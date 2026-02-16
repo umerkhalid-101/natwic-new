@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Natwic® Studio | Digital Creative Agency</title>
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='black'/><text x='50%' y='50%' text-anchor='middle' dy='.35em' fill='white' font-family='Inter, sans-serif' font-weight='800' font-size='14'>NW</text></svg>">
+    <!-- Favicon - Simplified to avoid URI Malformed errors during build -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/000000/n.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -69,10 +69,10 @@
     "react": "https://esm.sh/react@^19.2.4",
     "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
     "react/": "https://esm.sh/react@^19.2.4/",
-    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
     "framer-motion": "https://esm.sh/framer-motion@^12.34.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4",
-    "vite": "https://esm.sh/vite@^7.3.1"
+    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4"
   }
 }
 </script>
@@ -80,6 +80,7 @@
 <body>
     <div class="noise"></div>
     <div id="root"></div>
+    <!-- Vite will handle the resolution of this module -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>

@@ -3,9 +3,10 @@ import { Logo } from './Logo';
 
 interface FooterProps {
   setView?: (view: 'home' | 'contact') => void;
+  currentView?: 'home' | 'contact';
 }
 
-export const Footer: React.FC<FooterProps> = ({ setView }) => {
+export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
   return (
     <footer className="pt-32 px-6 border-t border-zinc-900 overflow-hidden bg-black text-white">
       <div className="max-w-7xl mx-auto mb-32">
@@ -18,12 +19,16 @@ export const Footer: React.FC<FooterProps> = ({ setView }) => {
               <h2 className="text-5xl md:text-[7rem] font-bold tracking-tight leading-[0.8] mb-16">
                 Build your legacy<br />with <span className="text-[#703FEC] italic">Natwic®</span>
               </h2>
-              <button 
-                onClick={() => setView?.('contact')}
-                className="bg-white text-black px-12 py-6 rounded-full text-[10px] font-bold uppercase tracking-[0.5em] hover:bg-[#703FEC] hover:text-white transition-all scale-100 hover:scale-110 shadow-[0_0_50px_rgba(112,63,236,0.2)]"
-              >
-                Contact the studio
-              </button>
+              
+              {/* Only show the CTA button if we are NOT on the contact page */}
+              {currentView !== 'contact' && (
+                <button 
+                  onClick={() => setView?.('contact')}
+                  className="bg-white text-black px-12 py-6 rounded-full text-[10px] font-bold uppercase tracking-[0.5em] hover:bg-[#703FEC] hover:text-white transition-all scale-100 hover:scale-110 shadow-[0_0_50px_rgba(112,63,236,0.2)]"
+                >
+                  Contact the studio
+                </button>
+              )}
            </div>
         </div>
       </div>

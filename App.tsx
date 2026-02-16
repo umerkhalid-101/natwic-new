@@ -46,7 +46,7 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <Footer setView={setView} />
+      <Footer setView={setView} currentView={view} />
     </div>
   );
 };

@@ -1,0 +1,8 @@
+{
+  "name": "Natwic® Creative Studio",
+  "description": "A high-end, modern digital agency landing page featuring sleek animations, a responsive design, and an integrated AI assistant for project inquiries.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

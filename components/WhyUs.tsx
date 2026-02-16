@@ -207,29 +207,32 @@ export const WhyUs: React.FC = () => {
               </motion.button>
             </div>
             
-            {/* Glass 3D PNG Visual Integration */}
+            {/* Glass 3D visual using the requested direct Google Drive link format */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none translate-y-16">
               <motion.img 
                 animate={{ 
-                  y: [0, -25, 0],
-                  rotateZ: [0, 8, -8, 0],
-                  rotateX: [0, 10, 0],
-                  scale: [1, 1.1, 1]
+                  y: [0, -30, 0],
+                  rotateZ: [0, 5, -5, 0],
+                  scale: [1, 1.08, 1]
                 }}
                 transition={{ 
-                  duration: 12, 
+                  duration: 10, 
                   repeat: Infinity, 
                   ease: "easeInOut" 
                 }}
-                src="https://images.unsplash.com/photo-1635336064729-683f54027ad4?auto=format&fit=crop&q=80&w=1200" 
-                className="w-[90%] h-[90%] object-contain mix-blend-screen opacity-70 group-hover:opacity-100 transition-all duration-1000 drop-shadow-[0_0_40px_rgba(112,63,236,0.3)]"
+                src="https://lh3.googleusercontent.com/d/1cVWp8OPf_6JmOZUvs0bnWNVLubYAwHhR" 
+                className="w-[95%] h-[95%] object-contain mix-blend-screen opacity-80 group-hover:opacity-100 transition-all duration-1000 drop-shadow-[0_0_50px_rgba(112,63,236,0.5)]"
                 alt="Glass 3D Iridescent Shape"
+                onError={(e) => {
+                  // Fallback if the direct drive link fails due to CORS or visibility
+                  (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1635336064729-683f54027ad4?auto=format&fit=crop&q=80&w=1200";
+                }}
               />
             </div>
 
             {/* Aesthetic Glow Enhancement */}
-            <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-[#703FEC] rounded-full blur-[120px] opacity-10 pointer-events-none group-hover:opacity-30 transition-opacity duration-1000" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#703FEC]/5 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+            <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-[#703FEC] rounded-full blur-[140px] opacity-15 pointer-events-none group-hover:opacity-40 transition-opacity duration-1000" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#703FEC]/10 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           </motion.div>
         </div>
       </div>

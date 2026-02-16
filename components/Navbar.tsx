@@ -21,7 +21,6 @@ export const Navbar: React.FC = () => {
           Work 
           <span className="bg-[#F3350C] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">3</span>
         </a>
-        <a href="#blog" className="hover:text-[#703FEC] transition-colors">Blog</a>
         <a href="#contact" className="hover:text-[#703FEC] transition-colors">Contact</a>
         
         <div className="flex flex-col gap-1 w-5 cursor-pointer ml-4 group">

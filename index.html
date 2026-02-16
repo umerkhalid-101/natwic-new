@@ -14,7 +14,6 @@
     <style>
         * {
             font-family: 'Inter', sans-serif;
-            cursor: none;
         }
         body {
             background-color: #fff;
@@ -33,50 +32,6 @@
             opacity: .03;
             background-image: url("https://grainy-gradients.vercel.app/noise.svg");
             will-change: transform;
-        }
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            top: 0;
-            left: 0;
-            transform: translate3d(-50%, -50%, 0);
-            mix-blend-difference: difference;
-            background-color: #fff;
-            will-change: transform;
-            transition: width 0.3s, height 0.3s, background-color 0.3s;
-        }
-        .cursor-outline {
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            top: 0;
-            left: 0;
-            transform: translate3d(-50%, -50%, 0);
-            transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.2s ease, border-color 0.3s;
-            mix-blend-difference: difference;
-            will-change: transform;
-        }
-        .cursor-active .cursor-outline {
-            transform: translate3d(-50%, -50%, 0) scale(1.6);
-            background: rgba(112, 63, 236, 0.1);
-            border-color: #703FEC;
-        }
-        .cursor-hover .cursor-outline {
-            transform: translate3d(-50%, -50%, 0) scale(1.2);
-            border-color: #fff;
-            background: rgba(255, 255, 255, 0.1);
-        }
-        .cursor-hover .cursor-dot {
-            width: 4px;
-            height: 4px;
         }
         
         @keyframes shimmer {
@@ -124,45 +79,7 @@
 </head>
 <body>
     <div class="noise"></div>
-    <div id="cursor-dot" class="cursor-dot"></div>
-    <div id="cursor-outline" class="cursor-outline"></div>
     <div id="root"></div>
-    
     <script type="module" src="index.tsx"></script>
-    
-    <script>
-        const dot = document.getElementById('cursor-dot');
-        const outline = document.getElementById('cursor-outline');
-        
-        let mouseX = 0;
-        let mouseY = 0;
-        let outlineX = 0;
-        let outlineY = 0;
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-        });
-
-        function animateOutline() {
-            outlineX += (mouseX - outlineX) * 0.15;
-            outlineY += (mouseY - outlineY) * 0.15;
-            outline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) translate(-50%, -50%)`;
-            requestAnimationFrame(animateOutline);
-        }
-        requestAnimationFrame(animateOutline);
-
-        document.addEventListener('mousedown', () => document.body.classList.add('cursor-active'));
-        document.addEventListener('mouseup', () => document.body.classList.remove('cursor-active'));
-
-        document.addEventListener('mouseover', (e) => {
-            if (e.target.closest('a, button, .cursor-pointer')) {
-                document.body.classList.add('cursor-hover');
-            } else {
-                document.body.classList.remove('cursor-hover');
-            }
-        });
-    </script>
 </body>
 </html>

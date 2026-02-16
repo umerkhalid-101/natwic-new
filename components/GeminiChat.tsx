@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { GoogleGenAI } from "@google/genai";
@@ -52,11 +51,9 @@ export const GeminiChat: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   return (
     <motion.div 
-      {...({
-        initial: { opacity: 0, scale: 0.95, y: 30 },
-        animate: { opacity: 1, scale: 1, y: 0 },
-        exit: { opacity: 0, scale: 0.95, y: 30 }
-      } as any)}
+      initial={{ opacity: 0, scale: 0.95, y: 30 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95, y: 30 }}
       className="fixed bottom-24 right-8 z-[100] w-full max-w-sm bg-white border border-zinc-100 rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col h-[550px]"
     >
       <div className="p-6 border-b border-zinc-50 flex justify-between items-center bg-white/80 backdrop-blur-xl">

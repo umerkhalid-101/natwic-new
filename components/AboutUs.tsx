@@ -7,7 +7,7 @@ export const AboutUs: React.FC = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left: Prismatic/Aurora Visual with Quote */}
         <div className="relative aspect-square rounded-[2.5rem] overflow-hidden group">
-          {/* Aurora Gradient Layer - Optimized */}
+          {/* Aurora Gradient Layer */}
           <div className="absolute inset-0 bg-gradient-to-tr from-[#f3350c] via-[#ffaa40] via-[#703fec] via-[#40ffaa] to-[#f3350c] opacity-80 blur-xl scale-110 animate-pulse duration-[10s] will-change-[transform,opacity]" />
           <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12">
             <motion.div 
@@ -21,12 +21,12 @@ export const AboutUs: React.FC = () => {
               </p>
               <div>
                 <p className="text-sm font-bold text-white mb-1">Otto Silva</p>
-                <p className="text-[10px] text-white/50 uppercase tracking-[0.2em] font-semibold">Co-founder of Alture®</p>
+                <p className="text-[10px] text-white/50 uppercase tracking-[0.2em] font-semibold">Co-founder of Natwic®</p>
               </div>
             </motion.div>
           </div>
           <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white font-bold text-2xl tracking-tighter opacity-50 select-none">
-            Alture®
+            Natwic®
           </div>
         </div>
 

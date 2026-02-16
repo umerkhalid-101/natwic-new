@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { TESTIMONIALS } from '../constants';
@@ -9,12 +8,10 @@ export const Stats: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 mb-32">
           <motion.div
-            {...({
-              initial: { opacity: 0, x: -30 },
-              whileInView: { opacity: 1, x: 0 },
-              viewport: { once: true },
-              transition: { duration: 1 }
-            } as any)}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
           >
             <p className="text-xs uppercase tracking-[0.4em] text-zinc-500 mb-8">Testimonials</p>
             <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-12">
@@ -38,12 +35,10 @@ export const Stats: React.FC = () => {
 
           <div className="space-y-8">
             <motion.div 
-              {...({
-                initial: { opacity: 0, scale: 0.95 },
-                whileInView: { opacity: 1, scale: 1 },
-                viewport: { once: true },
-                transition: { duration: 1 }
-              } as any)}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
               className="bg-zinc-50 p-12 rounded-[3rem] relative overflow-hidden group border border-zinc-100"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#703FEC]/5 rounded-full blur-3xl" />
@@ -53,7 +48,7 @@ export const Stats: React.FC = () => {
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-zinc-200 rounded-full overflow-hidden border-2 border-white shadow-md">
-                    <img src="https://i.pravatar.cc/150?u=harold" />
+                    <img src="https://i.pravatar.cc/150?u=harold" alt="Harold" />
                   </div>
                   <div>
                     <p className="font-bold">Harold Mercer</p>
@@ -67,12 +62,10 @@ export const Stats: React.FC = () => {
               {TESTIMONIALS.map((t, idx) => (
                 <motion.div 
                   key={t.id}
-                  {...({
-                    initial: { opacity: 0, y: 20 },
-                    whileInView: { opacity: 1, y: 0 },
-                    viewport: { once: true },
-                    transition: { delay: idx * 0.2, duration: 0.8 }
-                  } as any)}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.2, duration: 0.8 }}
                   className="p-8 border border-zinc-100 rounded-3xl hover:border-[#703FEC]/30 transition-colors"
                 >
                   <div className="flex gap-1.5 mb-6">
@@ -82,7 +75,7 @@ export const Stats: React.FC = () => {
                   </div>
                   <p className="text-sm font-medium leading-relaxed mb-8">{t.quote}</p>
                   <div className="flex items-center gap-3">
-                    <img src={t.image} className="w-8 h-8 rounded-full border border-zinc-100" />
+                    <img src={t.image} className="w-8 h-8 rounded-full border border-zinc-100" alt={t.author} />
                     <p className="text-xs font-bold uppercase tracking-tight">{t.author}</p>
                   </div>
                 </motion.div>

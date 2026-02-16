@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -24,16 +23,13 @@ export const Blog: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {ARTICLES.map((article, i) => (
-            /* Use spread operator to bypass strict type checking for motion props */
             <motion.div 
               key={i}
-              {...({
-                whileHover: { y: -10 }
-              } as any)}
+              whileHover={{ y: -10 }}
               className="group cursor-pointer"
             >
               <div className="aspect-[4/3] rounded-3xl overflow-hidden mb-8 border border-zinc-900">
-                <img src={article.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <img src={article.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={article.title} />
               </div>
               <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mb-4">{article.date}</p>
               <h3 className="text-xl font-bold leading-tight group-hover:text-zinc-300 transition-colors">

@@ -1,8 +1,6 @@
-
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-// Explicitly type WorkItem as React.FC to fix the missing 'key' property error during map()
 const WorkItem: React.FC<{ work: { id: number; title: string; image: string; year: string; category: string } }> = ({ work }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -18,12 +16,10 @@ const WorkItem: React.FC<{ work: { id: number; title: string; image: string; yea
   return (
     <motion.div 
       ref={containerRef}
-      {...({
-        initial: { opacity: 0, y: 100 },
-        whileInView: { opacity: 1, y: 0 },
-        viewport: { once: true, margin: "-10%" },
-        transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
-      } as any)}
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
       className="relative group cursor-pointer overflow-hidden rounded-[2rem] md:rounded-[4rem] aspect-[16/10] bg-zinc-100"
     >
       <motion.div 
@@ -83,9 +79,7 @@ export const SelectedWork: React.FC = () => {
               We specialize in creating digital landmarks. Every project is a synthesis of market intelligence and high-fidelity craftsmanship.
             </p>
             <motion.div 
-              {...({
-                whileHover: { x: 20 }
-              } as any)}
+              whileHover={{ x: 20 }}
               className="flex items-center gap-10 text-[11px] font-bold uppercase tracking-[0.6em] border-b-2 border-black pb-8 cursor-pointer group"
             >
               See all projects 

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useSpring } from 'framer-motion';
 import { SERVICES } from '../constants';
@@ -63,15 +62,16 @@ export const Services: React.FC = () => {
                 left: springX,
                 top: springY,
                 x: "-50%",
-                y: "-50%"
+                y: "-50%",
+                position: 'fixed',
+                pointerEvents: 'none',
+                zIndex: 50
               }}
-              {...({
-                initial: { opacity: 0, scale: 0.5, rotate: -15 },
-                animate: { opacity: 1, scale: 1, rotate: 0 },
-                exit: { opacity: 0, scale: 0.5, rotate: 15 },
-                transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
-              } as any)}
-              className="fixed pointer-events-none z-50 w-80 h-[450px] overflow-hidden rounded-[2.5rem] border-4 border-white shadow-2xl"
+              initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
+              animate={{ opacity: 1, scale: 1, rotate: 0 }}
+              exit={{ opacity: 0, scale: 0.5, rotate: 15 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="w-80 h-[450px] overflow-hidden rounded-[2.5rem] border-4 border-white shadow-2xl"
             >
               <img 
                 src={SERVICES.find(s => s.id === hoveredId)?.imageUrl} 

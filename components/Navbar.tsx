@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Logo } from './Logo';
@@ -6,11 +5,9 @@ import { Logo } from './Logo';
 export const Navbar: React.FC = () => {
   return (
     <motion.nav 
-      {...({
-        initial: { y: -100, opacity: 0 },
-        animate: { y: 0, opacity: 1 },
-        transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
-      } as any)}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
       className="fixed top-0 left-0 w-full z-[100] px-6 py-4 md:px-12 flex justify-between items-center bg-white border-b border-zinc-100"
     >
       <div className="flex items-center text-black">

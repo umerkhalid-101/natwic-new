@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -13,13 +12,10 @@ export const Partners: React.FC = () => {
         </p>
         <div className="grid grid-cols-2 md:grid-cols-6 gap-12 items-center">
           {PARTNERS.map((partner, i) => (
-            /* Use spread operator to bypass strict type checking for motion props */
             <motion.div 
               key={i}
-              {...({
-                whileHover: { opacity: 1 },
-                initial: { opacity: 0.5 }
-              } as any)}
+              whileHover={{ opacity: 1 }}
+              initial={{ opacity: 0.5 }}
               className="flex flex-col items-center gap-4 grayscale"
             >
               <div className="text-2xl font-black text-zinc-300">{partner}</div>

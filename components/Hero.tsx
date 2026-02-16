@@ -21,7 +21,7 @@ const PlasmaBlob: React.FC<{
   initialPos: { x: string; y: string }
 }> = ({ color, duration, delay = 0, size, initialPos }) => (
   <motion.div
-    className={`absolute rounded-full blur-[120px] mix-blend-screen opacity-60 pointer-events-none`}
+    className={`absolute rounded-full blur-[140px] mix-blend-screen opacity-50 pointer-events-none`}
     style={{ 
       backgroundColor: color, 
       width: size, 
@@ -30,10 +30,10 @@ const PlasmaBlob: React.FC<{
       top: initialPos.y,
     }}
     animate={{
-      x: ["-20%", "20%", "-10%", "10%", "-20%"],
-      y: ["-10%", "10%", "20%", "-20%", "-10%"],
-      scale: [1, 1.2, 0.9, 1.1, 1],
-      rotate: [0, 90, 180, 270, 360],
+      x: ["-15%", "15%", "-5%", "5%", "-15%"],
+      y: ["-8%", "8%", "15%", "-15%", "-8%"],
+      scale: [1, 1.3, 0.85, 1.15, 1],
+      rotate: [0, 120, 240, 360],
     }}
     transition={{
       duration,
@@ -58,13 +58,8 @@ const HeroSkeleton: React.FC = () => (
           <div key={i} className="h-2 w-20 bg-black rounded" />
         ))}
       </div>
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer" />
     </div>
-    <style>{`
-      @keyframes shimmer {
-        100% { transform: translateX(100%); }
-      }
-    `}</style>
   </div>
 );
 
@@ -76,7 +71,7 @@ export const Hero: React.FC = () => {
   const scale = useTransform(scrollY, [0, 600], [1, 0.98]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1200);
+    const timer = setTimeout(() => setIsLoading(false), 600);
     return () => clearTimeout(timer);
   }, []);
 
@@ -119,47 +114,44 @@ export const Hero: React.FC = () => {
           >
             {/* Plasma Visual Layer */}
             <div className="absolute inset-0 z-0 overflow-hidden bg-[#050505]">
-               {/* High fidelity image base with subtle interaction */}
+               {/* Robust high fidelity abstract visual */}
                <img 
-                 src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&q=80&w=2500" 
-                 className="w-full h-full object-cover opacity-20 scale-105"
-                 alt="Background visual"
+                 src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2500" 
+                 className="w-full h-full object-cover opacity-25 scale-105"
+                 alt="Natwic Background Visual"
+                 loading="eager"
                />
                
-               {/* Plasma Blobs */}
+               {/* Plasma Blobs Animation */}
                <div className="absolute inset-0 z-0">
                  <PlasmaBlob 
                    color="#703FEC" 
-                   duration={20} 
-                   size="60vw" 
-                   initialPos={{ x: "0%", y: "0%" }} 
+                   duration={18} 
+                   size="70vw" 
+                   initialPos={{ x: "-5%", y: "-5%" }} 
                  />
                  <PlasmaBlob 
                    color="#F3350C" 
-                   duration={25} 
+                   duration={22} 
                    delay={2} 
-                   size="50vw" 
-                   initialPos={{ x: "50%", y: "20%" }} 
+                   size="60vw" 
+                   initialPos={{ x: "45%", y: "15%" }} 
                  />
                  <PlasmaBlob 
                    color="#10b981" 
-                   duration={22} 
+                   duration={20} 
                    delay={1} 
-                   size="45vw" 
-                   initialPos={{ x: "20%", y: "60%" }} 
-                 />
-                 <PlasmaBlob 
-                   color="#3b82f6" 
-                   duration={18} 
-                   delay={3} 
-                   size="55vw" 
-                   initialPos={{ x: "70%", y: "50%" }} 
+                   size="50vw" 
+                   initialPos={{ x: "15%", y: "55%" }} 
                  />
                </div>
 
                {/* Overlay Grain and Blur */}
-               <div className="absolute inset-0 bg-black/40 backdrop-blur-[40px] mix-blend-overlay pointer-events-none" />
+               <div className="absolute inset-0 bg-black/40 backdrop-blur-[50px] mix-blend-overlay pointer-events-none" />
                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20 pointer-events-none" />
+               
+               {/* Requested Purple Gradient at Bottom Left */}
+               <div className="absolute bottom-[-15%] left-[-15%] w-[70%] h-[70%] bg-[#703FEC] rounded-full blur-[160px] opacity-40 mix-blend-screen pointer-events-none" />
             </div>
 
             {/* Category Tabs */}
@@ -184,7 +176,7 @@ export const Hero: React.FC = () => {
                   </MaskedText>
                   <MaskedText delay={0.5}>
                     <h2 className="text-5xl md:text-[6.5rem] font-semibold text-white leading-[0.9] tracking-[-0.05em]">
-                      Not just a studio,<br/>we are <span className="text-white drop-shadow-[0_0_15px_rgba(112,63,236,0.5)]">Natwic.</span>
+                      Not just a studio,<br/>we are <span className="text-white drop-shadow-[0_0_20px_rgba(112,63,236,0.6)]">Natwic.</span>
                     </h2>
                   </MaskedText>
                 </div>
@@ -197,7 +189,7 @@ export const Hero: React.FC = () => {
                   className="flex items-center gap-4 bg-white/5 backdrop-blur-2xl border border-white/10 p-2 pr-6 rounded-2xl hover:bg-white/10 transition-all cursor-pointer group will-change-transform"
                 >
                   <div className="relative">
-                    <img src="https://i.pravatar.cc/100?u=natwic_mark" className="w-12 h-12 rounded-xl object-cover grayscale group-hover:grayscale-0 transition-all" alt="Mark" />
+                    <img src="https://i.pravatar.cc/100?u=natwic_mark" className="w-12 h-12 rounded-xl object-cover grayscale group-hover:grayscale-0 transition-all" alt="Natwic Lead" />
                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#F3350C] rounded-full border-2 border-zinc-950" />
                   </div>
                   <div className="text-white">
@@ -213,7 +205,7 @@ export const Hero: React.FC = () => {
                <div className="text-[9px] font-bold uppercase tracking-[0.6em] text-white/30 flex items-center gap-5">
                  <span className="opacity-40">REVEAL</span>
                  <span className="w-8 h-[1px] bg-white/20" />
-                 <span className="text-white/60 animate-pulse">SCROLL TO REVEAL</span>
+                 <span className="text-white/60 animate-pulse">SCROLL TO EXPLORE</span>
                  <span className="w-8 h-[1px] bg-white/20" />
                  <span className="opacity-40">REVEAL</span>
                </div>

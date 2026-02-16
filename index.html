@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +28,7 @@
             z-index: 9999;
             opacity: .03;
             background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            will-change: transform;
         }
         .cursor-dot {
             width: 8px;
@@ -37,10 +37,12 @@
             position: fixed;
             pointer-events: none;
             z-index: 10000;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out;
+            top: 0;
+            left: 0;
+            transform: translate3d(-50%, -50%, 0);
             mix-blend-difference: difference;
             background-color: #fff;
+            will-change: transform;
         }
         .cursor-outline {
             width: 40px;
@@ -50,12 +52,15 @@
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: all 0.2s ease-out;
+            top: 0;
+            left: 0;
+            transform: translate3d(-50%, -50%, 0);
+            transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.2s ease;
             mix-blend-difference: difference;
+            will-change: transform;
         }
         .cursor-active .cursor-outline {
-            transform: translate(-50%, -50%) scale(1.6);
+            transform: translate3d(-50%, -50%, 0) scale(1.6);
             background: rgba(112, 63, 236, 0.1);
             border-color: #703FEC;
         }
@@ -91,7 +96,6 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div class="noise"></div>
@@ -102,22 +106,32 @@
         const dot = document.getElementById('cursor-dot');
         const outline = document.getElementById('cursor-outline');
         
+        let mouseX = 0;
+        let mouseY = 0;
+        let outlineX = 0;
+        let outlineY = 0;
+
         window.addEventListener('mousemove', (e) => {
-            const posX = e.clientX;
-            const posY = e.clientY;
+            mouseX = e.clientX;
+            mouseY = e.clientY;
             
-            dot.style.left = `${posX}px`;
-            dot.style.top = `${posY}px`;
-            
-            outline.animate({
-                left: `${posX}px`,
-                top: `${posY}px`
-            }, { duration: 600, fill: "forwards" });
+            // Move dot immediately via transform
+            dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
         });
+
+        function animateOutline() {
+            // Smoothler follow logic for outline
+            outlineX += (mouseX - outlineX) * 0.15;
+            outlineY += (mouseY - outlineY) * 0.15;
+            
+            outline.style.transform = `translate3d(${outlineX}px, ${outlineY}px, 0) translate(-50%, -50%)`;
+            
+            requestAnimationFrame(animateOutline);
+        }
+        requestAnimationFrame(animateOutline);
 
         document.addEventListener('mousedown', () => document.body.classList.add('cursor-active'));
         document.addEventListener('mouseup', () => document.body.classList.remove('cursor-active'));
     </script>
-<script type="module" src="/index.tsx"></script>
 </body>
 </html>

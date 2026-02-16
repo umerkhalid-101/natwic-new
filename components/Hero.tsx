@@ -1,15 +1,14 @@
-
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 // Explicitly type MaskedText as React.FC to fix children prop missing errors
 const MaskedText: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => (
-  <div className="overflow-hidden py-2">
+  <div className="overflow-hidden py-2" style={{ transform: 'translateZ(0)' }}>
     <motion.div
       {...({
         initial: { y: "100%" },
         animate: { y: 0 },
-        transition: { duration: 1.5, ease: [0.16, 1, 0.3, 1], delay }
+        transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1], delay }
       } as any)}
     >
       {children}
@@ -21,7 +20,7 @@ export const Hero: React.FC = () => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 800], [0, 150]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-  const scale = useTransform(scrollY, [0, 600], [1, 0.96]);
+  const scale = useTransform(scrollY, [0, 600], [1, 0.98]);
 
   return (
     <section id="home" className="relative min-h-screen pt-32 bg-white flex flex-col overflow-hidden">
@@ -48,7 +47,7 @@ export const Hero: React.FC = () => {
       {/* Main Visual Container */}
       <motion.div 
         style={{ scale }}
-        className="relative mx-auto w-[98vw] rounded-2xl md:rounded-[3rem] overflow-hidden bg-zinc-950 flex-1 min-h-[82vh] shadow-[0_30px_80px_rgba(0,0,0,0.2)] mb-4"
+        className="relative mx-auto w-[98vw] rounded-2xl md:rounded-[3rem] overflow-hidden bg-zinc-950 flex-1 min-h-[82vh] shadow-[0_30px_80px_rgba(0,0,0,0.2)] mb-4 will-change-transform"
       >
         {/* Category Tabs with Dotted Lines */}
         <div className="absolute top-0 left-0 w-full z-30 px-8 flex justify-between items-center text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.25em] text-white/40">
@@ -63,20 +62,18 @@ export const Hero: React.FC = () => {
           ))}
         </div>
 
-        {/* Dynamic Prismatic Animation */}
-        <motion.div style={{ y, opacity }} className="absolute inset-0 pointer-events-none">
+        {/* Dynamic Prismatic Animation - Optimized */}
+        <motion.div style={{ y, opacity }} className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute inset-0">
              <motion.div 
                animate={{ 
                  rotate: [0, 360],
-                 scale: [1, 1.2, 1],
-                 x: [-40, 40, -40],
-                 y: [-20, 20, -20]
+                 scale: [1, 1.1, 1],
                }}
-               transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-               className="absolute top-[-25%] left-[-25%] w-[150%] h-[150%] bg-gradient-to-tr from-[#703FEC]/40 via-[#F3350C]/20 via-emerald-400/10 via-[#703FEC]/30 to-[#F3350C]/40 blur-[130px] opacity-60"
+               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+               className="absolute top-[-25%] left-[-25%] w-[150%] h-[150%] bg-gradient-to-tr from-[#703FEC]/30 via-[#F3350C]/15 via-emerald-400/5 via-[#703FEC]/20 to-[#F3350C]/30 blur-[80px] opacity-60 will-change-transform"
              />
-             <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+             <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" />
           </div>
         </motion.div>
 
@@ -101,7 +98,7 @@ export const Hero: React.FC = () => {
                 animate: { opacity: 1, x: 0 },
                 transition: { delay: 1.2, duration: 1 }
               } as any)}
-              className="flex items-center gap-4 bg-white/5 backdrop-blur-2xl border border-white/10 p-2 pr-6 rounded-2xl hover:bg-white/10 transition-all cursor-pointer group"
+              className="flex items-center gap-4 bg-white/5 backdrop-blur-2xl border border-white/10 p-2 pr-6 rounded-2xl hover:bg-white/10 transition-all cursor-pointer group will-change-transform"
             >
               <div className="relative">
                 <img src="https://i.pravatar.cc/100?u=natwic_mark" className="w-12 h-12 rounded-xl object-cover grayscale group-hover:grayscale-0 transition-all" alt="Mark" />

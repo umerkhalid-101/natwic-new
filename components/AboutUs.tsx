@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -8,8 +7,8 @@ export const AboutUs: React.FC = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left: Prismatic/Aurora Visual with Quote */}
         <div className="relative aspect-square rounded-[2.5rem] overflow-hidden group">
-          {/* Aurora Gradient Layer */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#f3350c] via-[#ffaa40] via-[#703fec] via-[#40ffaa] to-[#f3350c] opacity-90 blur-2xl scale-125 animate-pulse duration-[8s]" />
+          {/* Aurora Gradient Layer - Optimized */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#f3350c] via-[#ffaa40] via-[#703fec] via-[#40ffaa] to-[#f3350c] opacity-80 blur-xl scale-110 animate-pulse duration-[10s] will-change-[transform,opacity]" />
           <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
@@ -41,7 +40,7 @@ export const AboutUs: React.FC = () => {
             We're a hands-on digital agency building thoughtful solutions for ambitious brands.
           </h2>
           <p className="text-zinc-500 text-base leading-relaxed mb-12 max-w-lg font-medium">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra.
+            Strategic storytelling combined with technical excellence. We bridge the gap between imagination and implementation.
           </p>
           <motion.button 
             whileHover={{ scale: 1.05 }}

@@ -1,8 +1,11 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export const Pricing: React.FC = () => {
+interface PricingProps {
+  setView?: (view: 'home' | 'contact') => void;
+}
+
+export const Pricing: React.FC<PricingProps> = ({ setView }) => {
   const plans = [
     {
       name: 'Standard',
@@ -85,7 +88,10 @@ export const Pricing: React.FC = () => {
                 {plan.footer}
               </div>
 
-              <button className={`w-full py-5 rounded-2xl font-bold uppercase tracking-widest text-[11px] transition-all hover:scale-[1.02] active:scale-95 ${plan.btnStyle}`}>
+              <button 
+                onClick={() => setView?.('contact')}
+                className={`w-full py-5 rounded-2xl font-bold uppercase tracking-widest text-[11px] transition-all hover:scale-[1.02] active:scale-95 ${plan.btnStyle}`}
+              >
                 Learn more
               </button>
               <p className="text-[9px] text-center mt-6 text-zinc-700 uppercase tracking-widest font-bold">

@@ -63,7 +63,11 @@ const HeroSkeleton: React.FC = () => (
   </div>
 );
 
-export const Hero: React.FC = () => {
+interface HeroProps {
+  setView?: (view: 'home' | 'contact') => void;
+}
+
+export const Hero: React.FC<HeroProps> = ({ setView }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 800], [0, 150]);
@@ -186,6 +190,7 @@ export const Hero: React.FC = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 1.2, duration: 1 }}
+                  onClick={() => setView?.('contact')}
                   className="flex items-center gap-4 bg-white/5 backdrop-blur-2xl border border-white/10 p-2 pr-6 rounded-2xl hover:bg-white/10 transition-all cursor-pointer group will-change-transform"
                 >
                   <div className="relative">

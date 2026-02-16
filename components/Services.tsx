@@ -38,7 +38,7 @@ export const Services: React.FC = () => {
               onMouseLeave={() => setHoveredId(null)}
             >
               <div className="flex flex-col md:flex-row gap-12 items-center relative z-10 transition-colors group-hover:text-[#703FEC]">
-                <div className="text-zinc-400 font-mono text-xl group-hover:text-[#F3350C]">{service.number}</div>
+                <div className="text-zinc-400 font-mono text-xl group-hover:text-[#703FEC]">{service.number}</div>
                 <div className="flex-1">
                   <h3 className="text-5xl md:text-8xl font-bold mb-0 transition-all duration-700 group-hover:translate-x-12">
                     {service.title}

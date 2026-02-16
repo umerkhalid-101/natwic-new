@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -21,7 +20,7 @@ const CHAT_MESSAGES = [
 
 const ExpertOrbital = () => {
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-[#111111] overflow-hidden">
+    <div className="relative w-full h-full flex items-center justify-center bg-[#0c0c0c] overflow-hidden">
       {/* Orbital Rings */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.8 }}
@@ -131,7 +130,7 @@ const CollaborationChat = () => {
 
 export const WhyUs: React.FC = () => {
   return (
-    <section className="py-32 px-6 md:px-12 bg-[#f7f7f5] text-black overflow-hidden">
+    <section className="pt-32 pb-80 px-6 md:px-12 bg-[#f7f7f5] text-black overflow-hidden relative">
       {/* Header Container */}
       <div className="max-w-7xl mx-auto mb-20">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start">
@@ -142,7 +141,7 @@ export const WhyUs: React.FC = () => {
             viewport={{ once: true }}
             className="flex gap-2 items-center pt-3 min-w-[200px]"
           >
-            <div className="w-1.5 h-1.5 bg-[#F3350C] rounded-full" />
+            <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_8px_rgba(112,63,236,0.6)]" />
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-900">Why work with us</p>
           </motion.div>
           {/* Main Headline */}
@@ -159,14 +158,14 @@ export const WhyUs: React.FC = () => {
       </div>
 
       {/* Grid Content */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 h-auto lg:h-[700px]">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 h-auto lg:min-h-[700px]">
         {/* Left: Huge Expert Orbital Card */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="w-full h-[500px] lg:h-full rounded-[3rem] overflow-hidden shadow-2xl"
+          className="w-full h-[500px] lg:h-auto rounded-[3rem] overflow-hidden shadow-2xl"
         >
           <ExpertOrbital />
         </motion.div>
@@ -200,36 +199,37 @@ export const WhyUs: React.FC = () => {
                 Transparent<br/>pricing model
               </h3>
               <motion.button 
-                whileHover={{ scale: 1.05, backgroundColor: '#F3350C', color: 'white' }}
+                whileHover={{ scale: 1.05, backgroundColor: '#703FEC', color: 'white' }}
                 whileTap={{ scale: 0.98 }}
-                className="bg-white text-black text-[10px] font-bold px-6 py-3 rounded-full flex items-center gap-2 transition-all duration-300"
+                className="bg-white text-black text-[10px] font-bold px-6 py-3 rounded-full flex items-center gap-2 transition-all duration-300 shadow-xl"
               >
-                View pricing <div className="w-1.5 h-1.5 bg-[#F3350C] rounded-full group-hover:bg-white" />
+                View pricing <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full group-hover:bg-white" />
               </motion.button>
             </div>
             
-            {/* 3D Visual - Updated to mimic the iridescent "S/Z" shape */}
+            {/* Glass 3D PNG Visual Integration */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none translate-y-16">
               <motion.img 
                 animate={{ 
-                  y: [0, -20, 0],
-                  rotateX: [0, 5, 0],
-                  rotateY: [0, 10, 0],
-                  scale: [1, 1.08, 1]
+                  y: [0, -25, 0],
+                  rotateZ: [0, 8, -8, 0],
+                  rotateX: [0, 10, 0],
+                  scale: [1, 1.1, 1]
                 }}
                 transition={{ 
-                  duration: 10, 
+                  duration: 12, 
                   repeat: Infinity, 
                   ease: "easeInOut" 
                 }}
-                // Using a high-quality iridescent render URL that matches the visual style
                 src="https://images.unsplash.com/photo-1635336064729-683f54027ad4?auto=format&fit=crop&q=80&w=1200" 
-                className="w-[90%] h-[90%] object-contain mix-blend-screen opacity-70 group-hover:opacity-100 transition-opacity duration-1000"
-                alt="Iridescent 3D Shape"
+                className="w-[90%] h-[90%] object-contain mix-blend-screen opacity-70 group-hover:opacity-100 transition-all duration-1000 drop-shadow-[0_0_40px_rgba(112,63,236,0.3)]"
+                alt="Glass 3D Iridescent Shape"
               />
             </div>
-            {/* Subtle glow behind the shape */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#703FEC]/10 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+
+            {/* Aesthetic Glow Enhancement */}
+            <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-[#703FEC] rounded-full blur-[120px] opacity-10 pointer-events-none group-hover:opacity-30 transition-opacity duration-1000" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#703FEC]/5 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           </motion.div>
         </div>
       </div>

@@ -70,7 +70,7 @@ export const Stats: React.FC = () => {
                 >
                   <div className="flex gap-1.5 mb-6">
                     {[...Array(t.stars)].map((_, i) => (
-                      <div key={i} className="w-2.5 h-2.5 bg-[#F3350C] rounded-full" />
+                      <div key={i} className="w-2.5 h-2.5 bg-[#703FEC] rounded-full" />
                     ))}
                   </div>
                   <p className="text-sm font-medium leading-relaxed mb-8">{t.quote}</p>
@@ -90,7 +90,7 @@ export const Stats: React.FC = () => {
             <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Revenue influenced</p>
           </div>
           <div>
-            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter text-[#F3350C]">87K</h3>
+            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC] opacity-80">87K</h3>
             <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Leads generated</p>
           </div>
           <div>

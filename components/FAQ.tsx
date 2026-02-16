@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -18,7 +17,7 @@ export const FAQ: React.FC = () => {
         {/* Left column: Questions */}
         <div className="lg:pr-10">
           <div className="flex gap-2 items-center mb-10">
-            <div className="w-1.5 h-1.5 bg-[#F3350C] rounded-full" />
+            <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_8px_rgba(112,63,236,0.6)]" />
             <p className="text-[10px] font-bold text-zinc-900 uppercase tracking-[0.4em]">FAQ</p>
           </div>
           <h2 className="text-6xl md:text-[80px] font-semibold tracking-tighter mb-8 leading-[0.9] text-black">
@@ -34,12 +33,12 @@ export const FAQ: React.FC = () => {
                   className="w-full flex items-center justify-between py-8 text-left group"
                 >
                   <div className="flex items-center gap-6">
-                    <div className="w-7 h-7 rounded-full bg-[#F3350C] text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                    <div className="w-7 h-7 rounded-full bg-[#703FEC] text-white flex items-center justify-center text-[10px] font-bold shrink-0 shadow-lg shadow-[#703FEC]/20">
                       {i + 1}
                     </div>
-                    <span className="text-[16px] md:text-[18px] font-bold text-black group-hover:text-[#F3350C] transition-colors">{faq.q}</span>
+                    <span className="text-[16px] md:text-[18px] font-bold text-black group-hover:text-[#703FEC] transition-colors">{faq.q}</span>
                   </div>
-                  <span className={`text-2xl transition-transform duration-500 font-light text-zinc-400 shrink-0 ${openIndex === i ? 'rotate-45 text-[#F3350C]' : ''}`}>+</span>
+                  <span className={`text-2xl transition-transform duration-500 font-light text-zinc-400 shrink-0 ${openIndex === i ? 'rotate-45 text-[#703FEC]' : ''}`}>+</span>
                 </button>
                 <AnimatePresence>
                   {openIndex === i && (

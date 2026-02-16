@@ -122,7 +122,7 @@ export const Hero: React.FC = () => {
                  loading="eager"
                />
                
-               {/* Plasma Blobs Animation */}
+               {/* Plasma Blobs Animation - Switched to Purples */}
                <div className="absolute inset-0 z-0">
                  <PlasmaBlob 
                    color="#703FEC" 
@@ -131,14 +131,14 @@ export const Hero: React.FC = () => {
                    initialPos={{ x: "-5%", y: "-5%" }} 
                  />
                  <PlasmaBlob 
-                   color="#F3350C" 
+                   color="#a855f7" 
                    duration={22} 
                    delay={2} 
                    size="60vw" 
                    initialPos={{ x: "45%", y: "15%" }} 
                  />
                  <PlasmaBlob 
-                   color="#10b981" 
+                   color="#4f46e5" 
                    duration={20} 
                    delay={1} 
                    size="50vw" 
@@ -150,7 +150,7 @@ export const Hero: React.FC = () => {
                <div className="absolute inset-0 bg-black/40 backdrop-blur-[50px] mix-blend-overlay pointer-events-none" />
                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20 pointer-events-none" />
                
-               {/* Requested Purple Gradient at Bottom Left */}
+               {/* Purple Gradient at Bottom Left */}
                <div className="absolute bottom-[-15%] left-[-15%] w-[70%] h-[70%] bg-[#703FEC] rounded-full blur-[160px] opacity-40 mix-blend-screen pointer-events-none" />
             </div>
 
@@ -190,7 +190,7 @@ export const Hero: React.FC = () => {
                 >
                   <div className="relative">
                     <img src="https://i.pravatar.cc/100?u=natwic_mark" className="w-12 h-12 rounded-xl object-cover grayscale group-hover:grayscale-0 transition-all" alt="Natwic Lead" />
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#F3350C] rounded-full border-2 border-zinc-950" />
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#703FEC] rounded-full border-2 border-zinc-950 shadow-[0_0_8px_#703FEC]" />
                   </div>
                   <div className="text-white">
                     <p className="text-xs font-semibold leading-none mb-1 group-hover:text-[#703FEC] transition-colors">Contact Mark</p>

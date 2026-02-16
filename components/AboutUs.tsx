@@ -7,8 +7,8 @@ export const AboutUs: React.FC = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left: Prismatic/Aurora Visual with Quote */}
         <div className="relative aspect-square rounded-[2.5rem] overflow-hidden group">
-          {/* Aurora Gradient Layer */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#f3350c] via-[#ffaa40] via-[#703fec] via-[#40ffaa] to-[#f3350c] opacity-80 blur-xl scale-110 animate-pulse duration-[10s] will-change-[transform,opacity]" />
+          {/* Aurora Gradient Layer - Shifted to Purples */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#703fec] via-[#a855f7] via-[#6366f1] via-[#c084fc] to-[#703fec] opacity-80 blur-xl scale-110 animate-pulse duration-[10s] will-change-[transform,opacity]" />
           <div className="absolute inset-0 flex items-center justify-center p-8 md:p-12">
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
@@ -20,7 +20,7 @@ export const AboutUs: React.FC = () => {
                 "Great work doesn't happen by accident. It comes from listening closely, challenging ideas, and obsessing over the details — that's what we do every day."
               </p>
               <div>
-                <p className="text-sm font-bold text-white mb-1">Otto Silva</p>
+                <p className="text-sm font-bold text-white mb-1">Umer Khalid</p>
                 <p className="text-[10px] text-white/50 uppercase tracking-[0.2em] font-semibold">Co-founder of Natwic®</p>
               </div>
             </motion.div>
@@ -33,7 +33,7 @@ export const AboutUs: React.FC = () => {
         {/* Right: Content */}
         <div className="lg:pl-10">
           <div className="flex gap-2 items-center mb-8">
-            <div className="w-1.5 h-1.5 bg-[#F3350C] rounded-full" />
+            <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_10px_rgba(112,63,236,0.8)]" />
             <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-400">About us</p>
           </div>
           <h2 className="text-4xl md:text-[56px] font-semibold tracking-tight leading-[1.05] mb-10">
@@ -47,7 +47,7 @@ export const AboutUs: React.FC = () => {
             whileTap={{ scale: 0.95 }}
             className="bg-black text-white text-[10px] font-bold px-10 py-5 rounded-full uppercase tracking-widest flex items-center gap-4 group"
           >
-            More about us <div className="w-1.5 h-1.5 bg-[#F3350C] rounded-full group-hover:scale-125 transition-transform" />
+            More about us <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full group-hover:scale-125 transition-transform shadow-[0_0_8px_#703FEC]" />
           </motion.button>
         </div>
       </div>

@@ -6,7 +6,7 @@ export const Pricing: React.FC = () => {
   const plans = [
     {
       name: 'Standard',
-      price: '3450',
+      price: '$ 1,450',
       period: '/project',
       badge: 'AFFORDABLE',
       features: [
@@ -21,7 +21,7 @@ export const Pricing: React.FC = () => {
     },
     {
       name: 'Pro',
-      price: '6850',
+      price: '$ 3,500',
       period: '/monthly',
       badge: 'POPULAR',
       isPopular: true,

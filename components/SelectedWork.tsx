@@ -38,7 +38,7 @@ const WorkItem: React.FC<{ work: { id: number; title: string; image: string; yea
           style={{ y: textY }}
           className="text-white transform translate-y-12 group-hover:translate-y-0 transition-transform duration-1000 ease-[0.16, 1, 0.3, 1]"
         >
-          <p className="text-[10px] md:text-xs uppercase tracking-[0.6em] mb-8 font-semibold text-[#F3350C]">
+          <p className="text-[10px] md:text-xs uppercase tracking-[0.6em] mb-8 font-semibold text-[#703FEC]">
             {work.category} — {work.year}
           </p>
           <h3 className="text-5xl md:text-[8rem] font-bold tracking-tight leading-[0.8]">

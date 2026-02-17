@@ -93,11 +93,11 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="relative min-h-screen pt-24 md:pt-32 bg-white flex flex-col overflow-hidden"
         >
-          {/* Main Heading - Refined for visibility on all screens */}
-          {/* Adjusted font sizing (8vw mobile, 11vw desktop) to ensure "NatwicStudio" fits without horizontal clipping */}
-          <div className="container mx-auto px-4 md:px-12 mb-6 select-none relative z-10 w-full text-center">
+          {/* Main Heading - Refined for maximum size without clipping */}
+          {/* Removed container constraint to allow full width, increased vw size, tightened tracking */}
+          <div className="w-full px-2 mb-2 md:mb-6 select-none relative z-10 text-center">
             <MaskedText>
-              <h1 className="text-[8vw] md:text-[11vw] font-extrabold text-black leading-[1.1] tracking-[-0.04em] lg:tracking-[-0.06em] inline-block whitespace-nowrap">
+              <h1 className="text-[13vw] md:text-[14vw] font-black text-black leading-[0.85] tracking-[-0.07em] inline-block whitespace-nowrap">
                 NatwicStudio
               </h1>
             </MaskedText>

@@ -4,7 +4,7 @@ import { Hero } from './components/Hero';
 import { Partners } from './components/Partners';
 import { SelectedWork } from './components/SelectedWork';
 import { WhyUs } from './components/WhyUs';
-import { AboutUs } from './components/AboutUs';
+import { StudioPreview } from './components/StudioPreview';
 import { Services } from './components/Services';
 import { Stats } from './components/Stats';
 import { Pricing } from './components/Pricing';
@@ -13,8 +13,10 @@ import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { Studio } from './components/Studio';
 import { Seo } from './components/Seo';
+import { Privacy } from './components/Privacy';
+import { Terms } from './components/Terms';
 
-type View = 'home' | 'contact' | 'studio';
+type View = 'home' | 'contact' | 'studio' | 'privacy' | 'terms';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('home');
@@ -23,10 +25,12 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleUrlChange = () => {
       const params = new URLSearchParams(window.location.search);
-      const viewParam = params.get('view');
-      if (viewParam === 'studio') setView('studio');
-      else if (viewParam === 'contact') setView('contact');
-      else setView('home');
+      const viewParam = params.get('view') as View;
+      if (['studio', 'contact', 'privacy', 'terms'].includes(viewParam)) {
+        setView(viewParam);
+      } else {
+        setView('home');
+      }
     };
 
     // Check initial URL
@@ -81,7 +85,7 @@ const App: React.FC = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <Navbar setView={changeView} currentView={view} />
+      <Navbar setView={changeView} currentView={view as 'home' | 'contact' | 'studio'} />
       
       <main>
         {view === 'home' && (
@@ -94,7 +98,7 @@ const App: React.FC = () => {
             <Hero setView={changeView} />
             <Partners />
             <WhyUs />
-            <AboutUs />
+            <StudioPreview setView={changeView} />
             <SelectedWork />
             <Services />
             <Stats />
@@ -123,6 +127,20 @@ const App: React.FC = () => {
             />
             <Contact isStandalone={true} setView={changeView} />
           </>
+        )}
+
+        {view === 'privacy' && (
+           <>
+             <Seo title="Privacy Policy | Natwic®" description="Natwic Studio Privacy Policy." view="privacy" />
+             <Privacy />
+           </>
+        )}
+
+        {view === 'terms' && (
+           <>
+             <Seo title="Terms of Service | Natwic®" description="Natwic Studio Terms of Service." view="terms" />
+             <Terms />
+           </>
         )}
       </main>
 

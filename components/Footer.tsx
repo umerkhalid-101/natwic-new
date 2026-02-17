@@ -2,8 +2,8 @@ import React from 'react';
 import { Logo } from './Logo';
 
 interface FooterProps {
-  setView?: (view: 'home' | 'contact' | 'studio') => void;
-  currentView?: 'home' | 'contact' | 'studio';
+  setView?: (view: 'home' | 'contact' | 'studio' | 'privacy' | 'terms') => void;
+  currentView?: string;
 }
 
 export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
@@ -33,7 +33,7 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-16 mb-32">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 mb-32">
         <div className="col-span-2 space-y-8">
            <div className="flex items-center gap-3">
              <span className="text-xl font-bold uppercase tracking-tighter">Natwic®</span>
@@ -46,27 +46,21 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
         <div className="space-y-6">
           <p className="text-xs font-bold uppercase tracking-widest text-[#F3350C]">Connect</p>
           <ul className="text-zinc-500 text-xs space-y-4 uppercase tracking-[0.3em] font-semibold">
-            <li className="hover:text-white cursor-pointer transition-colors">Instagram</li>
-            <li className="hover:text-white cursor-pointer transition-colors">LinkedIn</li>
-            <li className="hover:text-white cursor-pointer transition-colors">Behance</li>
-          </ul>
-        </div>
-
-        <div className="space-y-6">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#703FEC]">Studio</p>
-          <ul className="text-zinc-500 text-xs space-y-4 uppercase tracking-[0.3em] font-semibold">
-            <li className="hover:text-white cursor-pointer transition-colors" onClick={() => setView?.('home')}>Home</li>
-            <li className="hover:text-white cursor-pointer transition-colors" onClick={() => setView?.('studio')}>About</li>
-            <li className="hover:text-white cursor-pointer transition-colors">Process</li>
+            <li>
+              <a href="https://www.instagram.com/natwicstudio?igsh=MWZ4aXZ3Nm8yZjRsYQ==" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instagram</a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/company/natwic/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">LinkedIn</a>
+            </li>
           </ul>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto border-t border-zinc-900 py-12 flex flex-col md:flex-row justify-between items-center gap-8 text-[9px] text-zinc-600 font-bold uppercase tracking-[0.4em]">
-        <p>© 2025 Natwic Studio. Pure Intent.</p>
+        <p>© 2026 Natwic Studio. Pure Intent.</p>
         <div className="flex gap-8">
-          <span className="hover:text-white cursor-pointer transition-colors">Privacy</span>
-          <span className="hover:text-white cursor-pointer transition-colors">Terms</span>
+          <span onClick={() => setView?.('privacy')} className="hover:text-white cursor-pointer transition-colors">Privacy</span>
+          <span onClick={() => setView?.('terms')} className="hover:text-white cursor-pointer transition-colors">Terms</span>
         </div>
       </div>
 

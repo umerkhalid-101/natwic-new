@@ -104,7 +104,7 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
           <div className="container mx-auto px-6 md:px-12 mb-6 select-none relative z-10 w-full">
             <div className="flex justify-center items-baseline w-full overflow-hidden">
               <MaskedText>
-                <h1 className="text-[14vw] font-bold text-black leading-[0.85] tracking-[-0.08em] whitespace-nowrap">
+                <h1 className="text-[11.5vw] md:text-[12.5vw] font-bold text-black leading-[0.85] tracking-[-0.06em] whitespace-nowrap">
                   NatwicStudio
                 </h1>
               </MaskedText>

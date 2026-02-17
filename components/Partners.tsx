@@ -55,15 +55,36 @@ export const Partners: React.FC = () => {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 mb-24 text-center">
-        <motion.p 
+      <div className="max-w-7xl mx-auto px-6 mb-20 text-center">
+        <motion.div 
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-[0.5em]"
+          transition={{ duration: 0.8 }}
+          className="flex gap-2 items-center justify-center mb-6"
         >
-          Selected Collaborations
+          <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_8px_rgba(112,63,236,0.6)]" />
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-400">Partnerships</p>
+        </motion.div>
+        
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-black leading-[1.1]"
+        >
+          Trusted by<br className="md:hidden" /> world-class teams.
+        </motion.h2>
+
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-zinc-500 max-w-2xl mx-auto text-sm md:text-base font-medium leading-relaxed"
+        >
+          We collaborate with companies that refuse to settle for average. From early-stage startups to global enterprises, we help build products that people love.
         </motion.p>
       </div>
 
@@ -79,7 +100,7 @@ export const Partners: React.FC = () => {
             x: ["0%", "-50%"],
           }}
           transition={{
-            duration: 45, // Adjusted for smooth infinite scroll
+            duration: 20, // Faster speed (was 45)
             ease: "linear",
             repeat: Infinity,
           }}

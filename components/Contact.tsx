@@ -80,9 +80,10 @@ export const Contact: React.FC<ContactProps> = ({ isStandalone = true, setView }
               <p className="text-[10px] font-bold text-zinc-900 uppercase tracking-[0.4em]">Contact Us</p>
             </div>
             
-            <h2 className="text-6xl md:text-[110px] font-bold tracking-tighter leading-[0.85] mb-16">
+            {/* H1 for SEO Importance since this is the primary heading of the view */}
+            <h1 className="text-6xl md:text-[110px] font-bold tracking-tighter leading-[0.85] mb-16">
               Let's build<br />something<br /><span className="text-[#703FEC] italic">legendary.</span>
-            </h2>
+            </h1>
 
             <div className="space-y-16">
               <div className="flex flex-col md:flex-row gap-16">

@@ -27,7 +27,7 @@ export const Seo: React.FC<SeoProps> = ({ title, description, view }) => {
     const ogDesc = document.querySelector('meta[property="og:description"]');
     if (ogDesc) ogDesc.setAttribute('content', description);
 
-    // Update Canonical URL
+    // Update Canonical URL and OG URL
     let linkCanonical = document.querySelector('link[rel="canonical"]');
     if (!linkCanonical) {
       linkCanonical = document.createElement('link');
@@ -35,11 +35,16 @@ export const Seo: React.FC<SeoProps> = ({ title, description, view }) => {
       document.head.appendChild(linkCanonical);
     }
     
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+
     const url = new URL(window.location.origin);
     if (view && view !== 'home') {
       url.searchParams.set('view', view);
     }
-    linkCanonical.setAttribute('href', url.toString());
+    const finalUrl = url.toString();
+
+    linkCanonical.setAttribute('href', finalUrl);
+    if (ogUrl) ogUrl.setAttribute('content', finalUrl);
 
   }, [title, description, view]);
 

@@ -42,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
           <Logo />
         </div>
         
-        {/* Desktop Menu */}
+        {/* Desktop Menu - Visible on Large screens */}
         <div className="hidden lg:flex items-center gap-10 text-[11px] font-semibold uppercase tracking-[0.2em] text-black">
           <button 
             onClick={() => setView('home')} 
@@ -73,7 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
           </div>
         </div>
         
-        {/* Mobile Hamburger */}
+        {/* Mobile Hamburger - Hidden on lg screens */}
         <button 
           className="lg:hidden flex flex-col gap-1.5 w-8 h-8 justify-center items-end cursor-pointer text-black relative z-[101] p-1"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}

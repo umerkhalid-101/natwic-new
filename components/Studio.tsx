@@ -49,7 +49,7 @@ const OrbitalRing: React.FC<{
 }> = ({ radius, duration, members, onHover, reverse = false }) => {
   return (
     <motion.div
-      className="absolute rounded-full border border-white/5"
+      className="absolute rounded-full border border-white/5 pointer-events-none"
       style={{ width: radius * 2, height: radius * 2 }}
       animate={{ rotate: reverse ? -360 : 360 }}
       transition={{ duration, repeat: Infinity, ease: "linear" }}
@@ -73,7 +73,7 @@ const OrbitalRing: React.FC<{
               className="absolute -translate-x-1/2 -translate-y-1/2"
             >
               <div 
-                className="relative group cursor-pointer"
+                className="relative group cursor-pointer pointer-events-auto"
                 onMouseEnter={() => onHover(member)}
                 onMouseLeave={() => onHover(null)}
               >

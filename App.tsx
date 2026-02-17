@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Partners } from './components/Partners';
@@ -15,11 +16,13 @@ import { Studio } from './components/Studio';
 import { Seo } from './components/Seo';
 import { Privacy } from './components/Privacy';
 import { Terms } from './components/Terms';
+import { Loader } from './components/Loader';
 
 type View = 'home' | 'contact' | 'studio' | 'privacy' | 'terms';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('home');
+  const [isLoading, setIsLoading] = useState(true);
 
   // Handle URL synchronization on mount and popstate
   useEffect(() => {
@@ -79,6 +82,12 @@ const App: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-white text-black selection:bg-[#703FEC] selection:text-white">
+      
+      {/* Loading Screen Overlay */}
+      <AnimatePresence>
+        {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
+
       {/* Inject JSON-LD */}
       <script
         type="application/ld+json"

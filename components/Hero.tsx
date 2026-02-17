@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { Magnetic } from './Magnetic';
 
 const MaskedText: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => (
   // Increased vertical padding to prevent ascender/descender clipping
@@ -22,7 +23,7 @@ const PlasmaBlob: React.FC<{
   initialPos: { x: string; y: string }
 }> = ({ color, duration, delay = 0, size, initialPos }) => (
   <motion.div
-    className={`absolute rounded-full blur-[140px] mix-blend-screen opacity-50 pointer-events-none`}
+    className={`absolute rounded-full blur-[140px] mix-blend-screen opacity-50 pointer-events-none will-change-transform`}
     style={{ 
       backgroundColor: color, 
       width: size, 
@@ -93,9 +94,8 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="relative min-h-screen pt-24 md:pt-32 bg-white flex flex-col overflow-hidden"
         >
-          {/* Main Heading - Refined for maximum size without clipping */}
-          {/* Removed container constraint to allow full width, increased vw size, tightened tracking */}
-          <div className="w-full px-2 mb-2 md:mb-6 select-none relative z-10 text-center">
+          {/* Main Heading */}
+          <div className="w-full px-2 mb-2 md:mb-6 select-none relative z-10 text-center pointer-events-none">
             <MaskedText>
               <h1 className="text-[13vw] md:text-[14vw] font-black text-black leading-[0.85] tracking-[-0.07em] inline-block whitespace-nowrap">
                 NatwicStudio
@@ -129,7 +129,7 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
             {/* Content Overlay */}
             <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-24 pb-24 md:pb-36">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 md:gap-16">
-                <div className="max-w-4xl">
+                <div className="max-w-4xl pointer-events-none">
                   <MaskedText delay={0.6}>
                     <p className="text-[9px] md:text-xs font-bold uppercase tracking-[0.7em] mb-4 md:mb-8 text-white/50">ESTABLISHED TWENTY TWENTY FIVE</p>
                   </MaskedText>
@@ -140,27 +140,29 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
                   </MaskedText>
                 </div>
 
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                  onClick={() => setView?.('contact')}
-                  className="flex items-center gap-4 md:gap-5 bg-white/5 backdrop-blur-3xl border border-white/10 p-2 md:p-3 pr-6 md:pr-8 rounded-[1.5rem] md:rounded-[2rem] hover:bg-white/10 transition-all cursor-pointer group"
-                >
-                  <div className="relative shrink-0">
-                    <img src="https://i.pravatar.cc/100?u=natwic_mark" className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Studio Lead" />
-                    <div className="absolute -top-1 -right-1 w-2.5 md:w-3.5 h-2.5 md:h-3.5 bg-[#703FEC] rounded-full border-2 border-zinc-950" />
-                  </div>
-                  <div className="text-white">
-                    <p className="text-xs md:text-sm font-bold leading-none mb-1 md:mb-1.5 group-hover:text-[#703FEC] transition-colors duration-500">Contact Mark</p>
-                    <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-[0.25em]">Principal Design</p>
-                  </div>
-                </motion.div>
+                <Magnetic strength={0.2}>
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 1.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    onClick={() => setView?.('contact')}
+                    className="flex items-center gap-4 md:gap-5 bg-white/5 backdrop-blur-3xl border border-white/10 p-2 md:p-3 pr-6 md:pr-8 rounded-[1.5rem] md:rounded-[2rem] hover:bg-white/10 transition-all cursor-pointer group"
+                  >
+                    <div className="relative shrink-0">
+                      <img src="https://i.pravatar.cc/100?u=natwic_mark" className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Studio Lead" />
+                      <div className="absolute -top-1 -right-1 w-2.5 md:w-3.5 h-2.5 md:h-3.5 bg-[#703FEC] rounded-full border-2 border-zinc-950" />
+                    </div>
+                    <div className="text-white">
+                      <p className="text-xs md:text-sm font-bold leading-none mb-1 md:mb-1.5 group-hover:text-[#703FEC] transition-colors duration-500">Contact Mark</p>
+                      <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-[0.25em]">Principal Design</p>
+                    </div>
+                  </motion.div>
+                </Magnetic>
               </div>
             </div>
 
             {/* Soft Scroll Hint */}
-            <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-40 text-center opacity-40">
+            <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-40 text-center opacity-40 pointer-events-none">
                <motion.div 
                  animate={{ y: [0, 8, 0] }}
                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}

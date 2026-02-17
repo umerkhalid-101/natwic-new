@@ -49,10 +49,6 @@ const WorkItem: React.FC<{ work: { id: number; title: string; image: string; yea
           </div>
         </motion.div>
       </div>
-
-      <div className="absolute top-12 right-12 md:top-20 md:right-20 bg-white/10 backdrop-blur-3xl border border-white/20 text-white text-[10px] font-bold px-8 py-3 rounded-full uppercase tracking-[0.4em] group-hover:bg-[#703FEC] group-hover:border-[#703FEC] transition-all">
-        View Project
-      </div>
     </motion.div>
   );
 };
@@ -80,7 +76,7 @@ export const SelectedWork: React.FC = () => {
             </p>
             <motion.div 
               whileHover={{ x: 20 }}
-              className="flex items-center gap-10 text-[11px] font-bold uppercase tracking-[0.6em] border-b-2 border-black pb-8 cursor-pointer group"
+              className="flex items-center gap-10 text-[11px] font-bold uppercase tracking-[0.6em] border-b-2 border-black pb-8 cursor-pointer group w-fit"
             >
               See all projects 
               <span className="text-3xl group-hover:text-[#703FEC] transition-colors">→</span>

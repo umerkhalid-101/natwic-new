@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Logo } from './Logo';
+import { Magnetic } from './Magnetic';
 
 interface NavbarProps {
   setView: (view: 'home' | 'contact' | 'studio') => void;
@@ -39,38 +40,53 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
           className="flex items-center text-black cursor-pointer relative z-[101]" 
           onClick={() => handleNavClick('home')}
         >
-          <Logo />
+          <Magnetic>
+             <Logo />
+          </Magnetic>
         </div>
         
         {/* Desktop Menu - Visible on Large screens */}
         <div className="hidden lg:flex items-center gap-10 text-[11px] font-semibold uppercase tracking-[0.2em] text-black">
-          <button 
-            onClick={() => setView('home')} 
-            className={`hover:text-[#703FEC] transition-colors ${currentView === 'home' ? 'text-[#703FEC]' : ''}`}
-          >
-            Home
-          </button>
-          <button 
-            onClick={() => setView('studio')}
-            className={`hover:text-[#703FEC] transition-colors ${currentView === 'studio' ? 'text-[#703FEC]' : ''}`}
-          >
-            Studio
-          </button>
-          <a href={currentView === 'home' ? "#work" : "/#work"} className="flex items-center gap-2 hover:text-[#703FEC] transition-colors group">
-            Work 
-            <span className="bg-[#703FEC] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">3</span>
-          </a>
-          <button 
-            onClick={() => setView('contact')}
-            className={`hover:text-[#703FEC] transition-colors ${currentView === 'contact' ? 'text-[#703FEC]' : ''}`}
-          >
-            Contact
-          </button>
+          <Magnetic>
+            <button 
+              onClick={() => setView('home')} 
+              className={`hover:text-[#703FEC] transition-colors p-2 ${currentView === 'home' ? 'text-[#703FEC]' : ''}`}
+            >
+              Home
+            </button>
+          </Magnetic>
           
-          <div className="flex flex-col gap-1 w-5 cursor-pointer ml-4 group">
-            <div className="h-[1px] bg-black w-full group-hover:bg-[#703FEC] transition-colors" />
-            <div className="h-[1px] bg-black w-2/3 self-end group-hover:bg-[#703FEC] transition-colors" />
-          </div>
+          <Magnetic>
+            <button 
+              onClick={() => setView('studio')}
+              className={`hover:text-[#703FEC] transition-colors p-2 ${currentView === 'studio' ? 'text-[#703FEC]' : ''}`}
+            >
+              Studio
+            </button>
+          </Magnetic>
+
+          <Magnetic>
+            <a href={currentView === 'home' ? "#work" : "/#work"} className="flex items-center gap-2 hover:text-[#703FEC] transition-colors group p-2">
+              Work 
+              <span className="bg-[#703FEC] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold group-hover:scale-110 transition-transform">3</span>
+            </a>
+          </Magnetic>
+
+          <Magnetic>
+            <button 
+              onClick={() => setView('contact')}
+              className={`hover:text-[#703FEC] transition-colors p-2 ${currentView === 'contact' ? 'text-[#703FEC]' : ''}`}
+            >
+              Contact
+            </button>
+          </Magnetic>
+          
+          <Magnetic>
+            <div className="flex flex-col gap-1 w-5 cursor-pointer ml-4 group p-2">
+              <div className="h-[1px] bg-black w-full group-hover:bg-[#703FEC] transition-colors" />
+              <div className="h-[1px] bg-black w-2/3 self-end group-hover:bg-[#703FEC] transition-colors" />
+            </div>
+          </Magnetic>
         </div>
         
         {/* Mobile Hamburger - Hidden on lg screens */}

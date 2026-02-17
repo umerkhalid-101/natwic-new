@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const PARTNERS_DATA = [
@@ -30,7 +30,7 @@ const PARTNERS_DATA = [
   { 
     name: 'Salams', 
     description: 'Building meaningful connections through elegant tech.',
-    logoId: '1e2M3OY1iwa6IPzmYBdlgPfh57Bv4VleA'
+    logoId: '1JqI3RcLBtnK-E1UJMaGJZ0thde9h2HGm'
   },
   { 
     name: 'Zwilt', 
@@ -40,12 +40,52 @@ const PARTNERS_DATA = [
 ];
 
 export const Partners: React.FC = () => {
-  // Triple items for ultra-smooth loop on large screens
-  const duplicatedPartners = [...PARTNERS_DATA, ...PARTNERS_DATA, ...PARTNERS_DATA];
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  // We need 2 sets to loop seamlessly. We animate from 0% to -50% of the total width.
+  // Using 4 sets ensures we have enough buffer for very wide screens without empty spaces.
+  const duplicatedPartners = [...PARTNERS_DATA, ...PARTNERS_DATA, ...PARTNERS_DATA, ...PARTNERS_DATA];
+
+  useEffect(() => {
+    const marquee = marqueeRef.current;
+    if (!marquee) return;
+
+    const handleMouseEnter = () => {
+      // Slow down the animation smoothly
+      marquee.getAnimations().forEach(anim => {
+        anim.updatePlaybackRate(0.6); // 50s / 0.6 ~= 83s duration
+      });
+    };
+    
+    const handleMouseLeave = () => {
+      // Restore normal speed
+      marquee.getAnimations().forEach(anim => {
+        anim.updatePlaybackRate(1); 
+      });
+    };
+
+    marquee.addEventListener('mouseenter', handleMouseEnter);
+    marquee.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      marquee.removeEventListener('mouseenter', handleMouseEnter);
+      marquee.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
 
   return (
-    <section className="py-40 px-0 bg-white overflow-hidden relative border-t border-zinc-100">
-      <div className="max-w-7xl mx-auto px-6 mb-24 text-center">
+    <section className="py-24 md:py-40 px-0 bg-white overflow-hidden relative border-t border-zinc-100">
+      {/* Inject CSS for the marquee animation */}
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 50s linear infinite;
+        }
+      `}</style>
+
+      <div className="max-w-7xl mx-auto px-6 mb-16 md:mb-24 text-center">
         <motion.div 
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -62,7 +102,7 @@ export const Partners: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-5xl md:text-7xl font-bold tracking-tighter mb-8 text-black leading-[1.05]"
+          className="text-4xl md:text-7xl font-bold tracking-tighter mb-8 text-black leading-[1.05]"
         >
           Collaborating with<br />the world's boldest.
         </motion.h2>
@@ -78,38 +118,34 @@ export const Partners: React.FC = () => {
         </motion.p>
       </div>
 
-      <div className="relative w-full group">
-        <div className="absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-white via-white/70 to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-white via-white/70 to-transparent z-10 pointer-events-none" />
+      {/* Infinite Marquee Loop */}
+      <div className="relative w-full flex overflow-hidden">
+        <div className="absolute inset-y-0 left-0 w-24 md:w-64 bg-gradient-to-r from-white via-white/70 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-24 md:w-64 bg-gradient-to-l from-white via-white/70 to-transparent z-10 pointer-events-none" />
 
-        <motion.div 
-          className="flex gap-8 md:gap-14 px-4 will-change-transform"
-          animate={{ x: ["0%", "-33.33%"] }}
-          transition={{
-            duration: 12, // Maximum speed with high-end smoothness
-            ease: "linear",
-            repeat: Infinity,
-          }}
+        <div 
+          ref={marqueeRef}
+          className="flex animate-marquee will-change-transform"
         >
           {duplicatedPartners.map((partner, i) => (
-            <div key={i} className="flex flex-col items-center shrink-0 w-[220px] md:w-[320px] group/item">
-              <div className="w-full aspect-square rounded-[2rem] md:rounded-[3rem] bg-zinc-50 flex items-center justify-center mb-10 border border-zinc-100/50 shadow-[0_20px_50px_rgba(0,0,0,0.01)] relative overflow-hidden transition-all duration-700 hover:shadow-[0_40px_80px_rgba(0,0,0,0.04)]">
+            <div key={i} className="flex flex-col items-center shrink-0 w-[280px] md:w-[320px] pr-8 md:pr-14 group/item cursor-pointer">
+              <div className="w-full aspect-square rounded-[2.5rem] md:rounded-[3rem] bg-zinc-50 flex items-center justify-center mb-8 md:mb-10 border border-zinc-100/50 shadow-[0_20px_50px_rgba(0,0,0,0.01)] relative overflow-hidden transition-all duration-700 hover:shadow-[0_40px_80px_rgba(0,0,0,0.04)]">
                 <div className="w-2/3 h-2/3 flex items-center justify-center relative z-10 p-6">
                   <img 
                     src={`https://lh3.googleusercontent.com/d/${partner.logoId}`}
                     alt={`${partner.name}`}
-                    className="max-w-full max-h-[100px] object-contain grayscale opacity-40 group-hover/item:grayscale-0 group-hover/item:opacity-100 transition-all duration-700 transform group-hover/item:scale-110"
+                    className="max-w-full max-h-[80px] md:max-h-[100px] object-contain grayscale opacity-40 group-hover/item:grayscale-0 group-hover/item:opacity-100 transition-all duration-700 transform group-hover/item:scale-110"
                   />
                 </div>
               </div>
-              <div className="text-center px-6">
+              <div className="text-center px-4">
                 <h4 className="text-black font-bold text-[12px] md:text-[14px] mb-2 uppercase tracking-widest opacity-40 group-hover/item:opacity-100 transition-all duration-500">
                   {partner.name}
                 </h4>
               </div>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

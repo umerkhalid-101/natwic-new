@@ -70,9 +70,9 @@ export const FAQ: React.FC = () => {
             className="w-full aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl"
           >
             <img 
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=1200" 
+              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=1200" 
               className="w-full h-full object-cover" 
-              alt="Natwic Portrait"
+              alt="Natwic Team Member"
             />
           </motion.div>
         </div>

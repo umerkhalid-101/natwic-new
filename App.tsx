@@ -39,8 +39,6 @@ const App: React.FC = () => {
             <Stats />
             <Pricing setView={setView} />
             <FAQ />
-            {/* We keep a copy here for the landing scroll, or just navigate to the page */}
-            <Contact isStandalone={false} setView={setView} />
           </>
         )}
         

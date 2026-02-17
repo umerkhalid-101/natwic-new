@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
 const MaskedText: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => (
-  <div className="overflow-hidden py-4 -my-4" style={{ transform: 'translateZ(0)' }}>
+  // Increased vertical padding to prevent ascender/descender clipping
+  <div className="overflow-hidden py-8 -my-8" style={{ transform: 'translateZ(0)' }}>
     <motion.div
       initial={{ y: "110%" }}
       animate={{ y: 0 }}
@@ -93,9 +94,10 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
           className="relative min-h-screen pt-24 md:pt-32 bg-white flex flex-col overflow-hidden"
         >
           {/* Main Heading - Refined for visibility on all screens */}
-          <div className="container mx-auto px-4 md:px-12 mb-6 select-none relative z-10 w-full overflow-hidden text-center">
+          {/* Adjusted font sizing (8vw mobile, 11vw desktop) to ensure "NatwicStudio" fits without horizontal clipping */}
+          <div className="container mx-auto px-4 md:px-12 mb-6 select-none relative z-10 w-full text-center">
             <MaskedText>
-              <h1 className="text-[12.5vw] md:text-[14vw] font-extrabold text-black leading-[0.9] tracking-[-0.06em] lg:tracking-[-0.08em] inline-block">
+              <h1 className="text-[8vw] md:text-[11vw] font-extrabold text-black leading-[1.1] tracking-[-0.04em] lg:tracking-[-0.06em] inline-block whitespace-nowrap">
                 NatwicStudio
               </h1>
             </MaskedText>

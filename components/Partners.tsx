@@ -40,118 +40,76 @@ const PARTNERS_DATA = [
 ];
 
 export const Partners: React.FC = () => {
-  // We double the data to create a seamless infinite loop effect
-  const duplicatedPartners = [...PARTNERS_DATA, ...PARTNERS_DATA];
+  // Triple items for ultra-smooth loop on large screens
+  const duplicatedPartners = [...PARTNERS_DATA, ...PARTNERS_DATA, ...PARTNERS_DATA];
 
   return (
     <section className="py-40 px-0 bg-white overflow-hidden relative border-t border-zinc-100">
-      {/* Design Element: Small Red Dot - matching the high-fidelity design */}
-      <div className="absolute top-24 left-12 md:left-24">
+      <div className="max-w-7xl mx-auto px-6 mb-24 text-center">
         <motion.div 
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true }}
-          className="w-1.5 h-1.5 bg-[#F3350C] rounded-full shadow-[0_0_10px_rgba(243,53,12,0.4)]" 
-        />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 mb-20 text-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="flex gap-2 items-center justify-center mb-6"
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="flex gap-3 items-center justify-center mb-8"
         >
-          <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_8px_rgba(112,63,236,0.6)]" />
-          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-400">Partnerships</p>
+          <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_12px_rgba(112,63,236,0.8)]" />
+          <p className="text-[11px] font-bold uppercase tracking-[0.5em] text-zinc-400">Trusted Partnerships</p>
         </motion.div>
         
         <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="text-4xl md:text-6xl font-bold tracking-tighter mb-6 text-black leading-[1.1]"
+          transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="text-5xl md:text-7xl font-bold tracking-tighter mb-8 text-black leading-[1.05]"
         >
-          Trusted by<br className="md:hidden" /> world-class teams.
+          Collaborating with<br />the world's boldest.
         </motion.h2>
 
         <motion.p 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-zinc-500 max-w-2xl mx-auto text-sm md:text-base font-medium leading-relaxed"
+          transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-zinc-400 max-w-2xl mx-auto text-base md:text-lg font-medium leading-relaxed"
         >
-          We collaborate with companies that refuse to settle for average. From early-stage startups to global enterprises, we help build products that people love.
+          From high-growth startups to enterprise giants, we help industry leaders define what’s next through pure intent and design excellence.
         </motion.p>
       </div>
 
-      {/* Carousel Container */}
-      <div className="relative w-full">
-        {/* Fading Edges Overlay - Fading to White for Light Theme */}
-        <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
+      <div className="relative w-full group">
+        <div className="absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-white via-white/70 to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-white via-white/70 to-transparent z-10 pointer-events-none" />
 
         <motion.div 
-          className="flex gap-6 md:gap-10 px-4"
-          animate={{
-            x: ["0%", "-50%"],
-          }}
+          className="flex gap-8 md:gap-14 px-4 will-change-transform"
+          animate={{ x: ["0%", "-33.33%"] }}
           transition={{
-            duration: 20, // Faster speed (was 45)
+            duration: 12, // Maximum speed with high-end smoothness
             ease: "linear",
             repeat: Infinity,
           }}
         >
           {duplicatedPartners.map((partner, i) => (
-            <div key={i} className="flex flex-col items-center shrink-0 w-[200px] md:w-[280px] group">
-              {/* Logo Card - Refined sizing */}
-              <div className="w-full aspect-square rounded-[1.5rem] md:rounded-[2.5rem] bg-gradient-to-b from-zinc-50 to-zinc-100/50 flex items-center justify-center mb-8 border border-zinc-100/80 shadow-[0_15px_40px_rgba(0,0,0,0.02)] relative overflow-hidden">
-                {/* Inner Glow/Shine Effect */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-white via-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                
-                {/* Brand Logo Image */}
-                <div className="w-3/4 h-3/4 flex items-center justify-center relative z-10 p-4">
+            <div key={i} className="flex flex-col items-center shrink-0 w-[220px] md:w-[320px] group/item">
+              <div className="w-full aspect-square rounded-[2rem] md:rounded-[3rem] bg-zinc-50 flex items-center justify-center mb-10 border border-zinc-100/50 shadow-[0_20px_50px_rgba(0,0,0,0.01)] relative overflow-hidden transition-all duration-700 hover:shadow-[0_40px_80px_rgba(0,0,0,0.04)]">
+                <div className="w-2/3 h-2/3 flex items-center justify-center relative z-10 p-6">
                   <img 
                     src={`https://lh3.googleusercontent.com/d/${partner.logoId}`}
-                    alt={`${partner.name} logo`}
-                    className="max-w-full max-h-[100px] md:max-h-[120px] object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 transform group-hover:scale-105"
-                    onError={(e) => {
-                       // Fallback to text if logo fails to load
-                       (e.target as HTMLImageElement).style.display = 'none';
-                       const textNode = document.createElement('div');
-                       textNode.className = "text-black font-black text-xl md:text-2xl tracking-tighter text-center";
-                       textNode.innerText = partner.name.toUpperCase();
-                       (e.target as HTMLImageElement).parentElement?.appendChild(textNode);
-                    }}
+                    alt={`${partner.name}`}
+                    className="max-w-full max-h-[100px] object-contain grayscale opacity-40 group-hover/item:grayscale-0 group-hover/item:opacity-100 transition-all duration-700 transform group-hover/item:scale-110"
                   />
                 </div>
-
-                {/* Corner Decorative Element */}
-                <div className="absolute top-6 right-6 w-1 h-1 bg-zinc-200 rounded-full group-hover:bg-[#703FEC] transition-colors" />
               </div>
-              
-              {/* Description Below Card */}
-              <div className="text-center px-4">
-                <h4 className="text-black font-bold text-[11px] md:text-[13px] mb-1.5 uppercase tracking-wider group-hover:text-[#703FEC] transition-colors">
+              <div className="text-center px-6">
+                <h4 className="text-black font-bold text-[12px] md:text-[14px] mb-2 uppercase tracking-widest opacity-40 group-hover/item:opacity-100 transition-all duration-500">
                   {partner.name}
                 </h4>
-                <motion.p 
-                  className="text-zinc-400 text-[9px] md:text-[11px] font-medium leading-relaxed max-w-[180px] mx-auto opacity-70 group-hover:opacity-100 transition-opacity"
-                >
-                  {partner.description}
-                </motion.p>
               </div>
             </div>
           ))}
         </motion.div>
-      </div>
-
-      {/* Background Aesthetic Text - Extremely subtle in light theme */}
-      <div className="mt-32 flex justify-center opacity-[0.03] pointer-events-none select-none">
-        <span className="text-[14vw] font-bold tracking-tighter text-black whitespace-nowrap">PARTNERSHIPS</span>
       </div>
     </section>
   );

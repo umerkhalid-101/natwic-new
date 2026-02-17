@@ -19,31 +19,56 @@ export const Services: React.FC = () => {
   }, [springX, springY]);
 
   return (
-    <section id="services" className="py-32 px-6 relative overflow-hidden bg-white text-black">
+    <section id="services" className="py-24 md:py-32 px-6 relative overflow-hidden bg-white text-black">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-end mb-24 border-b border-zinc-900 pb-12">
+        <div className="flex justify-between items-end mb-16 md:mb-24 border-b border-zinc-900 pb-8 md:pb-12">
           <div>
             <p className="text-xs font-bold text-zinc-500 uppercase tracking-[0.4em] mb-4">Capabilities</p>
-            <h2 className="text-6xl font-bold tracking-tighter">Services.</h2>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">Services.</h2>
           </div>
-          <span className="text-[#703FEC] font-mono text-xl">(04)</span>
+          <span className="text-[#703FEC] font-mono text-lg md:text-xl">(04)</span>
         </div>
 
         <div className="divide-y divide-zinc-100">
           {SERVICES.map((service) => (
             <div 
               key={service.id}
-              className="relative py-20 group cursor-pointer"
+              className="relative py-12 md:py-20 group cursor-default lg:cursor-pointer"
               onMouseEnter={() => setHoveredId(service.id)}
               onMouseLeave={() => setHoveredId(null)}
             >
-              <div className="flex flex-col md:flex-row gap-12 items-center relative z-10 transition-colors group-hover:text-[#703FEC]">
-                <div className="text-zinc-400 font-mono text-xl group-hover:text-[#703FEC]">{service.number}</div>
-                <div className="flex-1">
-                  <h3 className="text-5xl md:text-8xl font-bold mb-0 transition-all duration-700 group-hover:translate-x-12">
+              <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 items-start lg:items-center relative z-10 transition-colors group-hover:text-[#703FEC]">
+                <div className="text-zinc-400 font-mono text-xl group-hover:text-[#703FEC] mb-2 lg:mb-0">{service.number}</div>
+                <div className="flex-1 w-full">
+                  <h3 className="text-4xl md:text-5xl lg:text-8xl font-bold mb-4 lg:mb-0 transition-all duration-700 lg:group-hover:translate-x-12">
                     {service.title}
                   </h3>
+                  
+                  {/* Mobile Content: Visible on small screens, hidden on desktop */}
+                  <div className="block lg:hidden mt-4">
+                     <p className="text-zinc-500 text-sm md:text-base mb-6 leading-relaxed max-w-lg">
+                        {service.description}
+                     </p>
+                     <p className="text-zinc-400 text-xs uppercase tracking-widest font-bold mb-8">
+                        {service.tags.join(' • ')}
+                     </p>
+                     <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="rounded-2xl overflow-hidden aspect-video w-full shadow-lg border border-zinc-100"
+                     >
+                       <img 
+                         src={service.imageUrl} 
+                         className="w-full h-full object-cover" 
+                         alt={service.title} 
+                       />
+                     </motion.div>
+                  </div>
                 </div>
+
+                {/* Desktop Tags: Visible only on desktop hover */}
                 <div className="max-w-xs hidden lg:block opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-right">
                   <p className="text-zinc-500 text-xs uppercase tracking-widest font-bold">
                     {service.tags.join(' • ')}
@@ -54,34 +79,36 @@ export const Services: React.FC = () => {
           ))}
         </div>
 
-        {/* Hover Image Portal */}
-        <AnimatePresence>
-          {hoveredId && (
-            <motion.div 
-              style={{
-                left: springX,
-                top: springY,
-                x: "-50%",
-                y: "-50%",
-                position: 'fixed',
-                pointerEvents: 'none',
-                zIndex: 50
-              }}
-              initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              exit={{ opacity: 0, scale: 0.5, rotate: 15 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="w-80 h-[450px] overflow-hidden rounded-[2.5rem] border-4 border-white shadow-2xl"
-            >
-              <img 
-                src={SERVICES.find(s => s.id === hoveredId)?.imageUrl} 
-                className="w-full h-full object-cover grayscale transition-all duration-700 scale-110"
-                alt="Service Preview"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#703FEC]/60 to-transparent" />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Hover Image Portal: Desktop Only */}
+        <div className="hidden lg:block">
+          <AnimatePresence>
+            {hoveredId && (
+              <motion.div 
+                style={{
+                  left: springX,
+                  top: springY,
+                  x: "-50%",
+                  y: "-50%",
+                  position: 'fixed',
+                  pointerEvents: 'none',
+                  zIndex: 50
+                }}
+                initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.5, rotate: 15 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="w-80 h-[450px] overflow-hidden rounded-[2.5rem] border-4 border-white shadow-2xl"
+              >
+                <img 
+                  src={SERVICES.find(s => s.id === hoveredId)?.imageUrl} 
+                  className="w-full h-full object-cover grayscale transition-all duration-700 scale-110"
+                  alt="Service Preview"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#703FEC]/60 to-transparent" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   );

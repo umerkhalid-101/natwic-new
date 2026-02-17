@@ -1,4 +1,3 @@
-
 import { ServiceItem, PricingPlan, Testimonial } from './types';
 
 export const SERVICES: ServiceItem[] = [
@@ -7,8 +6,8 @@ export const SERVICES: ServiceItem[] = [
     number: '01',
     title: 'Web design',
     tags: ['Website', 'Wireframe', 'Landing page', 'Dashboard', 'Product'],
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique.',
-    imageUrl: 'https://picsum.photos/seed/web/400/300'
+    description: 'We build immersive digital experiences that blend performance with high-end aesthetics.',
+    imageUrl: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1000'
   },
   {
     id: '2',
@@ -16,7 +15,7 @@ export const SERVICES: ServiceItem[] = [
     title: 'Branding',
     tags: ['Logo', 'Packaging', 'Mockup', 'Deck', 'Visual identity'],
     description: 'Creating timeless brand identities that resonate with your core audience and stand the test of time.',
-    imageUrl: 'https://picsum.photos/seed/brand/400/300'
+    imageUrl: 'https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&fit=crop&q=80&w=1000'
   },
   {
     id: '3',
@@ -24,7 +23,7 @@ export const SERVICES: ServiceItem[] = [
     title: 'Content',
     tags: ['UX writing', 'Social content', 'Campaign', 'Deck', 'Advertising'],
     description: 'Strategic content creation that drives engagement and tells your brand story effectively.',
-    imageUrl: 'https://picsum.photos/seed/content/400/300'
+    imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=1000'
   },
   {
     id: '4',
@@ -32,7 +31,7 @@ export const SERVICES: ServiceItem[] = [
     title: 'Social media',
     tags: ['Strategy', 'Growth', 'Campaign', 'Posts', 'Design'],
     description: 'Scaling your digital presence through data-driven social strategies and creative executions.',
-    imageUrl: 'https://picsum.photos/seed/social/400/300'
+    imageUrl: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=1000'
   }
 ];
 

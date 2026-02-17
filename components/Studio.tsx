@@ -20,10 +20,10 @@ const VALUES = [
 ];
 
 const TEAM = [
-  { id: 1, name: 'Umer Khalid', role: 'Founder', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400' },
-  { id: 2, name: 'Faiq Ahmed', role: 'Co-founder', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=400' },
-  { id: 3, name: 'Hassan Daniyal Ghauri', role: 'Head of Business', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400' },
-  { id: 4, name: 'Tanseer Khoso', role: 'Head of Design', image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400' },
+  { id: 1, name: 'Umer Khalid', role: 'Founder', image: 'https://lh3.googleusercontent.com/d/1-KWP8MBvRL9kjnqY53zzJtS0d-U3wHLg' },
+  { id: 2, name: 'Faiq Ahmed', role: 'Co-founder', image: 'https://lh3.googleusercontent.com/d/1F2UfBQhDUeie8MloYGRXKMF82vgSPSCP' },
+  { id: 3, name: 'Hassan Daniyal Ghauri', role: 'Head of Business', image: 'https://lh3.googleusercontent.com/d/1M6RiGlZRzBvq0wXWo2NvJWLVHdhmMxZ1' },
+  { id: 4, name: 'Tanseer Khoso', role: 'Head of Design', image: 'https://lh3.googleusercontent.com/d/1gmuo0GEVy94utuLhnlf6OUcOi3NGHiyF' },
 ];
 
 // Utility component for the "Masked Reveal" text animation
@@ -87,7 +87,7 @@ const OrbitalRing: React.FC<{
                   <img 
                     src={member.image} 
                     alt={member.name} 
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                    className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500"
                   />
                 </motion.div>
               </div>
@@ -338,7 +338,7 @@ export const Studio: React.FC<StudioProps> = ({ setView }) => {
                   <img 
                     src={member.image} 
                     alt={member.name} 
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" 
+                    className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-500" 
                   />
                  </div>
                  <div className="flex-1 min-w-0">

@@ -90,12 +90,12 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative min-h-screen pt-32 bg-white flex flex-col overflow-hidden"
+          className="relative min-h-screen pt-24 md:pt-32 bg-white flex flex-col overflow-hidden"
         >
-          {/* Main Heading */}
+          {/* Main Heading - Refined for visibility on all screens */}
           <div className="container mx-auto px-4 md:px-12 mb-6 select-none relative z-10 w-full overflow-hidden text-center">
             <MaskedText>
-              <h1 className="text-[14vw] font-extrabold text-black leading-none tracking-[-0.08em] whitespace-nowrap px-10">
+              <h1 className="text-[12.5vw] md:text-[14vw] font-extrabold text-black leading-[0.9] tracking-[-0.06em] lg:tracking-[-0.08em] inline-block">
                 NatwicStudio
               </h1>
             </MaskedText>
@@ -104,7 +104,7 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
           {/* Main Visual Container */}
           <motion.div 
             style={{ scale }}
-            className="relative mx-auto w-[98vw] rounded-2xl md:rounded-[3.5rem] overflow-hidden bg-black flex-1 min-h-[82vh] shadow-[0_40px_100px_rgba(0,0,0,0.2)] mb-4 will-change-transform"
+            className="relative mx-auto w-[98vw] rounded-2xl md:rounded-[3.5rem] overflow-hidden bg-black flex-1 min-h-[70vh] md:min-h-[82vh] shadow-[0_40px_100px_rgba(0,0,0,0.2)] mb-4 will-change-transform"
           >
             {/* Plasma Layer */}
             <div className="absolute inset-0 z-0 overflow-hidden bg-[#050505]">
@@ -125,14 +125,14 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
             </div>
 
             {/* Content Overlay */}
-            <div className="absolute inset-0 z-20 flex flex-col justify-end p-10 md:p-24 pb-36">
-              <div className="flex flex-col md:flex-row justify-between items-end gap-16">
+            <div className="absolute inset-0 z-20 flex flex-col justify-end p-6 md:p-24 pb-24 md:pb-36">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 md:gap-16">
                 <div className="max-w-4xl">
                   <MaskedText delay={0.6}>
-                    <p className="text-[10px] md:text-xs font-bold uppercase tracking-[0.7em] mb-8 text-white/50">ESTABLISHED TWENTY TWENTY FIVE</p>
+                    <p className="text-[9px] md:text-xs font-bold uppercase tracking-[0.7em] mb-4 md:mb-8 text-white/50">ESTABLISHED TWENTY TWENTY FIVE</p>
                   </MaskedText>
                   <MaskedText delay={0.8}>
-                    <h2 className="text-4xl md:text-[4.5rem] font-bold text-white leading-[1.1] tracking-[-0.04em]">
+                    <h2 className="text-3xl md:text-[4.5rem] font-bold text-white leading-[1.1] tracking-[-0.04em]">
                       Not just a studio,<br/><span className="italic text-white/40 font-medium">we are Natwic.</span>
                     </h2>
                   </MaskedText>
@@ -143,30 +143,30 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 1.4, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                   onClick={() => setView?.('contact')}
-                  className="flex items-center gap-5 bg-white/5 backdrop-blur-3xl border border-white/10 p-3 pr-8 rounded-[2rem] hover:bg-white/10 transition-all cursor-pointer group"
+                  className="flex items-center gap-4 md:gap-5 bg-white/5 backdrop-blur-3xl border border-white/10 p-2 md:p-3 pr-6 md:pr-8 rounded-[1.5rem] md:rounded-[2rem] hover:bg-white/10 transition-all cursor-pointer group"
                 >
                   <div className="relative shrink-0">
-                    <img src="https://i.pravatar.cc/100?u=natwic_mark" className="w-14 h-14 rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Studio Lead" />
-                    <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#703FEC] rounded-full border-2 border-zinc-950" />
+                    <img src="https://i.pravatar.cc/100?u=natwic_mark" className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Studio Lead" />
+                    <div className="absolute -top-1 -right-1 w-2.5 md:w-3.5 h-2.5 md:h-3.5 bg-[#703FEC] rounded-full border-2 border-zinc-950" />
                   </div>
                   <div className="text-white">
-                    <p className="text-sm font-bold leading-none mb-1.5 group-hover:text-[#703FEC] transition-colors duration-500">Contact Mark</p>
-                    <p className="text-[9px] font-bold text-white/30 uppercase tracking-[0.25em]">Principal Design</p>
+                    <p className="text-xs md:text-sm font-bold leading-none mb-1 md:mb-1.5 group-hover:text-[#703FEC] transition-colors duration-500">Contact Mark</p>
+                    <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-[0.25em]">Principal Design</p>
                   </div>
                 </motion.div>
               </div>
             </div>
 
             {/* Soft Scroll Hint */}
-            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-40 text-center opacity-40">
+            <div className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 z-40 text-center opacity-40">
                <motion.div 
                  animate={{ y: [0, 8, 0] }}
                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                 className="text-[10px] font-bold uppercase tracking-[0.6em] text-white flex items-center gap-6"
+                 className="text-[8px] md:text-[10px] font-bold uppercase tracking-[0.6em] text-white flex items-center gap-4 md:gap-6"
                >
-                 <span className="w-12 h-[1px] bg-white/10" />
+                 <span className="w-8 md:w-12 h-[1px] bg-white/10" />
                  SCROLL
-                 <span className="w-12 h-[1px] bg-white/10" />
+                 <span className="w-8 md:w-12 h-[1px] bg-white/10" />
                </motion.div>
             </div>
           </motion.div>

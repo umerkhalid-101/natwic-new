@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const EXPERTS = [
-  { id: 1, img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=150", radius: 185, speed: 100, offset: 0 },
-  { id: 2, img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=150", radius: 185, speed: 100, offset: 120 },
-  { id: 3, img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150", radius: 185, speed: 100, offset: 240 },
-  { id: 4, img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400", radius: 115, speed: 70, offset: 60 },
-  { id: 5, img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=400", radius: 115, speed: 70, offset: 180 },
-  { id: 6, img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=400", radius: 115, speed: 70, offset: 300 },
+  // Outer Ring (Radius 185)
+  { id: 1, img: "https://lh3.googleusercontent.com/d/1-KWP8MBvRL9kjnqY53zzJtS0d-U3wHLg", radius: 185, speed: 50, offset: 0 }, // Umer
+  { id: 2, img: "https://lh3.googleusercontent.com/d/1F2UfBQhDUeie8MloYGRXKMF82vgSPSCP", radius: 185, speed: 50, offset: 180 }, // Faiq
+  
+  // Inner Ring (Radius 115)
+  { id: 3, img: "https://lh3.googleusercontent.com/d/1M6RiGlZRzBvq0wXWo2NvJWLVHdhmMxZ1", radius: 115, speed: 40, offset: 90 }, // Hassan
+  { id: 4, img: "https://lh3.googleusercontent.com/d/1gmuo0GEVy94utuLhnlf6OUcOi3NGHiyF", radius: 115, speed: 40, offset: 270 }, // Tanseer
 ];
 
 const CHAT_MESSAGES = [
@@ -49,11 +50,11 @@ const ExpertOrbital = () => {
             <motion.div
               animate={{ rotate: -360 }}
               transition={{ duration: exp.speed, repeat: Infinity, ease: "linear", delay: -exp.offset }}
-              className="w-10 h-10 md:w-11 md:h-11 rounded-full border border-white/10 overflow-hidden bg-zinc-800 shadow-xl"
+              className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/10 overflow-hidden bg-zinc-800 shadow-xl"
             >
               <img 
                 src={exp.img} 
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" 
+                className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-500" 
                 alt="Expert" 
               />
             </motion.div>

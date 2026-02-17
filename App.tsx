@@ -11,8 +11,9 @@ import { Pricing } from './components/Pricing';
 import { FAQ } from './components/FAQ';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
+import { Studio } from './components/Studio';
 
-type View = 'home' | 'contact';
+type View = 'home' | 'contact' | 'studio';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('home');
@@ -27,7 +28,7 @@ const App: React.FC = () => {
       <Navbar setView={setView} currentView={view} />
       
       <main>
-        {view === 'home' ? (
+        {view === 'home' && (
           <>
             <Hero setView={setView} />
             <Partners />
@@ -41,7 +42,13 @@ const App: React.FC = () => {
             {/* We keep a copy here for the landing scroll, or just navigate to the page */}
             <Contact isStandalone={false} setView={setView} />
           </>
-        ) : (
+        )}
+        
+        {view === 'studio' && (
+          <Studio setView={setView} />
+        )}
+
+        {view === 'contact' && (
           <Contact isStandalone={true} setView={setView} />
         )}
       </main>

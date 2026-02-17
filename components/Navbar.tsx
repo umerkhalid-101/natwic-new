@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Logo } from './Logo';
 
 interface NavbarProps {
-  setView: (view: 'home' | 'contact') => void;
-  currentView: 'home' | 'contact';
+  setView: (view: 'home' | 'contact' | 'studio') => void;
+  currentView: 'home' | 'contact' | 'studio';
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
@@ -29,7 +29,12 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
         >
           Home
         </button>
-        <a href={currentView === 'home' ? "#studio" : "/#studio"} className="hover:text-[#703FEC] transition-colors">Studio</a>
+        <button 
+          onClick={() => setView('studio')}
+          className={`hover:text-[#703FEC] transition-colors ${currentView === 'studio' ? 'text-[#703FEC]' : ''}`}
+        >
+          Studio
+        </button>
         <a href={currentView === 'home' ? "#work" : "/#work"} className="flex items-center gap-2 hover:text-[#703FEC] transition-colors group">
           Work 
           <span className="bg-[#703FEC] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold">3</span>

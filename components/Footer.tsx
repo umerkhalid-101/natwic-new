@@ -2,8 +2,8 @@ import React from 'react';
 import { Logo } from './Logo';
 
 interface FooterProps {
-  setView?: (view: 'home' | 'contact') => void;
-  currentView?: 'home' | 'contact';
+  setView?: (view: 'home' | 'contact' | 'studio') => void;
+  currentView?: 'home' | 'contact' | 'studio';
 }
 
 export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
@@ -56,7 +56,7 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
           <p className="text-xs font-bold uppercase tracking-widest text-[#703FEC]">Studio</p>
           <ul className="text-zinc-500 text-xs space-y-4 uppercase tracking-[0.3em] font-semibold">
             <li className="hover:text-white cursor-pointer transition-colors" onClick={() => setView?.('home')}>Home</li>
-            <li className="hover:text-white cursor-pointer transition-colors">About</li>
+            <li className="hover:text-white cursor-pointer transition-colors" onClick={() => setView?.('studio')}>About</li>
             <li className="hover:text-white cursor-pointer transition-colors">Process</li>
           </ul>
         </div>

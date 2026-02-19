@@ -1,7 +1,10 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-const WorkItem: React.FC<{ work: { id: number; title: string; image: string; year: string; category: string } }> = ({ work }) => {
+const WorkItem: React.FC<{ 
+  work: { id: number; title: string; image: string; year: string; category: string };
+  onClick?: () => void;
+}> = ({ work, onClick }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const { scrollYProgress } = useScroll({
@@ -16,6 +19,7 @@ const WorkItem: React.FC<{ work: { id: number; title: string; image: string; yea
   return (
     <motion.div 
       ref={containerRef}
+      onClick={onClick}
       initial={{ opacity: 0, y: 100 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
@@ -53,7 +57,11 @@ const WorkItem: React.FC<{ work: { id: number; title: string; image: string; yea
   );
 };
 
-export const SelectedWork: React.FC = () => {
+interface SelectedWorkProps {
+  setView?: (view: 'home' | 'contact' | 'studio' | 'work') => void;
+}
+
+export const SelectedWork: React.FC<SelectedWorkProps> = ({ setView }) => {
   const works = [
     { id: 1, title: "Modernist Era", category: "Identity Design", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2000", year: "2025" },
     { id: 2, title: "Abstract Flow", category: "Product UX", image: "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&q=80&w=2000", year: "2025" },
@@ -75,6 +83,7 @@ export const SelectedWork: React.FC = () => {
               We specialize in creating digital landmarks. Every project is a synthesis of market intelligence and high-fidelity craftsmanship.
             </p>
             <motion.div 
+              onClick={() => setView?.('work')}
               whileHover={{ x: 20 }}
               className="flex items-center gap-10 text-[11px] font-bold uppercase tracking-[0.6em] border-b-2 border-black pb-8 cursor-pointer group w-fit"
             >
@@ -86,7 +95,11 @@ export const SelectedWork: React.FC = () => {
 
         <div className="flex flex-col gap-32 md:gap-56">
           {works.map((work) => (
-            <WorkItem key={work.id} work={work} />
+            <WorkItem 
+              key={work.id} 
+              work={work} 
+              onClick={() => setView?.('work')}
+            />
           ))}
         </div>
       </div>

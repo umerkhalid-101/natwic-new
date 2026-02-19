@@ -17,8 +17,9 @@ import { Seo } from './components/Seo';
 import { Privacy } from './components/Privacy';
 import { Terms } from './components/Terms';
 import { Loader } from './components/Loader';
+import { WorkComingSoon } from './components/WorkComingSoon';
 
-type View = 'home' | 'contact' | 'studio' | 'privacy' | 'terms';
+type View = 'home' | 'contact' | 'studio' | 'privacy' | 'terms' | 'work';
 
 const App: React.FC = () => {
   const [view, setView] = useState<View>('home');
@@ -29,7 +30,7 @@ const App: React.FC = () => {
     const handleUrlChange = () => {
       const params = new URLSearchParams(window.location.search);
       const viewParam = params.get('view') as View;
-      if (['studio', 'contact', 'privacy', 'terms'].includes(viewParam)) {
+      if (['studio', 'contact', 'privacy', 'terms', 'work'].includes(viewParam)) {
         setView(viewParam);
       } else {
         setView('home');
@@ -94,7 +95,7 @@ const App: React.FC = () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <Navbar setView={changeView} currentView={view as 'home' | 'contact' | 'studio'} />
+      <Navbar setView={changeView as any} currentView={view as 'home' | 'contact' | 'studio'} />
       
       <main>
         {view === 'home' && (
@@ -108,7 +109,7 @@ const App: React.FC = () => {
             <Partners />
             <WhyUs />
             <StudioPreview setView={changeView} />
-            <SelectedWork />
+            <SelectedWork setView={changeView} />
             <Services />
             <Stats />
             <Pricing setView={changeView} />
@@ -127,6 +128,17 @@ const App: React.FC = () => {
           </>
         )}
 
+        {view === 'work' && (
+          <>
+            <Seo 
+              title="Selected Work | Natwic®" 
+              description="Explore our portfolio of high-end digital experiences. Coming Soon."
+              view="work"
+            />
+            <WorkComingSoon setView={changeView as any} />
+          </>
+        )}
+
         {view === 'contact' && (
           <>
             <Seo 
@@ -134,7 +146,7 @@ const App: React.FC = () => {
               description="Start your legacy with Natwic. Get in touch for high-end web design, branding, and digital strategy."
               view="contact"
             />
-            <Contact isStandalone={true} setView={changeView} />
+            <Contact isStandalone={true} setView={changeView as any} />
           </>
         )}
 
@@ -153,7 +165,7 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <Footer setView={changeView} currentView={view} />
+      {view !== 'work' && <Footer setView={changeView as any} currentView={view} />}
     </div>
   );
 };

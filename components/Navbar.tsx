@@ -4,8 +4,8 @@ import { Logo } from './Logo';
 import { Magnetic } from './Magnetic';
 
 interface NavbarProps {
-  setView: (view: 'home' | 'contact' | 'studio') => void;
-  currentView: 'home' | 'contact' | 'studio';
+  setView: (view: 'home' | 'contact' | 'studio' | 'work') => void;
+  currentView: 'home' | 'contact' | 'studio' | 'work';
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
@@ -23,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
     };
   }, [isMobileMenuOpen]);
 
-  const handleNavClick = (view: 'home' | 'contact' | 'studio') => {
+  const handleNavClick = (view: 'home' | 'contact' | 'studio' | 'work') => {
     setView(view);
     setIsMobileMenuOpen(false);
   };
@@ -66,10 +66,13 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
           </Magnetic>
 
           <Magnetic>
-            <a href={currentView === 'home' ? "#work" : "/#work"} className="flex items-center gap-2 hover:text-[#703FEC] transition-colors group p-2">
+            <button 
+              onClick={() => setView('work')}
+              className={`flex items-center gap-2 hover:text-[#703FEC] transition-colors group p-2 ${currentView === 'work' ? 'text-[#703FEC]' : ''}`}
+            >
               Work 
               <span className="bg-[#703FEC] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold group-hover:scale-110 transition-transform">3</span>
-            </a>
+            </button>
           </Magnetic>
 
           <Magnetic>
@@ -123,7 +126,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
                 {[
                   { label: 'Home', action: () => handleNavClick('home') },
                   { label: 'Studio', action: () => handleNavClick('studio') },
-                  { label: 'Work', action: () => { window.location.hash = "#work"; setIsMobileMenuOpen(false); } },
+                  { label: 'Work', action: () => handleNavClick('work') },
                   { label: 'Contact', action: () => handleNavClick('contact') }
                 ].map((item, i) => (
                   <motion.div

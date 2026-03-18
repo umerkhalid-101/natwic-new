@@ -139,7 +139,7 @@ export const WhyUs: React.FC = () => {
             className="flex gap-3 items-center pt-2 min-w-[200px]"
           >
             <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_8px_rgba(112,63,236,0.3)]" />
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-400">WHY WORK WITH US</p>
+            <p className="text-xs font-bold uppercase tracking-[0.4em] text-zinc-600">WHY WORK WITH US</p>
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}

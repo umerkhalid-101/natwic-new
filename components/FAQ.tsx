@@ -18,7 +18,7 @@ export const FAQ: React.FC = () => {
         <div className="lg:pr-10">
           <div className="flex gap-2 items-center mb-10">
             <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_8px_rgba(112,63,236,0.6)]" />
-            <p className="text-[10px] font-bold text-zinc-900 uppercase tracking-[0.4em]">FAQ</p>
+            <p className="text-xs font-bold text-zinc-700 uppercase tracking-[0.4em]">FAQ</p>
           </div>
           <h2 className="text-6xl md:text-[80px] font-semibold tracking-tighter mb-8 leading-[0.9] text-black">
             Answered<br />questions.

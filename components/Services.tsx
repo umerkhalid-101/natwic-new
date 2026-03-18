@@ -23,7 +23,7 @@ export const Services: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-end mb-16 md:mb-24 border-b border-zinc-900 pb-8 md:pb-12">
           <div>
-            <p className="text-xs font-bold text-zinc-500 uppercase tracking-[0.4em] mb-4">Capabilities</p>
+            <p className="text-xs font-bold text-zinc-600 uppercase tracking-[0.4em] mb-4">Capabilities</p>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">Services.</h2>
           </div>
           <span className="text-[#703FEC] font-mono text-lg md:text-xl">(04)</span>

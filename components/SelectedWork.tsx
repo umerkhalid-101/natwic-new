@@ -75,7 +75,7 @@ export const SelectedWork: React.FC<SelectedWorkProps> = ({ setView }) => {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-40 gap-24">
           <div className="max-w-4xl">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.8em] text-[#703FEC] mb-12">SELECTED ARCHIVE</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.8em] text-[#703FEC] mb-12">SELECTED ARCHIVE</p>
             <h2 className="text-7xl md:text-[11rem] font-bold tracking-tight leading-[0.75] mb-12">
               Bolder<br />Thinking.
             </h2>

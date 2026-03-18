@@ -49,9 +49,9 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
           className="absolute inset-0 z-0"
           style={{
             background: `
-              radial-gradient(ellipse 80% 80% at -10% -10%, #703FEC 0%, transparent 60%),
-              radial-gradient(ellipse 70% 70% at 110% 60%, #a855f7 0%, transparent 60%),
-              radial-gradient(ellipse 80% 80% at -20% 120%, #703FEC 0%, transparent 55%),
+              radial-gradient(ellipse 90% 90% at -5% -5%, rgba(112,63,236,0.95) 0%, transparent 55%),
+              radial-gradient(ellipse 75% 75% at 105% 55%, rgba(168,85,247,0.85) 0%, transparent 55%),
+              radial-gradient(ellipse 70% 70% at 50% 110%, rgba(112,63,236,0.7) 0%, transparent 50%),
               #050505
             `
           }}

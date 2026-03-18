@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -10,14 +10,15 @@ import { Services } from './components/Services';
 import { Stats } from './components/Stats';
 import { Pricing } from './components/Pricing';
 import { FAQ } from './components/FAQ';
-import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
-import { Studio } from './components/Studio';
 import { Seo } from './components/Seo';
-import { Privacy } from './components/Privacy';
-import { Terms } from './components/Terms';
 import { Loader } from './components/Loader';
-import { WorkComingSoon } from './components/WorkComingSoon';
+
+const Contact = lazy(() => import('./components/Contact').then(m => ({ default: m.Contact })));
+const Studio = lazy(() => import('./components/Studio').then(m => ({ default: m.Studio })));
+const Privacy = lazy(() => import('./components/Privacy').then(m => ({ default: m.Privacy })));
+const Terms = lazy(() => import('./components/Terms').then(m => ({ default: m.Terms })));
+const WorkComingSoon = lazy(() => import('./components/WorkComingSoon').then(m => ({ default: m.WorkComingSoon })));
 
 type View = 'home' | 'contact' | 'studio' | 'privacy' | 'terms' | 'work';
 
@@ -66,7 +67,7 @@ const App: React.FC = () => {
     "@type": "ProfessionalService",
     "name": "Natwic Studio",
     "image": "https://lh3.googleusercontent.com/d/1TNWPq9K4wbLxAey0l4zm8fNPya-DOx62",
-    "url": "https://natwic.studio",
+    "url": "https://www.natwic.com",
     "telephone": "+1 234 567 890",
     "priceRange": "$$$",
     "address": {
@@ -76,6 +77,7 @@ const App: React.FC = () => {
       "addressCountry": "UK"
     },
     "sameAs": [
+      "https://www.natwic.com",
       "https://www.linkedin.com/company/natwic",
       "https://www.instagram.com/natwic"
     ]
@@ -117,52 +119,54 @@ const App: React.FC = () => {
           </>
         )}
         
-        {view === 'studio' && (
-          <>
-            <Seo 
-              title="Our Studio | Natwic®" 
-              description="Meet the minds behind Natwic. A multidisciplinary team of designers, developers, and strategists redefining the digital landscape."
-              view="studio"
-            />
-            <Studio setView={changeView} />
-          </>
-        )}
+        <Suspense fallback={null}>
+          {view === 'studio' && (
+            <>
+              <Seo
+                title="Our Studio | Natwic®"
+                description="Meet the minds behind Natwic. A multidisciplinary team of designers, developers, and strategists redefining the digital landscape."
+                view="studio"
+              />
+              <Studio setView={changeView} />
+            </>
+          )}
 
-        {view === 'work' && (
-          <>
-            <Seo 
-              title="Selected Work | Natwic®" 
-              description="Explore our portfolio of high-end digital experiences. Coming Soon."
-              view="work"
-            />
-            <WorkComingSoon setView={changeView as any} />
-          </>
-        )}
+          {view === 'work' && (
+            <>
+              <Seo
+                title="Selected Work | Natwic®"
+                description="Explore our portfolio of high-end digital experiences. Coming Soon."
+                view="work"
+              />
+              <WorkComingSoon setView={changeView as any} />
+            </>
+          )}
 
-        {view === 'contact' && (
-          <>
-            <Seo 
-              title="Contact Us | Natwic®" 
-              description="Start your legacy with Natwic. Get in touch for high-end web design, branding, and digital strategy."
-              view="contact"
-            />
-            <Contact isStandalone={true} setView={changeView as any} />
-          </>
-        )}
+          {view === 'contact' && (
+            <>
+              <Seo
+                title="Contact Us | Natwic®"
+                description="Start your legacy with Natwic. Get in touch for high-end web design, branding, and digital strategy."
+                view="contact"
+              />
+              <Contact isStandalone={true} setView={changeView as any} />
+            </>
+          )}
 
-        {view === 'privacy' && (
-           <>
-             <Seo title="Privacy Policy | Natwic®" description="Natwic Studio Privacy Policy." view="privacy" />
-             <Privacy />
-           </>
-        )}
+          {view === 'privacy' && (
+            <>
+              <Seo title="Privacy Policy | Natwic®" description="Natwic Studio Privacy Policy." view="privacy" />
+              <Privacy />
+            </>
+          )}
 
-        {view === 'terms' && (
-           <>
-             <Seo title="Terms of Service | Natwic®" description="Natwic Studio Terms of Service." view="terms" />
-             <Terms />
-           </>
-        )}
+          {view === 'terms' && (
+            <>
+              <Seo title="Terms of Service | Natwic®" description="Natwic Studio Terms of Service." view="terms" />
+              <Terms />
+            </>
+          )}
+        </Suspense>
       </main>
 
       {view !== 'work' && <Footer setView={changeView as any} currentView={view} />}

@@ -59,10 +59,12 @@ export const Services: React.FC = () => {
                         transition={{ duration: 0.8 }}
                         className="rounded-2xl overflow-hidden aspect-video w-full shadow-lg border border-zinc-100"
                      >
-                       <img 
-                         src={service.imageUrl} 
-                         className="w-full h-full object-cover" 
-                         alt={service.title} 
+                       <img
+                         src={service.imageUrl}
+                         className="w-full h-full object-cover"
+                         alt={service.title}
+                         loading="lazy"
+                         decoding="async"
                        />
                      </motion.div>
                   </div>
@@ -99,10 +101,12 @@ export const Services: React.FC = () => {
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="w-80 h-[450px] overflow-hidden rounded-[2.5rem] border-4 border-white shadow-2xl"
               >
-                <img 
-                  src={SERVICES.find(s => s.id === hoveredId)?.imageUrl} 
+                <img
+                  src={SERVICES.find(s => s.id === hoveredId)?.imageUrl}
                   className="w-full h-full object-cover grayscale transition-all duration-700 scale-110"
                   alt="Service Preview"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#703FEC]/60 to-transparent" />
               </motion.div>

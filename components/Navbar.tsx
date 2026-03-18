@@ -46,7 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
         </div>
         
         {/* Desktop Menu - Visible on Large screens */}
-        <div className="hidden lg:flex items-center gap-10 text-[11px] font-semibold uppercase tracking-[0.2em] text-black">
+        <div className="hidden lg:flex items-center gap-10 text-sm font-semibold uppercase tracking-[0.15em] text-black">
           <Magnetic>
             <button 
               onClick={() => setView('home')} 

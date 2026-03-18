@@ -94,7 +94,7 @@ export const Partners: React.FC = () => {
           className="flex gap-3 items-center justify-center mb-8"
         >
           <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_12px_rgba(112,63,236,0.8)]" />
-          <p className="text-[11px] font-bold uppercase tracking-[0.5em] text-zinc-400">Trusted Partnerships</p>
+          <p className="text-xs font-bold uppercase tracking-[0.5em] text-zinc-600">Trusted Partnerships</p>
         </motion.div>
         
         <motion.h2 

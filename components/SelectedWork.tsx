@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-const WorkItem: React.FC<{ 
+const WorkItem = React.memo<{
   work: { id: number; title: string; image: string; year: string; category: string };
   onClick?: () => void;
-}> = ({ work, onClick }) => {
+}>(({ work, onClick }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const { scrollYProgress } = useScroll({
@@ -30,10 +30,12 @@ const WorkItem: React.FC<{
         style={{ y, scale }}
         className="absolute inset-0 w-full h-full"
       >
-        <img 
-          src={work.image} 
-          alt={work.title} 
-          className="w-full h-full object-cover transition-all duration-1000 grayscale group-hover:grayscale-0 group-hover:scale-105" 
+        <img
+          src={work.image}
+          alt={work.title}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover transition-all duration-1000 grayscale group-hover:grayscale-0 group-hover:scale-105"
         />
       </motion.div>
 
@@ -55,7 +57,7 @@ const WorkItem: React.FC<{
       </div>
     </motion.div>
   );
-};
+});
 
 interface SelectedWorkProps {
   setView?: (view: 'home' | 'contact' | 'studio' | 'work') => void;
@@ -63,9 +65,9 @@ interface SelectedWorkProps {
 
 export const SelectedWork: React.FC<SelectedWorkProps> = ({ setView }) => {
   const works = [
-    { id: 1, title: "Modernist Era", category: "Identity Design", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2000", year: "2025" },
-    { id: 2, title: "Abstract Flow", category: "Product UX", image: "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&q=80&w=2000", year: "2025" },
-    { id: 3, title: "Digital Echo", category: "Campaign", image: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&q=80&w=2000", year: "2024" }
+    { id: 1, title: "Modernist Era", category: "Identity Design", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=75&w=1200", year: "2025" },
+    { id: 2, title: "Abstract Flow", category: "Product UX", image: "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&q=75&w=1200", year: "2025" },
+    { id: 3, title: "Digital Echo", category: "Campaign", image: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&q=75&w=1200", year: "2024" }
   ];
 
   return (

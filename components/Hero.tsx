@@ -32,9 +32,9 @@ const PlasmaBlob: React.FC<{
       top: initialPos.y,
     }}
     animate={{
-      x: ["-10%", "10%", "-2%", "2%", "-10%"],
-      y: ["-5%", "5%", "10%", "-10%", "-5%"],
-      scale: [1, 1.2, 0.9, 1.1, 1],
+      x: ["-10%", "10%", "-10%"],
+      y: ["-5%", "10%", "-5%"],
+      scale: [1, 1.15, 1],
     }}
     transition={{
       duration,
@@ -110,11 +110,12 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
           >
             {/* Plasma Layer */}
             <div className="absolute inset-0 z-0 overflow-hidden bg-[#050505]">
-               <img 
-                 src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2500" 
+               <img
+                 src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=75&w=1600"
                  className="w-full h-full object-cover opacity-20 scale-110"
                  alt="Natwic Background"
                  loading="eager"
+                 decoding="async"
                />
                
                <div className="absolute inset-0 z-0">
@@ -122,7 +123,7 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
                  <PlasmaBlob color="#a855f7" duration={25} delay={3} size="70vw" initialPos={{ x: "50%", y: "20%" }} />
                </div>
 
-               <div className="absolute inset-0 bg-black/50 backdrop-blur-[60px] pointer-events-none" />
+               <div className="absolute inset-0 bg-black/60 pointer-events-none" />
                <div className="absolute bottom-[-20%] left-[-20%] w-[80%] h-[80%] bg-[#703FEC] rounded-full blur-[200px] opacity-30 mix-blend-screen pointer-events-none" />
             </div>
 

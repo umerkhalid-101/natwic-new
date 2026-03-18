@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 export const CustomCursor = () => {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
-  
+
   const springConfig = { damping: 25, stiffness: 700 };
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
@@ -12,24 +12,37 @@ export const CustomCursor = () => {
   const [isHovering, setIsHovering] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
   const [cursorText, setCursorText] = useState("");
+  const rafId = useRef<number | null>(null);
+  const pendingEvent = useRef<MouseEvent | null>(null);
 
   useEffect(() => {
-    const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX - 16); // Center the 32px cursor
+    const processMove = () => {
+      const e = pendingEvent.current;
+      if (!e) return;
+      pendingEvent.current = null;
+
+      cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
-      
+
       const target = e.target as HTMLElement;
-      
-      // Check interactive elements
       const interactive = target.closest('a, button, .cursor-pointer, input, select, textarea');
-      const isInteractive = !!interactive || window.getComputedStyle(target).cursor === 'pointer';
-      
-      // Check for data-cursor-text attribute
+      const isInteractive = !!interactive;
+
       const textContainer = target.closest('[data-cursor-text]');
       const text = textContainer ? textContainer.getAttribute('data-cursor-text') : "";
 
-      setIsHovering(isInteractive);
-      setCursorText(text || "");
+      setIsHovering(prev => prev !== isInteractive ? isInteractive : prev);
+      setCursorText(prev => { const next = text || ""; return prev !== next ? next : prev; });
+    };
+
+    const moveCursor = (e: MouseEvent) => {
+      pendingEvent.current = e;
+      if (rafId.current === null) {
+        rafId.current = requestAnimationFrame(() => {
+          rafId.current = null;
+          processMove();
+        });
+      }
     };
 
     const handleMouseDown = () => setIsClicking(true);
@@ -43,6 +56,7 @@ export const CustomCursor = () => {
       window.removeEventListener('mousemove', moveCursor);
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
+      if (rafId.current !== null) cancelAnimationFrame(rafId.current);
     };
   }, [cursorX, cursorY]);
 

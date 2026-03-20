@@ -24,7 +24,7 @@ const setMeta = (selector: string, attr: string, value: string) => {
 export const Seo: React.FC<SeoProps> = ({ title, description, view, image = DEFAULT_IMAGE }) => {
   useEffect(() => {
     const url = view && view !== 'home'
-      ? `${BASE_URL}/?view=${view}`
+      ? `${BASE_URL}/${view}`
       : `${BASE_URL}/`;
 
     // Title

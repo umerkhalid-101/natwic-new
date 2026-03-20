@@ -2,37 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.natwic.com/</loc>
-    <lastmod>2026-03-18</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.natwic.com/?view=studio</loc>
-    <lastmod>2026-03-18</lastmod>
+    <loc>https://www.natwic.com/studio</loc>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.natwic.com/?view=work</loc>
-    <lastmod>2026-03-18</lastmod>
+    <loc>https://www.natwic.com/work</loc>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.natwic.com/?view=contact</loc>
-    <lastmod>2026-03-18</lastmod>
+    <loc>https://www.natwic.com/contact</loc>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.natwic.com/?view=privacy</loc>
-    <lastmod>2026-03-18</lastmod>
+    <loc>https://www.natwic.com/privacy</loc>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.natwic.com/?view=terms</loc>
-    <lastmod>2026-03-18</lastmod>
+    <loc>https://www.natwic.com/terms</loc>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

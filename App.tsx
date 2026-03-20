@@ -29,10 +29,9 @@ const App: React.FC = () => {
   // Handle URL synchronization on mount and popstate
   useEffect(() => {
     const handleUrlChange = () => {
-      const params = new URLSearchParams(window.location.search);
-      const viewParam = params.get('view') as View;
-      if (['studio', 'contact', 'privacy', 'terms', 'work'].includes(viewParam)) {
-        setView(viewParam);
+      const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') as View;
+      if (['studio', 'contact', 'privacy', 'terms', 'work'].includes(path)) {
+        setView(path);
       } else {
         setView('home');
       }
@@ -49,15 +48,8 @@ const App: React.FC = () => {
   // Custom setter that updates the URL so Google can index specific pages
   const changeView = (newView: View) => {
     setView(newView);
-    const url = new URL(window.location.href);
-    
-    if (newView === 'home') {
-      url.searchParams.delete('view');
-    } else {
-      url.searchParams.set('view', newView);
-    }
-    
-    window.history.pushState({}, '', url);
+    const path = newView === 'home' ? '/' : `/${newView}`;
+    window.history.pushState({}, '', path);
     window.scrollTo(0, 0);
   };
 

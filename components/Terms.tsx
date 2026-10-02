@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { scrollToTop } from './smoothScroll';
 
 export const Terms: React.FC = () => {
     useEffect(() => {
-        window.scrollTo(0, 0);
+        scrollToTop();
     }, []);
     
     return (

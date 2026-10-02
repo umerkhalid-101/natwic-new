@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { lockScroll, unlockScroll } from './smoothScroll';
 
 export const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    lockScroll();
 
     // Slightly shorter duration for snappier feel
     const duration = 2000;
@@ -30,7 +31,7 @@ export const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => 
         // Wait for the expansion animation to cover the screen before completing
         setTimeout(() => {
             onComplete();
-            document.body.style.overflow = 'unset';
+            unlockScroll();
         }, 800);
       }
     };
@@ -38,7 +39,7 @@ export const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => 
     requestAnimationFrame(frame);
 
     return () => {
-      document.body.style.overflow = 'unset';
+      unlockScroll();
     };
   }, [onComplete]);
 

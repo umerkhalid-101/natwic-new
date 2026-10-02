@@ -6,7 +6,8 @@ export const SERVICES: ServiceItem[] = [
     number: '01',
     title: 'Web design',
     tags: ['Website', 'Wireframe', 'Landing page', 'Dashboard', 'Product'],
-    description: 'We build immersive digital experiences that blend performance with high-end aesthetics.',
+    description: 'Fast, conversion-focused websites and product UI. From a launch-ready landing page to a full SaaS dashboard.',
+    idealFor: 'SaaS launches, product teams, service businesses',
     imageUrl: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1000'
   },
   {
@@ -14,7 +15,8 @@ export const SERVICES: ServiceItem[] = [
     number: '02',
     title: 'Branding',
     tags: ['Logo', 'Packaging', 'Mockup', 'Deck', 'Visual identity'],
-    description: 'Creating timeless brand identities that resonate with your core audience and stand the test of time.',
+    description: 'Identities that make you look as good as the thing you sell: logo, type, colour and the system that ties it together.',
+    idealFor: 'New startups, rebrands, local shops and studios',
     imageUrl: 'https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&fit=crop&q=80&w=1000'
   },
   {
@@ -22,7 +24,8 @@ export const SERVICES: ServiceItem[] = [
     number: '03',
     title: 'Content',
     tags: ['UX writing', 'Social content', 'Campaign', 'Deck', 'Advertising'],
-    description: 'Strategic content creation that drives engagement and tells your brand story effectively.',
+    description: 'Clear words and visuals that explain what you do and why it matters, on your site, in decks and in campaigns.',
+    idealFor: 'Pitch decks, product launches, websites',
     imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=1000'
   },
   {
@@ -30,7 +33,8 @@ export const SERVICES: ServiceItem[] = [
     number: '04',
     title: 'Social media',
     tags: ['Strategy', 'Growth', 'Campaign', 'Posts', 'Design'],
-    description: 'Scaling your digital presence through data-driven social strategies and creative executions.',
+    description: 'A consistent social presence that brings people back: strategy, templates and posts designed to grow your audience.',
+    idealFor: 'Local businesses, consumer brands, founders',
     imageUrl: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=1000'
   }
 ];

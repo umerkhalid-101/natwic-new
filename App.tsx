@@ -3,9 +3,8 @@ import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Partners } from './components/Partners';
-import { SelectedWork } from './components/SelectedWork';
 import { WhyUs } from './components/WhyUs';
-import { StudioPreview } from './components/StudioPreview';
+import { Universe } from './components/Universe';
 import { Services } from './components/Services';
 import { Stats } from './components/Stats';
 import { Pricing } from './components/Pricing';
@@ -13,6 +12,7 @@ import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
 import { Seo } from './components/Seo';
 import { Loader } from './components/Loader';
+import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './components/smoothScroll';
 
 const Contact = lazy(() => import('./components/Contact').then(m => ({ default: m.Contact })));
 const Studio = lazy(() => import('./components/Studio').then(m => ({ default: m.Studio })));
@@ -25,6 +25,11 @@ type View = 'home' | 'contact' | 'studio' | 'privacy' | 'terms' | 'work';
 const App: React.FC = () => {
   const [view, setView] = useState<View>('home');
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    initSmoothScroll();
+    return destroySmoothScroll;
+  }, []);
 
   // Handle URL synchronization on mount and popstate
   useEffect(() => {
@@ -50,7 +55,7 @@ const App: React.FC = () => {
     setView(newView);
     const path = newView === 'home' ? '/' : `/${newView}`;
     window.history.pushState({}, '', path);
-    window.scrollTo(0, 0);
+    scrollToTop();
   };
 
   // Structured Data (JSON-LD) for Organization
@@ -102,9 +107,8 @@ const App: React.FC = () => {
             <Hero setView={changeView} />
             <Partners />
             <WhyUs />
-            <StudioPreview setView={changeView} />
-            <SelectedWork setView={changeView} />
-            <Services />
+            <Universe setView={changeView} />
+            <Services setView={changeView} />
             <Stats />
             <Pricing setView={changeView} />
             <FAQ />

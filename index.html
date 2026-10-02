@@ -89,8 +89,26 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #703FEC;
         }
-        html {
-            scroll-behavior: smooth;
+        html.lenis, html.lenis body {
+            height: auto;
+        }
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+        .lenis.lenis-smooth [data-lenis-prevent] {
+            overscroll-behavior: contain;
+        }
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+        /* The nav steps aside while the immersive section has the screen */
+        [data-site-nav] {
+            transition: transform .6s cubic-bezier(.16,1,.3,1), opacity .4s ease;
+        }
+        html[data-immersive] [data-site-nav] {
+            transform: translateY(-110%) !important;
+            opacity: 0;
+            pointer-events: none;
         }
         ::selection {
             background: #703FEC;

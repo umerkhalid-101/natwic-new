@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Logo } from './Logo';
 import { Magnetic } from './Magnetic';
+import { lockScroll, unlockScroll } from './smoothScroll';
 
 interface NavbarProps {
   setView: (view: 'home' | 'contact' | 'studio' | 'work') => void;
@@ -14,13 +15,11 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      lockScroll();
     } else {
-      document.body.style.overflow = 'unset';
+      unlockScroll();
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    return unlockScroll;
   }, [isMobileMenuOpen]);
 
   const handleNavClick = (view: 'home' | 'contact' | 'studio' | 'work') => {
@@ -34,6 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+        data-site-nav
         className="fixed top-0 left-0 w-full z-[100] px-6 py-4 md:px-12 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-zinc-100"
       >
         <div 

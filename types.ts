@@ -5,6 +5,7 @@ export interface ServiceItem {
   title: string;
   tags: string[];
   description: string;
+  idealFor: string;
   imageUrl: string;
 }
 

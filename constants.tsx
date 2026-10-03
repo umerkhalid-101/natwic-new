@@ -70,18 +70,18 @@ export const PRICING_PLANS: PricingPlan[] = [
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: '1',
-    quote: "Fast, thoughtful, and deeply collaborative. Natwic felt like part of our team from day one.",
-    author: "Naomi Voss",
-    role: "Creative Director at Antra®",
-    image: "https://i.pravatar.cc/150?u=naomi",
+    quote: "Natwic understood our brand straight away and turned it into something we're proud to show. Clear communication the whole way through.",
+    author: "Linda",
+    role: "Salams",
+    image: "",
     stars: 5
   },
   {
     id: '2',
-    quote: "Natwic's work was minimal in form but rich in intention. They helped us express our brand with clarity.",
-    author: "Mark Williams",
-    role: "Head of Brand at Velith®",
-    image: "https://i.pravatar.cc/150?u=mark",
+    quote: "Quick turnarounds, smart ideas and no hand-holding needed. Natwic made our launch feel easy.",
+    author: "Ryan",
+    role: "Breakthirty",
+    image: "",
     stars: 5
   }
 ];

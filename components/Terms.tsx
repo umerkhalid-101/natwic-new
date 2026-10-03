@@ -28,7 +28,7 @@ export const Terms: React.FC = () => {
                 >
                     <h3 className="text-2xl font-bold mb-4 mt-12">1. Agreement to Terms</h3>
                     <p className="text-zinc-600 mb-6 leading-relaxed">
-                        These Terms of Service constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and Natwic Studio ("we," "us" or "our"), concerning your access to and use of the natwic.studio website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the "Site").
+                        These Terms of Service constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and Natwic Studio ("we," "us" or "our"), concerning your access to and use of the natwic.com website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the "Site").
                     </p>
 
                     <h3 className="text-2xl font-bold mb-4 mt-12">2. Intellectual Property Rights</h3>

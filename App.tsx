@@ -13,17 +13,19 @@ import { Footer } from './components/Footer';
 import { Seo } from './components/Seo';
 import { Loader } from './components/Loader';
 import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './components/smoothScroll';
+import { ROUTE_META, View, viewFromPath, slugFromPath, caseMeta } from './seo';
 
 const Contact = lazy(() => import('./components/Contact').then(m => ({ default: m.Contact })));
 const Studio = lazy(() => import('./components/Studio').then(m => ({ default: m.Studio })));
 const Privacy = lazy(() => import('./components/Privacy').then(m => ({ default: m.Privacy })));
 const Terms = lazy(() => import('./components/Terms').then(m => ({ default: m.Terms })));
-const WorkComingSoon = lazy(() => import('./components/WorkComingSoon').then(m => ({ default: m.WorkComingSoon })));
+const WorkIndex = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.WorkIndex })));
+const CaseStudyPage = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.CaseStudyPage })));
 
-type View = 'home' | 'contact' | 'studio' | 'privacy' | 'terms' | 'work';
-
-const App: React.FC = () => {
-  const [view, setView] = useState<View>('home');
+// `initialView` lets the build-time pre-renderer render each page
+const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ initialView = 'home', initialSlug = null }) => {
+  const [view, setView] = useState<View>(initialView);
+  const [slug, setSlug] = useState<string | null>(initialSlug);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -34,12 +36,8 @@ const App: React.FC = () => {
   // Handle URL synchronization on mount and popstate
   useEffect(() => {
     const handleUrlChange = () => {
-      const path = window.location.pathname.replace(/^\//, '').replace(/\/$/, '') as View;
-      if (['studio', 'contact', 'privacy', 'terms', 'work'].includes(path)) {
-        setView(path);
-      } else {
-        setView('home');
-      }
+      setView(viewFromPath(window.location.pathname));
+      setSlug(slugFromPath(window.location.pathname));
     };
 
     // Check initial URL
@@ -53,31 +51,18 @@ const App: React.FC = () => {
   // Custom setter that updates the URL so Google can index specific pages
   const changeView = (newView: View) => {
     setView(newView);
+    setSlug(null);
     const path = newView === 'home' ? '/' : `/${newView}`;
     window.history.pushState({}, '', path);
     scrollToTop();
   };
 
-  // Structured Data (JSON-LD) for Organization
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Natwic Studio",
-    "image": "https://lh3.googleusercontent.com/d/1TNWPq9K4wbLxAey0l4zm8fNPya-DOx62",
-    "url": "https://www.natwic.com",
-    "telephone": "+1 234 567 890",
-    "priceRange": "$$$",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "124 Creative Boulevard, Suite 400",
-      "addressLocality": "London",
-      "addressCountry": "UK"
-    },
-    "sameAs": [
-      "https://www.natwic.com",
-      "https://www.linkedin.com/company/natwic",
-      "https://www.instagram.com/natwic"
-    ]
+  // Case studies live at /work/<slug>
+  const openCase = (next: string) => {
+    setView('work');
+    setSlug(next);
+    window.history.pushState({}, '', `/work/${next}`);
+    scrollToTop();
   };
 
   return (
@@ -88,25 +73,16 @@ const App: React.FC = () => {
         {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
       </AnimatePresence>
 
-      {/* Inject JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
 
       <Navbar setView={changeView as any} currentView={view as 'home' | 'contact' | 'studio'} />
       
       <main>
         {view === 'home' && (
           <>
-            <Seo 
-              title="Natwic® Studio | Redefining Digital Excellence" 
-              description="Not just a studio. We are Natwic. A high-fidelity creative partner building legacy-grade digital experiences for the world's most ambitious brands."
-              view="home"
-            />
+            <Seo {...ROUTE_META.home} view="home" />
             <Hero setView={changeView} />
             <Partners />
-            <WhyUs />
+            <WhyUs onStart={() => changeView('contact')} />
             <Universe setView={changeView} />
             <Services setView={changeView} />
             <Stats />
@@ -118,54 +94,49 @@ const App: React.FC = () => {
         <Suspense fallback={null}>
           {view === 'studio' && (
             <>
-              <Seo
-                title="Our Studio | Natwic®"
-                description="Meet the minds behind Natwic. A multidisciplinary team of designers, developers, and strategists redefining the digital landscape."
-                view="studio"
-              />
+              <Seo {...ROUTE_META.studio} view="studio" />
               <Studio setView={changeView} />
             </>
           )}
 
-          {view === 'work' && (
+          {view === 'work' && !slug && (
             <>
-              <Seo
-                title="Selected Work | Natwic®"
-                description="Explore our portfolio of high-end digital experiences. Coming Soon."
-                view="work"
-              />
-              <WorkComingSoon setView={changeView as any} />
+              <Seo {...ROUTE_META.work} view="work" />
+              <WorkIndex onOpen={openCase} onContact={() => changeView('contact')} />
+            </>
+          )}
+
+          {view === 'work' && slug && (
+            <>
+              <Seo {...caseMeta(slug)} view={`work/${slug}`} />
+              <CaseStudyPage slug={slug} onOpen={openCase} onAll={() => changeView('work')} onContact={() => changeView('contact')} />
             </>
           )}
 
           {view === 'contact' && (
             <>
-              <Seo
-                title="Contact Us | Natwic®"
-                description="Start your legacy with Natwic. Get in touch for high-end web design, branding, and digital strategy."
-                view="contact"
-              />
+              <Seo {...ROUTE_META.contact} view="contact" />
               <Contact isStandalone={true} setView={changeView as any} />
             </>
           )}
 
           {view === 'privacy' && (
             <>
-              <Seo title="Privacy Policy | Natwic®" description="Natwic Studio Privacy Policy." view="privacy" />
+              <Seo {...ROUTE_META.privacy} view="privacy" />
               <Privacy />
             </>
           )}
 
           {view === 'terms' && (
             <>
-              <Seo title="Terms of Service | Natwic®" description="Natwic Studio Terms of Service." view="terms" />
+              <Seo {...ROUTE_META.terms} view="terms" />
               <Terms />
             </>
           )}
         </Suspense>
       </main>
 
-      {view !== 'work' && <Footer setView={changeView as any} currentView={view} />}
+      <Footer setView={changeView as any} currentView={view} />
     </div>
   );
 };

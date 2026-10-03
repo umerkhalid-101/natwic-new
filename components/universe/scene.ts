@@ -3,7 +3,8 @@ import * as THREE from 'three';
 /**
  * The particle universe behind the About → Work journey.
  * One set of particles morphs through five formations as `progress` (0–1) advances:
- * 0 galaxy · 1 two clusters · 2 open sky · 3 tunnel · 4 a single point.
+ * 0 galaxy · 1 two clusters · 2 open sky · 3 tunnel · 4 a calm field,
+ * which then falls into the Services sheet as it rises (uFall / uEdge).
  */
 
 const VERT = /* glsl */ `
@@ -21,6 +22,8 @@ const VERT = /* glsl */ `
   uniform float uFocus;
   uniform float uPixelRatio;
   uniform float uDim;
+  uniform float uFall;
+  uniform float uEdge;
 
   varying vec3 vColor;
   varying float vAlpha;
@@ -45,6 +48,10 @@ const VERT = /* glsl */ `
     vec3 pos = mix(a, b, t);
     pos += vec3(sin(uTime * 0.5 + aSeed * 40.0), cos(uTime * 0.4 + aSeed * 23.0), 0.0) * 0.05;
 
+    // Falling into the next section: each star drops at its own pace
+    float fall = uFall * uFall;
+    pos.y -= fall * (14.0 + aSeed * 34.0);
+
     vec4 mv = modelViewMatrix * vec4(pos, 1.0);
 
     // In the two-cluster formation, the hovered side brightens
@@ -53,11 +60,17 @@ const VERT = /* glsl */ `
     float focus = step(0.5, abs(uFocus)) * inCluster;
     float boost = 1.0 + focus * (side * uFocus > 0.0 ? 0.7 : -0.5);
 
-    gl_PointSize = uSize * (0.5 + aSeed) * boost * uPixelRatio * (10.0 / max(0.5, -mv.z));
     gl_Position = projectionMatrix * mv;
 
-    vColor = aColor;
-    vAlpha = (0.5 + 0.5 * aSeed) * clamp(boost, 0.35, 1.5) * uDim;
+    // Stars just above the sheet's top edge flare violet as they touch it, then pass behind
+    float dy = gl_Position.y / gl_Position.w - uEdge;
+    float rim = (1.0 - smoothstep(0.0, 0.2, dy)) * step(0.0, dy) * step(0.001, uFall);
+
+    // Capped so stars that pass right by the camera don't flood the screen with overdraw
+    gl_PointSize = min(uSize * (0.5 + aSeed) * boost * uPixelRatio * (10.0 / max(0.5, -mv.z)), 48.0 * uPixelRatio) * (1.0 + rim * 1.2);
+
+    vColor = mix(aColor, vec3(0.62, 0.48, 1.0), rim * 0.7);
+    vAlpha = (0.5 + 0.5 * aSeed) * clamp(boost, 0.35, 1.5) * uDim * (1.0 + rim * 4.0);
   }
 `;
 
@@ -92,13 +105,26 @@ export class UniverseScene {
   private pointer = { x: 0, y: 0 };
   private smooth = { x: 0, y: 0, z: 27, focus: 0 };
   private focusTarget = 0;
+  private edge = 2; // top of the next section, as a fraction of viewport height
   private clock = new THREE.Clock();
   private reduced: boolean;
+  private count: number;
+  private maxRatio: number;
+  // Adaptive quality: if frames run long, drop resolution, then particle count
+  private frames = 0;
+  private slowTime = 0;
+  private sampleStart = 0;
+  private tier = 0;
+  private strikes = 0;
 
   constructor(private canvas: HTMLCanvasElement, count: number, private compact = false) {
     this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.count = count;
+    // Low-core machines start at 1x; everyone else is capped at 1.5x, which is indistinguishable for soft points
+    const weak = (navigator.hardwareConcurrency || 8) <= 4;
+    this.maxRatio = Math.min(window.devicePixelRatio || 1, weak ? 1 : 1.5);
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: 'high-performance' });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    this.renderer.setPixelRatio(this.maxRatio);
     this.renderer.setClearColor(0x000000, 0);
 
     const geo = new THREE.BufferGeometry();
@@ -176,13 +202,10 @@ export class UniverseScene {
       f[3][k + 1] = Math.sin(ta) * tr;
       f[3][k + 2] = rand(-175, -40);
 
-      // 4 — everything collapses into one point ahead of the camera
-      const cr = Math.pow(Math.random(), 3) * 0.6;
-      const ca = rand(0, Math.PI * 2);
-      const cb = Math.acos(rand(-1, 1));
-      f[4][k] = cr * Math.sin(cb) * Math.cos(ca);
-      f[4][k + 1] = cr * Math.sin(cb) * Math.sin(ca);
-      f[4][k + 2] = -124 + cr * Math.cos(cb);
+      // 4 — the tunnel loosens into a calm, open field ahead of the camera
+      f[4][k] = rand(-34, 34);
+      f[4][k + 1] = rand(-20, 22);
+      f[4][k + 2] = rand(-150, -112);
     }
 
     geo.setAttribute('position', new THREE.BufferAttribute(f[0], 3));
@@ -205,6 +228,8 @@ export class UniverseScene {
         uFocus: { value: 0 },
         uPixelRatio: { value: this.renderer.getPixelRatio() },
         uDim: { value: 1 },
+        uFall: { value: 0 },
+        uEdge: { value: -3 },
       },
     });
 
@@ -217,6 +242,8 @@ export class UniverseScene {
   setProgress(p: number) { this.progress = p; if (!this.running) this.renderOnce(); }
   setPointer(x: number, y: number) { this.pointer.x = x; this.pointer.y = y; }
   setFocus(side: -1 | 0 | 1) { this.focusTarget = side; }
+  /** Where the next section's top edge sits, 0 (top) – 1 (bottom) of the viewport. */
+  setEdge(edge: number) { this.edge = edge; if (!this.running) this.renderOnce(); }
 
   resize() {
     const { clientWidth: w, clientHeight: h } = this.canvas;
@@ -232,9 +259,13 @@ export class UniverseScene {
     if (this.running) return;
     this.running = true;
     this.clock.start();
+    this.frames = 0;
+    this.slowTime = 0;
+    this.sampleStart = performance.now();
     const loop = () => {
       if (!this.running) return;
       this.renderOnce();
+      this.adapt();
       this.raf = requestAnimationFrame(loop);
     };
     loop();
@@ -252,6 +283,32 @@ export class UniverseScene {
     this.renderer.dispose();
   }
 
+  /** Every ~2s, if the frame rate has been poor, step quality down a notch. */
+  private adapt() {
+    if (this.tier >= 2) return;
+    const now = performance.now();
+    this.frames++;
+    const elapsed = now - this.sampleStart;
+    if (elapsed < 2000) return;
+    const fps = (this.frames * 1000) / elapsed;
+    this.frames = 0;
+    this.sampleStart = now;
+    // Two poor samples in a row before stepping down, so a one-off hitch doesn't cost quality
+    if (document.hidden || fps >= 40) { this.strikes = 0; return; }
+    if (++this.strikes < 2) return;
+    this.strikes = 0;
+    this.tier++;
+    if (this.tier === 1 && this.maxRatio > 1) {
+      this.renderer.setPixelRatio(1);
+    } else {
+      // Draw fewer particles; roles are assigned by index modulo, so any prefix stays evenly spread
+      this.points.geometry.setDrawRange(0, Math.floor(this.count * 0.7));
+      this.renderer.setPixelRatio(1);
+    }
+    this.material.uniforms.uPixelRatio.value = this.renderer.getPixelRatio();
+    this.resize();
+  }
+
   private morphFor(p: number) {
     const seg = (a: number, b: number) => Math.min(1, Math.max(0, (p - a) / (b - a)));
     return seg(0.17, 0.26) + seg(0.41, 0.45) + seg(0.64, 0.7) + seg(0.9, 0.97);
@@ -267,7 +324,7 @@ export class UniverseScene {
     return Math.min(
       win(0.075, 0.225, 0.02, 0.32), // the statement
       win(0.43, 0.66, 0.02, 0.6),    // the walk-through cards
-      win(0.9, 0.96, 0.015, 0.55),   // the closing line
+      win(0.9, 1.07, 0.015, 0.85),   // the closing line and call to action
     );
   }
 
@@ -277,7 +334,7 @@ export class UniverseScene {
     if (p < 0.425) return lerp(12, 10.8, (p - 0.22) / 0.205); // slow push-in while the cards are up
     if (p < 0.66) return lerp(10.8, -62, (p - 0.425) / 0.235); // the walk-through
     if (p < 0.91) return lerp(-62, -104, (p - 0.66) / 0.25); // the tunnel
-    return -104; // hold behind the collapse point so it reads as one bright star
+    return -104;
   }
 
   private renderOnce() {
@@ -285,6 +342,9 @@ export class UniverseScene {
     const u = this.material.uniforms;
     if (!this.reduced) u.uTime.value += dt;
     u.uMorph.value = this.morphFor(this.progress);
+    // Starts just before the sheet shows and completes as it reaches the top third
+    u.uFall.value = Math.min(1, Math.max(0, (1.12 - this.edge) / 0.82));
+    u.uEdge.value = 1 - 2 * this.edge;
     u.uDim.value += (this.dimFor(this.progress) - u.uDim.value) * (this.reduced ? 1 : 1 - Math.pow(0.002, dt));
 
     // Ease camera and focus so scroll jumps never snap

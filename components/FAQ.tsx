@@ -2,17 +2,25 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FAQS = [
-  { q: "What type of clients do you usually work with?", a: "We work with forward-thinking tech startups, luxury brands, and established enterprises looking to redefine their digital presence." },
-  { q: "How long does a typical project take?", a: "Sprints typically last 2-4 weeks. Larger brand transformations can take 3-6 months depending on scope." },
-  { q: "Do you offer ongoing support after a project ends?", a: "Yes, we offer monthly retainer packages for continuous design and development support." },
-  { q: "How do I get started or request a proposal?", a: "Click any 'Get in Touch' button or scroll to the footer to join our newsletter and start a conversation." }
+  { q: "What type of clients do you usually work with?", a: "We design websites and brands for startups, SaaS teams and small businesses. We're based in Dubai and work with clients around the world." },
+  { q: "Do you work with clients outside the UAE?", a: "Yes. Most of our work is remote, and we schedule calls around your time zone." },
+  { q: "How long does a typical project take?", a: "Most projects run in 2–4 week sprints. Larger brand and product work can take 3–6 months, depending on scope." },
+  { q: "How do I get started?", a: "Click 'Start a project' anywhere on the site, or tell us what's not working in the chat above. We'll get back to you with next steps." }
 ];
+
+// Lets Google show these answers directly in search results
+const FAQ_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
 
 export const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
     <section className="py-40 px-6 md:px-12 bg-white">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_SCHEMA) }} />
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
         {/* Left column: Questions */}
         <div className="lg:pr-10">
@@ -61,7 +69,7 @@ export const FAQ: React.FC = () => {
         </div>
 
         {/* Right column: Image */}
-        <div className="relative lg:sticky lg:top-32">
+        <div className="relative">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -72,7 +80,7 @@ export const FAQ: React.FC = () => {
             <img 
               src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=1200" 
               className="w-full h-full object-cover" 
-              alt="Natwic Team Member"
+              alt=""
             />
           </motion.div>
         </div>

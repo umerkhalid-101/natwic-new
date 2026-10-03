@@ -4,6 +4,7 @@ import { SERVICES } from '../constants';
 import { ServiceItem } from '../types';
 import { useTilt, Spotlight } from './interactions';
 import { Magnetic } from './Magnetic';
+import { ServiceVisual } from './ServiceVisuals';
 
 const THEMES = [
   { card: 'bg-zinc-100 text-black', muted: 'text-zinc-600', chip: 'bg-white text-black', line: 'border-zinc-300', button: 'bg-black text-white' },
@@ -20,23 +21,15 @@ const ServiceCard: React.FC<{
   onStart?: () => void;
 }> = ({ service, index, total, progress, onStart }) => {
   const theme = THEMES[index % THEMES.length];
-  // Earlier cards shrink slightly as the later ones stack over them
-  const scale = useTransform(progress, [index / total, 1], [1, 1 - (total - index - 1) * 0.04]);
   // ...and dim a little, so the active card reads as "on top"
   const dim = useTransform(progress, [Math.min(1, (index + 0.85) / total), Math.min(1, (index + 1.3) / total)], [0, index === total - 1 ? 0 : 0.3]);
   const { px, py, handlers } = useTilt(0);
 
-  // Image wipes open and drifts as the card scrolls through
-  const imageRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: imgProgress } = useScroll({ target: imageRef, offset: ['start end', 'end start'] });
-  const imgY = useTransform(imgProgress, [0, 1], ['-12%', '12%']);
-  const clip = useTransform(imgProgress, [0, 0.35], ['inset(18% 18% 18% 18% round 2rem)', 'inset(0% 0% 0% 0% round 2rem)']);
   const spot = index === 1 ? 'rgba(112,63,236,0.35)' : index === 2 ? 'rgba(255,255,255,0.18)' : 'rgba(112,63,236,0.14)';
 
   return (
     <div className="sticky h-auto" style={{ top: `calc(6rem + ${index * 1.5}rem)` }}>
       <motion.article
-        style={{ scale }}
         {...handlers}
         className={`group/card relative overflow-hidden origin-top rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 lg:p-14 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-14 lg:min-h-[68vh] shadow-[0_-20px_60px_rgba(0,0,0,0.06)] ${theme.card}`}
       >
@@ -50,15 +43,26 @@ const ServiceCard: React.FC<{
               <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${theme.muted}`}>Capability</span>
             </div>
             <h3 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.9] mb-6 md:mb-8">
-              {service.title.split('').map((ch, i) => (
-                <span
-                  key={i}
-                  className="inline-block transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:-translate-y-1.5"
-                  style={{ transitionDelay: `${i * 18}ms` }}
-                >
-                  {ch === ' ' ? '\u00A0' : ch}
-                </span>
-              ))}
+              {/* Letters ripple on hover; each word stays whole when the title wraps */}
+              {service.title.split(' ').map((word, w, words) => {
+                const offset = words.slice(0, w).join(' ').length + (w ? 1 : 0);
+                return (
+                  <React.Fragment key={w}>
+                    <span className="inline-block whitespace-nowrap">
+                      {word.split('').map((ch, i) => (
+                        <span
+                          key={i}
+                          className="inline-block transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:-translate-y-1.5"
+                          style={{ transitionDelay: `${(offset + i) * 18}ms` }}
+                        >
+                          {ch}
+                        </span>
+                      ))}
+                    </span>
+                    {w < words.length - 1 && ' '}
+                  </React.Fragment>
+                );
+              })}
             </h3>
             <p className={`text-base md:text-xl leading-relaxed max-w-lg ${theme.muted}`}>{service.description}</p>
           </div>
@@ -89,16 +93,15 @@ const ServiceCard: React.FC<{
           </div>
         </div>
 
-        <motion.div ref={imageRef} style={{ clipPath: clip }} className="relative z-10 overflow-hidden rounded-[1.5rem] md:rounded-[2rem] h-48 md:h-72 lg:h-auto">
-          <motion.img
-            src={service.imageUrl}
-            alt={service.title}
-            loading="lazy"
-            decoding="async"
-            style={{ y: imgY, scale: 1.25 }}
-            className="absolute inset-0 w-full h-full object-cover grayscale-[30%] transition-[filter] duration-700 group-hover/card:grayscale-0"
-          />
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#703FEC]/30 to-transparent mix-blend-multiply transition-opacity duration-700 group-hover/card:opacity-0" />
+        {/* Revealed once as it arrives; nothing here is tied to scroll, so stacking stays smooth */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 overflow-hidden rounded-[1.5rem] md:rounded-[2rem] h-72 md:h-96 lg:h-auto lg:min-h-[440px] [contain:paint]"
+        >
+          <ServiceVisual index={index} />
         </motion.div>
       </motion.article>
     </div>

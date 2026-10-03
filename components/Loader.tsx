@@ -84,9 +84,9 @@ export const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => 
                         className="relative z-10 mt-40 text-white mix-blend-difference"
                     >
                         <div className="flex flex-col items-center">
-                            <h1 className="text-[12vw] md:text-[8vw] font-bold tracking-tighter tabular-nums leading-none">
+                            <p className="text-[12vw] md:text-[8vw] font-bold tracking-tighter tabular-nums leading-none">
                                 {progress}
-                            </h1>
+                            </p>
                             <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-zinc-500 mt-4">
                                 Loading 
                             </p>

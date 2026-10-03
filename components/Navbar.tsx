@@ -70,8 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
               onClick={() => setView('work')}
               className={`flex items-center gap-2 hover:text-[#703FEC] transition-colors group p-2 ${currentView === 'work' ? 'text-[#703FEC]' : ''}`}
             >
-              Work 
-              <span className="bg-[#703FEC] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold group-hover:scale-110 transition-transform">3</span>
+              Work
             </button>
           </Magnetic>
 

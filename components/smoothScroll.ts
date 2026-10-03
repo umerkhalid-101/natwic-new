@@ -9,8 +9,8 @@ export const initSmoothScroll = () => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo out
+    // Eases towards the target each frame, so it tracks the wheel closely and never feels heavy
+    lerp: 0.12,
     smoothWheel: true,
     wheelMultiplier: 1,
     touchMultiplier: 1.5,
@@ -45,7 +45,9 @@ export const scrollToTop = () => {
   else window.scrollTo(0, 0);
 };
 
-export const scrollToY = (y: number) => {
-  if (lenis) lenis.scrollTo(y, { duration: 1.4 });
+export const scrollToY = (y: number, duration = 1.4, lock = false) => {
+  // force: still runs if Lenis is mid-scroll or stopped. lock: wheel/trackpad input
+  // (including trackpad momentum) can't cancel the trip until it arrives
+  if (lenis) lenis.scrollTo(y, { duration, force: true, lock });
   else window.scrollTo({ top: y, behavior: 'smooth' });
 };

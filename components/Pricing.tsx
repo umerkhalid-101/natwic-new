@@ -65,15 +65,16 @@ export const Pricing: React.FC<PricingProps> = ({ setView }) => {
     <section className="py-32 px-4 bg-[#080808] text-white relative overflow-hidden rounded-[3rem] mx-2 md:mx-6 my-2 min-h-[90vh] flex items-center justify-center border border-white/5 shadow-2xl">
        {/* Ambient Background */}
        <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-[#703FEC]/20 rounded-full blur-[150px] opacity-40 mix-blend-screen" />
-          <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-blue-600/10 rounded-full blur-[150px] opacity-40 mix-blend-screen" />
+          {/* Gradients rather than blur filters: same glow, no per-frame filter cost */}
+          <div className="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(112,63,236,0.09)_0%,transparent_65%)]" />
+          <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(37,99,235,0.05)_0%,transparent_65%)]" />
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15]" />
           
           {/* Big Blurred Background Text */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-0">
-             <h1 className="text-[18vw] font-black text-white/[0.04] blur-[8px] leading-none whitespace-nowrap select-none tracking-tighter">
+             <div aria-hidden className="text-[18vw] font-black text-white/[0.04] blur-[8px] leading-none whitespace-nowrap select-none tracking-tighter">
                 START PROJECT
-             </h1>
+             </div>
           </div>
        </div>
 
@@ -96,7 +97,7 @@ export const Pricing: React.FC<PricingProps> = ({ setView }) => {
                transition={{ delay: 0.1 }}
                className="text-5xl md:text-7xl font-bold tracking-tighter text-white drop-shadow-lg"
              >
-               Ready to elevate?
+               Tell us what you’re building.
              </motion.h2>
           </div>
 
@@ -111,11 +112,11 @@ export const Pricing: React.FC<PricingProps> = ({ setView }) => {
             <motion.div
               animate={{ y: [-10, 10, -10] }}
               transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              className="bg-zinc-900/40 backdrop-blur-2xl border border-white/10 p-8 md:p-14 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden group hover:border-white/20 transition-colors duration-500"
+              className="bg-zinc-900/70 border border-white/10 p-8 md:p-14 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden group hover:border-white/20 transition-colors duration-500"
             >
                {/* Shine effect */}
                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-60" />
-               <div className="absolute bottom-0 right-0 w-80 h-80 bg-[#703FEC]/10 rounded-full blur-[100px] pointer-events-none group-hover:bg-[#703FEC]/20 transition-colors duration-700" />
+               <div className="absolute -bottom-20 -right-20 w-[30rem] h-[30rem] bg-[radial-gradient(circle,rgba(112,63,236,0.12)_0%,transparent_60%)] pointer-events-none opacity-70 group-hover:opacity-100 transition-opacity duration-700" />
 
                <AnimatePresence mode="wait">
                   {formState === 'success' ? (

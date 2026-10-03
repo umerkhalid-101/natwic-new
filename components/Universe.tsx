@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, MotionValue, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import type { UniverseScene } from './universe/scene';
-import { CaseStudy, WORKS, Work, pad } from './CaseStudy';
+import { PROJECTS as WORKS, Project as Work, pad } from './work/projects';
+import { Magnetic } from './Magnetic';
 
 type View = 'home' | 'contact' | 'studio' | 'work';
 
@@ -16,6 +17,9 @@ const CH = {
   work: [0.67, 0.905],
   close: [0.905, 1],
 } as const;
+
+/* Section is 1090vh; chapters were timed against a 950vh scroll, so they keep their pace */
+const STRETCH = 990 / 950;
 
 const isSmall = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
@@ -369,15 +373,22 @@ const Process: React.FC<{ p: MotionValue<number> }> = ({ p }) => {
 /* Selected work — site cards drifting through space                   */
 /* ------------------------------------------------------------------ */
 
+// Alternating sides, so cards that share the screen never overlap
 const LAYOUT = [
-  { x: '-22vw', mx: '-3vw', rotate: -2.5 },
+  { x: '-21vw', mx: '-3vw', rotate: -2.5 },
   { x: '21vw', mx: '3vw', rotate: 2 },
-  { x: '-3vw', mx: '-1vw', rotate: -1 },
+  { x: '-20vw', mx: '-2vw', rotate: -1.5 },
+  { x: '22vw', mx: '2vw', rotate: 2.5 },
+  { x: '-21vw', mx: '-3vw', rotate: -2 },
 ];
+// Five cards share the work chapter: each rises through in WORK_TRAVEL, WORK_GAP apart
+const WORK_START = 0.73;
+const WORK_GAP = 0.0225;
+const WORK_TRAVEL = 0.075;
 
-const FloatingProject: React.FC<{ p: MotionValue<number>; work: Work; index: number; onOpen: () => void }> = ({ p, work, index, onOpen }) => {
-  const start = 0.73 + index * 0.05;
-  const end = start + 0.085;
+const FloatingProject: React.FC<{ p: MotionValue<number>; work: Work; index: number }> = ({ p, work, index }) => {
+  const start = WORK_START + index * WORK_GAP;
+  const end = start + WORK_TRAVEL;
   const y = useTransform(p, [start, end], ['95vh', '-95vh']);
   const l = LAYOUT[index % LAYOUT.length];
   const [small] = useState(isSmall);
@@ -387,33 +398,35 @@ const FloatingProject: React.FC<{ p: MotionValue<number>; work: Work; index: num
       style={{ y, x: small ? l.mx : l.x, rotate: l.rotate }}
       className="absolute left-1/2 top-1/2 -ml-[41vw] md:-ml-[15vw] -mt-[30vw] md:-mt-[13vw] w-[82vw] md:w-[30vw] md:min-w-[380px] will-change-transform"
     >
-      <button
-        onClick={onOpen}
-        aria-label={`Open case study: ${work.title}`}
+      <a
+        href={work.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Visit ${work.title} (opens in a new tab)`}
         className="group block w-full text-left rounded-[2.5rem] bg-[#0F0F0F] border border-white/[0.07] p-3 shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04]"
       >
         <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-zinc-900">
-          <img src={work.image} alt={work.title} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
+          <img src={work.image} alt={`${work.title} website`} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
           <span className="absolute left-4 top-4 rounded-full bg-black/70 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white">{work.category}</span>
         </div>
         <div className="flex items-center justify-between gap-4 px-4 pt-5 pb-3">
           <div>
             <p className="text-2xl font-bold tracking-[-0.03em] text-white">{work.title}</p>
-            <p className="text-xs text-white/45 mt-1">{work.year}</p>
+            <p className="text-xs text-white/45 mt-1">{work.domain} ↗</p>
           </div>
           <span className="w-12 h-12 shrink-0 rounded-full bg-white text-black flex items-center justify-center transition-[background-color,color,transform] duration-300 group-hover:bg-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
         </div>
-      </button>
+      </a>
     </motion.div>
   );
 };
 
-const WorkChapter: React.FC<{ p: MotionValue<number>; onOpen: (i: number) => void; onAll: () => void }> = ({ p, onOpen, onAll }) => {
+const WorkChapter: React.FC<{ p: MotionValue<number>; onAll: () => void }> = ({ p, onAll }) => {
   const w = useWindow(p, CH.work, 0.015);
   const titleOpacity = useTransform(p, [0.67, 0.68, 0.72, 0.74], [0, 1, 1, 0]);
   const titleScale = useTransform(p, [0.67, 0.68, 0.74], [0.94, 1, 1.04]);
   const [active, setActive] = useState(0);
-  useMotionValueEvent(p, 'change', (v) => setActive(Math.max(0, Math.min(WORKS.length - 1, Math.floor((v - 0.75) / 0.05)))));
+  useMotionValueEvent(p, 'change', (v) => setActive(Math.max(0, Math.min(WORKS.length - 1, Math.floor((v - WORK_START - WORK_TRAVEL / 3) / WORK_GAP)))));
 
   return (
     <motion.div style={w} className="absolute inset-0">
@@ -425,7 +438,7 @@ const WorkChapter: React.FC<{ p: MotionValue<number>; onOpen: (i: number) => voi
       </motion.div>
 
       {WORKS.map((work, i) => (
-        <FloatingProject key={work.id} p={p} work={work} index={i} onOpen={() => onOpen(i)} />
+        <FloatingProject key={work.id} p={p} work={work} index={i} />
       ))}
 
       <div className="absolute left-5 right-5 md:left-12 md:right-12 bottom-6 md:bottom-10 flex items-center justify-between gap-4">
@@ -442,19 +455,57 @@ const WorkChapter: React.FC<{ p: MotionValue<number>; onOpen: (i: number) => voi
 };
 
 /* ------------------------------------------------------------------ */
-/* Close out — everything collapses to a point, then opens to white    */
+/* Close out — the stars settle, then fall into the Services sheet     */
 /* ------------------------------------------------------------------ */
 
-const Close: React.FC<{ p: MotionValue<number> }> = ({ p }) => {
-  // The next section rises over this as a sheet, so the line clears before it arrives
-  const textOpacity = useTransform(p, [0.905, 0.915, 0.945, 0.958], [0, 1, 1, 0]);
-  const textScale = useTransform(p, [0.905, 0.915, 0.958], [0.92, 1, 1.04]);
+// Runs past 1: the section's last 40vh of scroll is held for the call to action
+const Close: React.FC<{ p: MotionValue<number>; onStart: () => void }> = ({ p, onStart }) => {
+  // Both clear before the Services sheet climbs past the lower third
+  const textOpacity = useTransform(p, [0.905, 0.915, 0.99, 1.005], [0, 1, 1, 0]);
+  const textScale = useTransform(p, [0.905, 0.915, 1.005], [0.92, 1, 1.04]);
+  const ctaOpacity = useTransform(p, [0.925, 0.94, 0.99, 1.005], [0, 1, 1, 0]);
+  const ctaScale = useTransform(p, [0.925, 0.95], [0.55, 1]);
+  const ctaEvents = useTransform(ctaOpacity, (o) => (o > 0.6 ? 'auto' : 'none'));
+
   return (
-    <motion.div style={{ opacity: textOpacity, scale: textScale }} className="absolute inset-x-0 top-0 h-[70vh] flex items-center justify-center text-center px-6 pointer-events-none">
-      <p className="max-w-6xl text-[clamp(2.75rem,8vw,7.5rem)] font-bold tracking-[-0.045em] leading-[1.02] text-white">
-        Your project could be <span className="font-serif italic font-normal tracking-[-0.02em] text-[#b9a1ff]">next.</span>
-      </p>
-    </motion.div>
+    <>
+      <motion.div
+        style={{ opacity: textOpacity, scale: textScale }}
+        className="absolute inset-x-0 bottom-[calc(50%+5.5rem)] md:bottom-[calc(50%+7rem)] flex justify-center text-center px-6 pointer-events-none"
+      >
+        <p className="max-w-6xl text-[clamp(2.75rem,min(8vw,13vh),7.5rem)] font-bold tracking-[-0.045em] leading-[1.02] text-white">
+          Your project could be <span className="font-serif italic font-normal tracking-[-0.02em] text-[#b9a1ff]">next.</span>
+        </p>
+      </motion.div>
+
+      <div className="absolute inset-0 grid place-items-center pointer-events-none">
+        <motion.div style={{ opacity: ctaOpacity, scale: ctaScale, pointerEvents: ctaEvents }}>
+          <Magnetic strength={0.3}>
+            <button
+              onClick={onStart}
+              aria-label="Start a project"
+              className="group relative grid place-items-center w-[8.5rem] h-[8.5rem] md:w-44 md:h-44 rounded-full text-white"
+            >
+              <span className="absolute inset-0 rounded-full border border-white/15 transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:border-[#703FEC] group-hover:bg-[#703FEC] group-hover:scale-110 group-hover:shadow-[0_0_80px_rgba(112,63,236,0.55)]" />
+              <svg viewBox="0 0 100 100" aria-hidden className="absolute inset-0 w-full h-full animate-[spin_22s_linear_infinite] motion-reduce:animate-none">
+                <defs>
+                  <path id="cta-ring" d="M50,50 m-39,0 a39,39 0 1,1 78,0 a39,39 0 1,1 -78,0" />
+                </defs>
+                <text className="fill-current text-[6.4px] font-bold uppercase" textLength="244" lengthAdjust="spacing">
+                  <textPath href="#cta-ring">Start a project · Start a project · </textPath>
+                </text>
+              </svg>
+              <span className="relative grid place-items-center w-9 h-9">
+                <span className="absolute w-1.5 h-1.5 rounded-full bg-[#F3350C] shadow-[0_0_12px_#F3350C] transition-all duration-300 group-hover:scale-0 group-hover:opacity-0" />
+                <svg viewBox="0 0 24 24" aria-hidden className="w-6 h-6 opacity-0 -translate-x-1 translate-y-1 transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0">
+                  <path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </button>
+          </Magnetic>
+        </motion.div>
+      </div>
+    </>
   );
 };
 
@@ -464,9 +515,10 @@ export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) 
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<UniverseScene | null>(null);
-  const [open, setOpen] = useState<number | null>(null);
 
-  const { scrollYProgress: p } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
+  // The journey runs on the first 950vh of the 990vh scroll; past 1 is the CTA hold
+  const p = useTransform(scrollYProgress, (v) => v * STRETCH);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -512,8 +564,16 @@ export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) 
   }, [p]);
 
   useMotionValueEvent(p, 'change', (v) => {
-    sceneRef.current?.setProgress(v);
-    const immersive = v > 0.05 && v < 0.955;
+    const scene = sceneRef.current;
+    if (scene) {
+      scene.setProgress(v);
+      // Track the Services sheet so the stars can fall into its edge
+      const next = sectionRef.current?.nextElementSibling;
+      if (v > 0.95 && next) scene.setEdge(next.getBoundingClientRect().top / window.innerHeight);
+      else scene.setEdge(2);
+    }
+    // The nav returns as the Services sheet starts to rise
+    const immersive = v > 0.05 && v < 0.975;
     const root = document.documentElement;
     if (immersive && !root.dataset.immersive) root.dataset.immersive = '1';
     else if (!immersive && root.dataset.immersive) delete root.dataset.immersive;
@@ -521,10 +581,9 @@ export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) 
   useEffect(() => () => { delete document.documentElement.dataset.immersive; }, []);
 
   const focus = useCallback((s: -1 | 0 | 1) => sceneRef.current?.setFocus(s), []);
-  const close = useCallback(() => setOpen(null), []);
 
   return (
-    <section ref={sectionRef} id="work" className="relative h-[1050vh] bg-[#050505]" style={{ marginBottom: '-70vh' }}>
+    <section ref={sectionRef} id="work" className="relative h-[1090vh] bg-[#050505]" style={{ marginBottom: '-70vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden text-white">
         <canvas ref={canvasRef} aria-hidden className="absolute inset-0 w-full h-full" />
 
@@ -532,21 +591,10 @@ export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) 
         <Manifesto p={p} />
         <Audiences p={p} onFocus={focus} onStart={() => setView('contact')} />
         <Process p={p} />
-        <WorkChapter p={p} onOpen={setOpen} onAll={() => setView('work')} />
-        <Close p={p} />
+        <WorkChapter p={p} onAll={() => setView('work')} />
+        <Close p={p} onStart={() => setView('contact')} />
       </div>
 
-      <AnimatePresence>
-        {open !== null && (
-          <CaseStudy
-            key="case-study"
-            index={open}
-            onClose={close}
-            onGo={setOpen}
-            onAll={() => { setOpen(null); setView('work'); }}
-          />
-        )}
-      </AnimatePresence>
     </section>
   );
 };

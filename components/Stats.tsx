@@ -44,15 +44,15 @@ export const Stats: React.FC = () => {
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#703FEC]/5 rounded-full blur-3xl" />
               <div className="relative z-10">
                  <p className="text-2xl font-medium mb-12 leading-relaxed">
-                  "Working with Natwic felt less like hiring a design agency and more like gaining a strategic partner <span className="text-[#703FEC] italic font-semibold">forever</span>."
+                  "Natwic moves fast, sweats the details and is easy to work with. It felt like having a design team <span className="text-[#703FEC] italic font-semibold">in-house</span>."
                 </p>
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-zinc-200 rounded-full overflow-hidden border-2 border-white shadow-md">
-                    <img src="https://i.pravatar.cc/150?u=harold" alt="Harold" />
+                  <div className="w-12 h-12 bg-[#703FEC] text-white rounded-full grid place-items-center border-2 border-white shadow-md text-sm font-bold">
+                    AR
                   </div>
                   <div>
-                    <p className="font-bold">Harold Mercer</p>
-                    <p className="text-xs text-zinc-500">Investor at Solence®</p>
+                    <p className="font-bold">Adeel Raza</p>
+                    <p className="text-xs text-zinc-500">Mailmunch</p>
                   </div>
                 </div>
               </div>

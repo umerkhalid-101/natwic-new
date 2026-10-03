@@ -54,8 +54,7 @@ export const Privacy: React.FC = () => {
                     <p className="text-zinc-600 mb-6 leading-relaxed">
                         If you have questions or comments about this Privacy Policy, please contact us at: <br/><br/>
                         <strong>Natwic Studio</strong><br/>
-                        124 Creative Boulevard, Suite 400<br/>
-                        London, UK<br/>
+                        Dubai, United Arab Emirates<br/>
                         hello@natwic.studio
                     </p>
                 </motion.div>

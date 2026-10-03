@@ -8,7 +8,7 @@ export const VIEWS: View[] = ['home', 'studio', 'work', 'contact', 'privacy', 't
 
 export const ROUTE_META: Record<View, { title: string; description: string }> = {
   home: {
-    title: 'Natwic — Web Design & Branding Studio for Startups and Small Businesses',
+    title: 'Natwic | Web Design & Branding Studio for Startups and Small Businesses',
     description:
       'Natwic is a web design and branding studio for startups, SaaS teams and small businesses worldwide. Based in Dubai, working remotely with clients everywhere.',
   },

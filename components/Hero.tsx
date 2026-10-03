@@ -80,8 +80,11 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
                 </h2>
               </MaskedText>
               <MaskedText delay={0.7}>
-                <h1 className="mt-4 md:mt-7 max-w-xl text-sm md:text-lg font-medium leading-relaxed text-white/60">
-                  Web design and branding for startups, SaaS teams and small businesses — wherever you are.
+                <h1 className="mt-6 md:mt-10 flex items-start gap-3 md:gap-4 max-w-2xl text-base md:text-[1.6rem] font-medium leading-[1.3] tracking-[-0.02em] text-white/50">
+                  <span aria-hidden className="mt-[0.55em] w-1.5 h-1.5 md:w-2 md:h-2 shrink-0 rounded-full bg-[#703FEC] shadow-[0_0_12px_rgba(112,63,236,0.8)]" />
+                  <span>
+                    <span className="text-white">Web design &amp; branding</span> for startups, SaaS teams and small businesses, anywhere in the world.
+                  </span>
                 </h1>
               </MaskedText>
             </div>

@@ -62,15 +62,10 @@ type Msg = { id: number; from: 'you' | 'studio'; text?: string; next?: Next };
 
 const GREETING: Msg = { id: -1, from: 'studio', text: 'Hi! What’s not working for you right now?' };
 
-/** The studio's avatar: the barcode mark from the logo. */
+/** The studio's avatar: the Natwic mark. */
 const StudioAvatar: React.FC = () => (
-  <span className="w-7 h-7 rounded-full bg-black grid place-items-center shrink-0">
-    <span className="flex gap-[1.5px] h-3 items-center">
-      <span className="w-[1px] h-full bg-white" />
-      <span className="w-[2.5px] h-full bg-white" />
-      <span className="w-[1px] h-full bg-white" />
-      <span className="w-[1.5px] h-full bg-white" />
-    </span>
+  <span className="w-7 h-7 rounded-full bg-white border border-black/[0.06] shadow-sm grid place-items-center shrink-0">
+    <img src="/brand/mark-128.png" alt="" width={16} height={16} className="w-4 h-4 object-contain" />
   </span>
 );
 

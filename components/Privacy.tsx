@@ -27,7 +27,7 @@ export const Privacy: React.FC = () => {
                 >
                     <h3 className="text-2xl font-bold mb-4 mt-12">1. Introduction</h3>
                     <p className="text-zinc-600 mb-6 leading-relaxed">
-                        Natwic Studio ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website natwic.studio, use our services, or engage with us.
+                        Natwic Studio ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website natwic.com, use our services, or engage with us.
                     </p>
 
                     <h3 className="text-2xl font-bold mb-4 mt-12">2. Information We Collect</h3>
@@ -55,7 +55,7 @@ export const Privacy: React.FC = () => {
                         If you have questions or comments about this Privacy Policy, please contact us at: <br/><br/>
                         <strong>Natwic Studio</strong><br/>
                         Dubai, United Arab Emirates<br/>
-                        hello@natwic.studio
+                        hello@natwic.com
                     </p>
                 </motion.div>
             </div>

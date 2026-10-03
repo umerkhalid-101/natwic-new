@@ -34,8 +34,8 @@ export const Stats: React.FC = () => {
                   "Natwic moves fast, sweats the details and is easy to work with. It felt like having a design team <span className="text-[#703FEC] italic font-semibold">in-house</span>."
                 </p>
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-[#703FEC] text-white rounded-full grid place-items-center border-2 border-white shadow-md text-sm font-bold">
-                    AR
+                  <div className="w-12 h-12 bg-zinc-200 rounded-full overflow-hidden border-2 border-white shadow-md">
+                    <img src="/team/adeel-raza.jpg" alt="Adeel Raza" width={48} height={48} loading="lazy" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <p className="font-bold">Adeel Raza</p>

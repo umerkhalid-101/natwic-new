@@ -95,11 +95,11 @@ export const Contact: React.FC<ContactProps> = ({ isStandalone = true, setView }
               <div className="flex flex-col md:flex-row gap-16">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-6">Email us</p>
-                  <a href="mailto:hello@natwic.studio" className="text-2xl font-semibold hover:text-[#703FEC] transition-colors border-b border-zinc-100 pb-2">hello@natwic.studio</a>
+                  <a href="mailto:hello@natwic.com" className="text-2xl font-semibold hover:text-[#703FEC] transition-colors border-b border-zinc-100 pb-2">hello@natwic.com</a>
                 </div>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-6">Call us</p>
-                  <a href="tel:+123456789" className="text-2xl font-semibold hover:text-[#703FEC] transition-colors border-b border-zinc-100 pb-2">+1 234 567 890</a>
+                  <a href="tel:+971585203139" className="text-2xl font-semibold hover:text-[#703FEC] transition-colors border-b border-zinc-100 pb-2">+971 58 520 3139</a>
                 </div>
               </div>
               

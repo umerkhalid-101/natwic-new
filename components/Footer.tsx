@@ -118,14 +118,12 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
       </div>
 
       {/* Details */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 py-12 md:py-16">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10 py-12 md:py-16">
+        {/* Email and phone stacked in one column */}
         <div className="col-span-2 md:col-span-1">
-          <Label>Email</Label>
+          <Label>Contact</Label>
           <CopyEmail />
-        </div>
-        <div>
-          <Label>Phone</Label>
-          <a href="tel:+971585203139" className="text-base md:text-lg font-semibold tracking-tight text-white hover:text-[#b9a1ff] transition-colors">{PHONE}</a>
+          <a href="tel:+971585203139" className="mt-2 block text-base md:text-lg font-semibold tracking-tight text-white/70 hover:text-[#b9a1ff] transition-colors">{PHONE}</a>
         </div>
         <div>
           <Label>Studio</Label>

@@ -12,25 +12,12 @@ export const Stats: React.FC = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
+            className="lg:sticky lg:top-32 self-start"
           >
             <p className="text-xs uppercase tracking-[0.4em] text-zinc-500 mb-8">Testimonials</p>
             <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-12">
               What our<br />clients are<br />saying
             </h2>
-            <div className="space-y-8 max-w-md">
-              <div className="flex justify-between items-center py-4 border-b border-zinc-100 group">
-                <span className="text-4xl font-bold group-hover:text-[#703FEC] transition-colors">92%</span>
-                <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Return for project</span>
-              </div>
-              <div className="flex justify-between items-center py-4 border-b border-zinc-100 group">
-                <span className="text-4xl font-bold group-hover:text-[#703FEC] transition-colors">87%</span>
-                <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Brand Perception</span>
-              </div>
-              <div className="flex justify-between items-center py-4 border-b border-zinc-100 group">
-                <span className="text-4xl font-bold group-hover:text-[#703FEC] transition-colors">74%</span>
-                <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Engagement</span>
-              </div>
-            </div>
           </motion.div>
 
           <div className="space-y-8">
@@ -75,8 +62,13 @@ export const Stats: React.FC = () => {
                   </div>
                   <p className="text-sm font-medium leading-relaxed mb-8">{t.quote}</p>
                   <div className="flex items-center gap-3">
-                    <img src={t.image} className="w-8 h-8 rounded-full border border-zinc-100" alt={t.author} />
-                    <p className="text-xs font-bold uppercase tracking-tight">{t.author}</p>
+                    <span className="w-8 h-8 rounded-full bg-zinc-100 text-zinc-600 grid place-items-center text-[11px] font-bold shrink-0">
+                      {t.author.charAt(0)}
+                    </span>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-tight">{t.author}</p>
+                      <p className="text-[11px] text-zinc-500">{t.role}</p>
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -86,15 +78,15 @@ export const Stats: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center border-t border-zinc-100 pt-24">
           <div>
-            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC]">$43M</h3>
+            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC]">$2M</h3>
             <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Revenue influenced</p>
           </div>
           <div>
-            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC] opacity-80">87K</h3>
+            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC] opacity-80">89K</h3>
             <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Leads generated</p>
           </div>
           <div>
-            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter">268</h3>
+            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter">50+</h3>
             <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Brands partnered</p>
           </div>
         </div>

@@ -5,8 +5,6 @@ const FAQS = [
   { q: "What type of clients do you usually work with?", a: "We design websites and brands for startups, SaaS teams and small businesses. We're based in Dubai and work with clients around the world." },
   { q: "Do you work with clients outside the UAE?", a: "Yes. Most of our work is remote, and we schedule calls around your time zone." },
   { q: "How long does a typical project take?", a: "Most projects run in 2–4 week sprints. Larger brand and product work can take 3–6 months, depending on scope." },
-  { q: "Can I update the website myself?", a: "Yes. We set your site up so your team can edit pages, text and images without touching code." },
-  { q: "Do you offer ongoing support after a project ends?", a: "Yes, we offer monthly retainer packages for continuous design and development support." },
   { q: "How do I get started?", a: "Click 'Start a project' anywhere on the site, or tell us what's not working in the chat above. We'll get back to you with next steps." }
 ];
 
@@ -71,7 +69,7 @@ export const FAQ: React.FC = () => {
         </div>
 
         {/* Right column: Image */}
-        <div className="relative lg:sticky lg:top-32">
+        <div className="relative">
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}

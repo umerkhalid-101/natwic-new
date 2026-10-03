@@ -4,13 +4,15 @@ import { lockScroll, unlockScroll } from './smoothScroll';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-export type Work = { id: number; title: string; image: string; year: string; category: string; summary: string };
+export type Work = { id: number; title: string; image: string; year: string; category: string; summary: string; url?: string; domain?: string };
 
-// Case-study copy in [brackets] is a placeholder for the real project details.
+// Live client sites shown on the home page; covers are captured from each site
 export const WORKS: Work[] = [
-  { id: 1, title: "Modernist Era", category: "Identity Design", year: "2025", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=75&w=1600", summary: "[One line on the brand: who it’s for and what changed.]" },
-  { id: 2, title: "Abstract Flow", category: "Product UX", year: "2025", image: "https://images.unsplash.com/photo-1633167606207-d840b5070fc2?auto=format&fit=crop&q=75&w=1600", summary: "[One line on the product: the problem and the experience you designed.]" },
-  { id: 3, title: "Digital Echo", category: "Campaign", year: "2024", image: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&q=75&w=1600", summary: "[One line on the campaign: the idea and where it ran.]" },
+  { id: 1, title: 'Unita', category: 'Web platform', year: '', domain: 'unitaw.com', url: 'https://unitaw.com/', image: '/work/unitaw.jpg', summary: 'A directory where verified businesses find each other.' },
+  { id: 2, title: 'Folionomics', category: 'Fintech · Product UI', year: '', domain: 'folionomics.com', url: 'https://www.folionomics.com/', image: '/work/folionomics.jpg', summary: 'Wallets and DeFi positions in one clear view.' },
+  { id: 3, title: 'Breakthirty', category: 'Marketing · Website', year: '', domain: 'breakthirty.com', url: 'https://www.breakthirty.com/', image: '/work/breakthirty.jpg', summary: 'A growth marketing agency site built to convert.' },
+  { id: 4, title: 'Beyond Hut', category: 'Remote staffing · Website', year: '', domain: 'beyondhut.com', url: 'https://beyondhut.com/', image: '/work/beyondhut.jpg', summary: 'Remote property teams, without the overhead.' },
+  { id: 5, title: 'Cayano', category: 'Property · Website', year: '', domain: 'cayano.co.uk', url: 'https://cayano.co.uk/', image: '/work/cayano.jpg', summary: 'Property management that puts people first.' },
 ];
 
 export const pad = (n: number) => String(n).padStart(2, '0');

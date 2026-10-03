@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, MotionValue, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import type { UniverseScene } from './universe/scene';
 import { CaseStudy, WORKS, Work, pad } from './CaseStudy';
+import { Magnetic } from './Magnetic';
 
 type View = 'home' | 'contact' | 'studio' | 'work';
 
@@ -16,6 +17,9 @@ const CH = {
   work: [0.67, 0.905],
   close: [0.905, 1],
 } as const;
+
+/* Section is 1150vh; chapters were timed against a 950vh scroll, so they keep their pace */
+const STRETCH = 1050 / 950;
 
 const isSmall = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
@@ -442,19 +446,57 @@ const WorkChapter: React.FC<{ p: MotionValue<number>; onOpen: (i: number) => voi
 };
 
 /* ------------------------------------------------------------------ */
-/* Close out — everything collapses to a point, then opens to white    */
+/* Close out — the stars settle, then fall into the Services sheet     */
 /* ------------------------------------------------------------------ */
 
-const Close: React.FC<{ p: MotionValue<number> }> = ({ p }) => {
-  // The next section rises over this as a sheet, so the line clears before it arrives
-  const textOpacity = useTransform(p, [0.905, 0.915, 0.945, 0.958], [0, 1, 1, 0]);
-  const textScale = useTransform(p, [0.905, 0.915, 0.958], [0.92, 1, 1.04]);
+// Runs past 1: the section's last 100vh of scroll is held for the call to action
+const Close: React.FC<{ p: MotionValue<number>; onStart: () => void }> = ({ p, onStart }) => {
+  // Both clear before the Services sheet climbs past the lower third
+  const textOpacity = useTransform(p, [0.905, 0.915, 1.045, 1.06], [0, 1, 1, 0]);
+  const textScale = useTransform(p, [0.905, 0.915, 1.06], [0.92, 1, 1.04]);
+  const ctaOpacity = useTransform(p, [0.93, 0.945, 1.045, 1.06], [0, 1, 1, 0]);
+  const ctaScale = useTransform(p, [0.93, 0.955], [0.55, 1]);
+  const ctaEvents = useTransform(ctaOpacity, (o) => (o > 0.6 ? 'auto' : 'none'));
+
   return (
-    <motion.div style={{ opacity: textOpacity, scale: textScale }} className="absolute inset-x-0 top-0 h-[70vh] flex items-center justify-center text-center px-6 pointer-events-none">
-      <p className="max-w-6xl text-[clamp(2.75rem,8vw,7.5rem)] font-bold tracking-[-0.045em] leading-[1.02] text-white">
-        Your project could be <span className="font-serif italic font-normal tracking-[-0.02em] text-[#b9a1ff]">next.</span>
-      </p>
-    </motion.div>
+    <>
+      <motion.div
+        style={{ opacity: textOpacity, scale: textScale }}
+        className="absolute inset-x-0 bottom-[calc(50%+5.5rem)] md:bottom-[calc(50%+7rem)] flex justify-center text-center px-6 pointer-events-none"
+      >
+        <p className="max-w-6xl text-[clamp(2.75rem,min(8vw,13vh),7.5rem)] font-bold tracking-[-0.045em] leading-[1.02] text-white">
+          Your project could be <span className="font-serif italic font-normal tracking-[-0.02em] text-[#b9a1ff]">next.</span>
+        </p>
+      </motion.div>
+
+      <div className="absolute inset-0 grid place-items-center pointer-events-none">
+        <motion.div style={{ opacity: ctaOpacity, scale: ctaScale, pointerEvents: ctaEvents }}>
+          <Magnetic strength={0.3}>
+            <button
+              onClick={onStart}
+              aria-label="Start a project"
+              className="group relative grid place-items-center w-[8.5rem] h-[8.5rem] md:w-44 md:h-44 rounded-full text-white"
+            >
+              <span className="absolute inset-0 rounded-full border border-white/15 transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:border-[#703FEC] group-hover:bg-[#703FEC] group-hover:scale-110 group-hover:shadow-[0_0_80px_rgba(112,63,236,0.55)]" />
+              <svg viewBox="0 0 100 100" aria-hidden className="absolute inset-0 w-full h-full animate-[spin_22s_linear_infinite] motion-reduce:animate-none">
+                <defs>
+                  <path id="cta-ring" d="M50,50 m-39,0 a39,39 0 1,1 78,0 a39,39 0 1,1 -78,0" />
+                </defs>
+                <text className="fill-current text-[6.4px] font-bold uppercase" textLength="244" lengthAdjust="spacing">
+                  <textPath href="#cta-ring">Start a project · Start a project · </textPath>
+                </text>
+              </svg>
+              <span className="relative grid place-items-center w-9 h-9">
+                <span className="absolute w-1.5 h-1.5 rounded-full bg-[#F3350C] shadow-[0_0_12px_#F3350C] transition-all duration-300 group-hover:scale-0 group-hover:opacity-0" />
+                <svg viewBox="0 0 24 24" aria-hidden className="w-6 h-6 opacity-0 -translate-x-1 translate-y-1 transition-all duration-500 ease-[cubic-bezier(.16,1,.3,1)] group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0">
+                  <path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </button>
+          </Magnetic>
+        </motion.div>
+      </div>
+    </>
   );
 };
 
@@ -466,7 +508,9 @@ export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) 
   const sceneRef = useRef<UniverseScene | null>(null);
   const [open, setOpen] = useState<number | null>(null);
 
-  const { scrollYProgress: p } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end end'] });
+  // The journey runs on the first 950vh of the 1050vh scroll; past 1 is the CTA hold
+  const p = useTransform(scrollYProgress, (v) => v * STRETCH);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -512,8 +556,16 @@ export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) 
   }, [p]);
 
   useMotionValueEvent(p, 'change', (v) => {
-    sceneRef.current?.setProgress(v);
-    const immersive = v > 0.05 && v < 0.955;
+    const scene = sceneRef.current;
+    if (scene) {
+      scene.setProgress(v);
+      // Track the Services sheet so the stars can fall into its edge
+      const next = sectionRef.current?.nextElementSibling;
+      if (v > 0.95 && next) scene.setEdge(next.getBoundingClientRect().top / window.innerHeight);
+      else scene.setEdge(2);
+    }
+    // The nav returns as the Services sheet starts to rise
+    const immersive = v > 0.05 && v < 1.03;
     const root = document.documentElement;
     if (immersive && !root.dataset.immersive) root.dataset.immersive = '1';
     else if (!immersive && root.dataset.immersive) delete root.dataset.immersive;
@@ -524,7 +576,7 @@ export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) 
   const close = useCallback(() => setOpen(null), []);
 
   return (
-    <section ref={sectionRef} id="work" className="relative h-[1050vh] bg-[#050505]" style={{ marginBottom: '-70vh' }}>
+    <section ref={sectionRef} id="work" className="relative h-[1150vh] bg-[#050505]" style={{ marginBottom: '-70vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden text-white">
         <canvas ref={canvasRef} aria-hidden className="absolute inset-0 w-full h-full" />
 
@@ -533,7 +585,7 @@ export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) 
         <Audiences p={p} onFocus={focus} onStart={() => setView('contact')} />
         <Process p={p} />
         <WorkChapter p={p} onOpen={setOpen} onAll={() => setView('work')} />
-        <Close p={p} />
+        <Close p={p} onStart={() => setView('contact')} />
       </div>
 
       <AnimatePresence>

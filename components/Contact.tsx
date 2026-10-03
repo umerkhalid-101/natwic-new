@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+const readBrief = () => {
+  try { return sessionStorage.getItem('natwic:brief') ?? ''; } catch { return ''; }
+};
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
@@ -28,13 +32,15 @@ interface ContactProps {
 
 export const Contact: React.FC<ContactProps> = ({ isStandalone = true, setView }) => {
   const [formState, setFormState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(() => ({
     name: '',
     email: '',
     service: 'Web Design',
     budget: '$1,000 - $5,000',
-    message: ''
-  });
+    // Pre-filled when the visitor arrives from the chat on the home page
+    message: readBrief(),
+  }));
+  useEffect(() => { try { sessionStorage.removeItem('natwic:brief'); } catch { /* ignore */ } }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,9 +107,8 @@ export const Contact: React.FC<ContactProps> = ({ isStandalone = true, setView }
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-4">Visit Studio</p>
                   <p className="text-lg font-medium leading-relaxed text-zinc-600">
-                    124 Creative Boulevard<br />
-                    Suite 400, Studio District<br />
-                    London, UK
+                    Based in Dubai, UAE<br />
+                    Working with clients worldwide
                   </p>
                 </div>
                 <div className="flex flex-col gap-3">

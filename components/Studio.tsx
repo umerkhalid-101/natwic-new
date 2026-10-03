@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useInView, useMotionValue, useScroll, useSpring, useTransform, animate } from 'framer-motion';
-import type { GlobeScene, City } from './studio/globeScene';
 import { Magnetic } from './Magnetic';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -18,12 +17,39 @@ const TEAM = [
   { name: 'Tanseer Khoso', first: 'Tanseer', role: 'Head of Design', focus: 'Brand design', handles: ['Brand identity', 'Visual systems', 'Art direction'], image: '/team/tanseer.jpg' },
 ];
 
-// Where clients are. Add more as { name, clients, lat, lon }.
+// Where we work: home plus the cities our clients work from. Add more as { name, country, tz, lat, lon }.
+type City = { name: string; country: string; tz: string; lat: number; lon: number; home?: boolean };
 const CITIES: City[] = [
-  { name: 'Dubai', clients: 'Natwic Studio', lat: 25.2, lon: 55.27, home: true },
-  { name: 'London', clients: 'Cayano · Beyond Hut', lat: 51.5, lon: -0.13 },
-  { name: 'Utah', clients: 'Breakthirty', lat: 40.76, lon: -111.89 },
+  { name: 'Dubai', country: 'UAE', tz: 'Asia/Dubai', lat: 25.2, lon: 55.27, home: true },
+  { name: 'London', country: 'UK', tz: 'Europe/London', lat: 51.5, lon: -0.13 },
+  { name: 'New York', country: 'USA', tz: 'America/New_York', lat: 40.71, lon: -74.0 },
+  { name: 'Salt Lake City', country: 'USA', tz: 'America/Denver', lat: 40.76, lon: -111.89 },
+  { name: 'Toronto', country: 'Canada', tz: 'America/Toronto', lat: 43.65, lon: -79.38 },
+  { name: 'Berlin', country: 'Germany', tz: 'Europe/Berlin', lat: 52.52, lon: 13.4 },
+  { name: 'Amsterdam', country: 'Netherlands', tz: 'Europe/Amsterdam', lat: 52.37, lon: 4.9 },
+  { name: 'Riyadh', country: 'Saudi Arabia', tz: 'Asia/Riyadh', lat: 24.71, lon: 46.68 },
+  { name: 'Doha', country: 'Qatar', tz: 'Asia/Qatar', lat: 25.29, lon: 51.53 },
+  { name: 'Karachi', country: 'Pakistan', tz: 'Asia/Karachi', lat: 24.86, lon: 67.0 },
+  { name: 'Singapore', country: 'Singapore', tz: 'Asia/Singapore', lat: 1.35, lon: 103.82 },
+  { name: 'Sydney', country: 'Australia', tz: 'Australia/Sydney', lat: -33.87, lon: 151.21 },
 ];
+
+/** Local time in a zone, and how far it is from Dubai, e.g. "4h behind". */
+const zoneMinutes = (tz: string) => {
+  const p = new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: 'numeric', minute: 'numeric', day: 'numeric', hourCycle: 'h23' }).formatToParts(new Date());
+  const get = (t: string) => Number(p.find((x) => x.type === t)?.value ?? 0);
+  return get('day') * 1440 + get('hour') * 60 + get('minute');
+};
+const localTime = (tz: string) => new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit' }).format(new Date());
+const fromDubai = (tz: string) => {
+  // Wrap to within a day, so crossing midnight or a month boundary doesn't skew it
+  let d = (((zoneMinutes(tz) - zoneMinutes('Asia/Dubai')) % 1440) + 1440) % 1440;
+  if (d > 720) d -= 1440;
+  const h = Math.round((d / 60) * 2) / 2;
+  if (h === 0) return 'Same time as Dubai';
+  return `${Math.abs(h)}h ${h < 0 ? 'behind' : 'ahead of'} Dubai`;
+};
+
 
 const STEPS = [
   { t: 'Discover', d: 'A call and a short brief: your goals, your audience and what success looks like for this project.', out: 'Project brief' },
@@ -158,83 +184,67 @@ const Team: React.FC<{ onTalk: () => void }> = ({ onTalk }) => {
 /* Where we work: the globe                                            */
 /* ------------------------------------------------------------------ */
 
-const Globe: React.FC = () => {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const sceneRef = useRef<GlobeScene | null>(null);
-  const labelRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [focus, setFocus] = useState(0);
+const Daylight: React.FC<{ hour: number }> = ({ hour }) =>
+  hour >= 6 && hour < 18 ? (
+    <svg viewBox="0 0 16 16" className="w-3.5 h-3.5 text-[#FFC24B]" aria-label="Daytime"><circle cx="8" cy="8" r="3.2" fill="currentColor" />{[0, 45, 90, 135, 180, 225, 270, 315].map((d) => <line key={d} x1="8" y1="1.2" x2="8" y2="2.8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" transform={`rotate(${d} 8 8)`} />)}</svg>
+  ) : (
+    <svg viewBox="0 0 16 16" className="w-3.5 h-3.5 text-[#b9a1ff]" aria-label="Night-time"><path d="M10.5 2.5a5.5 5.5 0 1 0 3 9.9A6 6 0 0 1 10.5 2.5z" fill="currentColor" /></svg>
+  );
 
+/** A world clock: every city we work with, its time right now, and its distance from Dubai. */
+const WorldClock: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { amount: 0.2 });
+  const [, setTick] = useState(0);
+  const [blink, setBlink] = useState(true);
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const wrap = wrapRef.current;
-    if (!canvas || !wrap) return;
-    let cleanup = () => {};
-    let cancelled = false;
-    import('./studio/globeScene').then(({ GlobeScene }) => {
-      if (cancelled) return;
-      let scene: GlobeScene;
-      try { scene = new GlobeScene(canvas, CITIES); } catch { return; }
-      sceneRef.current = scene;
-      scene.onFrame = (pts) => {
-        pts.forEach((p, i) => {
-          const el = labelRefs.current[i];
-          if (!el) return;
-          el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`;
-          el.style.opacity = p.visible ? '1' : '0';
-        });
-      };
-      const io = new IntersectionObserver(([e]) => (e.isIntersecting ? scene.start() : scene.stop()));
-      io.observe(wrap);
-      const ro = new ResizeObserver(() => scene.resize());
-      ro.observe(canvas);
-      cleanup = () => { io.disconnect(); ro.disconnect(); scene.dispose(); sceneRef.current = null; };
-    });
-    return () => { cancelled = true; cleanup(); };
-  }, []);
-
-  const go = (i: number) => { setFocus(i); sceneRef.current?.focus(i); };
+    if (!inView) return;
+    const t = window.setInterval(() => { setBlink((b) => !b); setTick((n) => n + 1); }, 1000);
+    return () => clearInterval(t);
+  }, [inView]);
 
   return (
     <section className="px-2 md:px-3">
-      <div className="relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem] bg-[#0A0A0A] text-white">
-        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(112,63,236,0.28),transparent_55%)]" />
-        <div className="relative max-w-7xl mx-auto grid lg:grid-cols-[0.9fr_1.1fr] items-center gap-6 px-6 md:px-12 py-16 md:py-24">
-          <div>
-            <Label tone="light">Where we work</Label>
-            <h2 className="mt-5 text-4xl md:text-7xl font-bold tracking-[-0.045em] leading-[1.02]">
-              Dubai to <span className="italic text-[#b9a1ff]">everywhere.</span>
-            </h2>
-            <p className="mt-6 max-w-md text-white/60 leading-relaxed">
-              We’re based in Dubai and work remotely with clients around the world, scheduling around your time zone.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-2">
-              {CITIES.map((c, i) => (
-                <button
-                  key={c.name}
-                  onClick={() => go(i)}
-                  className={`group rounded-full border px-4 py-2.5 text-left transition-all duration-300 ${focus === i ? 'bg-white text-black border-white' : 'border-white/15 text-white/80 hover:border-white/40'}`}
-                >
-                  <span className="flex items-center gap-2 text-sm font-semibold">
-                    <span className={`w-1.5 h-1.5 rounded-full ${c.home ? 'bg-[#F3350C]' : 'bg-[#8c63ff]'}`} />
-                    {c.name}
-                  </span>
-                  <span className={`block text-[11px] ${focus === i ? 'text-black/55' : 'text-white/40'}`}>{c.clients}</span>
-                </button>
-              ))}
+      <div ref={ref} className="relative overflow-hidden rounded-[2.5rem] md:rounded-[4rem] bg-[#0A0A0A] text-white">
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(112,63,236,0.3),transparent_55%)]" />
+        <div className="relative max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24">
+          <div className="grid lg:grid-cols-[1.2fr_1fr] gap-6 lg:gap-16 items-end mb-12 md:mb-16">
+            <div>
+              <Label tone="light">Where we work</Label>
+              <h2 className="mt-5 text-5xl md:text-8xl font-bold tracking-[-0.05em] leading-[1]">
+                Dubai to <span className="italic text-[#b9a1ff]">everywhere.</span>
+              </h2>
             </div>
+            <p className="text-white/60 leading-relaxed lg:pb-3">
+              Based in Dubai, working with clients across five continents. We plan calls around your time zone, not ours.
+            </p>
           </div>
 
-          <div ref={wrapRef} className="relative aspect-square w-full max-w-[640px] mx-auto touch-none">
-            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing" aria-label="Globe showing where our clients are" />
-            {CITIES.map((c, i) => (
-              <div key={c.name} ref={(el) => { labelRefs.current[i] = el; }} className="pointer-events-none absolute left-0 top-0 transition-opacity duration-300" style={{ opacity: 0 }}>
-                <span className="absolute left-3 -top-3 whitespace-nowrap rounded-full bg-black/70 border border-white/10 px-2.5 py-1 text-[10px] font-semibold text-white">
-                  {c.name}
-                </span>
-              </div>
-            ))}
-            <p className="pointer-events-none absolute bottom-2 inset-x-0 text-center text-[10px] font-semibold uppercase tracking-[0.3em] text-white/30">Drag to spin</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-white/[0.08]">
+            {CITIES.map((c, i) => {
+              const [hh, mm] = localTime(c.tz).split(':');
+              const hour = Number(hh);
+              return (
+                <motion.div
+                  key={c.name}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease, delay: (i % 4) * 0.06 }}
+                  className={`group relative p-5 md:p-7 transition-colors duration-300 ${c.home ? 'bg-[#703FEC]' : 'bg-[#0A0A0A] hover:bg-[#151515]'}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className={`text-[10px] font-bold uppercase tracking-[0.25em] ${c.home ? 'text-white/70' : 'text-white/35'}`}>{c.country}</span>
+                    {c.home ? <span className="rounded-full bg-white/20 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em]">Studio</span> : <Daylight hour={hour} />}
+                  </div>
+                  <p className="mt-6 md:mt-8 text-lg md:text-xl font-semibold tracking-tight">{c.name}</p>
+                  <p className={`mt-1 font-mono text-3xl md:text-4xl tabular-nums tracking-tight transition-colors duration-300 ${c.home ? 'text-white' : 'text-white group-hover:text-[#b9a1ff]'}`}>
+                    {hh}<span className={`transition-opacity duration-200 ${blink ? 'opacity-100' : 'opacity-30'}`}>:</span>{mm}
+                  </p>
+                  <p className={`mt-2 text-xs ${c.home ? 'text-white/70' : 'text-white/40'}`}>{c.home ? 'Where we are' : fromDubai(c.tz)}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -301,9 +311,149 @@ const Process: React.FC = () => {
 };
 
 /* ------------------------------------------------------------------ */
+/* Values: scroll lights each one up in turn                           */
+/* ------------------------------------------------------------------ */
+
+const ValueVisual: React.FC<{ i: number }> = ({ i }) => {
+  if (i === 0) {
+    // Transparency: clear panes you can see straight through
+    return (
+      <div className="relative w-56 h-56 md:w-72 md:h-72">
+        {[0, 1, 2].map((k) => (
+          <motion.div
+            key={k}
+            className="absolute inset-0 rounded-[2rem] border border-white/40 bg-white/[0.07]"
+            initial={{ x: 0, y: 0, rotate: 0 }}
+            animate={{ x: (k - 1) * 34, y: (k - 1) * -26, rotate: (k - 1) * 6 }}
+            transition={{ duration: 1, ease, delay: k * 0.08 }}
+            style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.35)' }}
+          />
+        ))}
+        <motion.span
+          className="absolute left-1/2 top-1/2 w-4 h-4 -ml-2 -mt-2 rounded-full bg-white shadow-[0_0_30px_rgba(255,255,255,0.9)]"
+          animate={{ scale: [1, 1.4, 1] }}
+          transition={{ duration: 2.4, repeat: Infinity }}
+        />
+      </div>
+    );
+  }
+  if (i === 1) {
+    // Passion: a warm core that keeps pulsing
+    return (
+      <div className="relative w-56 h-56 md:w-72 md:h-72 grid place-items-center">
+        {[1, 2, 3].map((k) => (
+          <motion.span
+            key={k}
+            className="absolute rounded-full border border-white/25"
+            style={{ width: `${30 + k * 22}%`, height: `${30 + k * 22}%` }}
+            animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.15, 0.5] }}
+            transition={{ duration: 2.6, repeat: Infinity, delay: k * 0.3 }}
+          />
+        ))}
+        <motion.span
+          className="w-[42%] h-[42%] rounded-full bg-[radial-gradient(circle_at_35%_30%,#ffd2c2,#F3350C_45%,#703FEC_100%)] shadow-[0_0_80px_rgba(243,53,12,0.6)]"
+          animate={{ scale: [1, 1.07, 1] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
+    );
+  }
+  // Empathy: two circles moving to meet each other
+  return (
+    <div className="relative w-64 h-48 md:w-80 md:h-60">
+      <motion.span
+        className="absolute top-1/2 -mt-[30%] left-0 w-[60%] aspect-square rounded-full bg-[#703FEC] mix-blend-screen"
+        animate={{ x: ['0%', '22%', '0%'] }}
+        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.span
+        className="absolute top-1/2 -mt-[30%] right-0 w-[60%] aspect-square rounded-full bg-[#F3350C] mix-blend-screen"
+        animate={{ x: ['0%', '-22%', '0%'] }}
+        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }}
+      />
+    </div>
+  );
+};
+
+const VALUE_BG = ['#141414', '#703FEC', '#0A0A0A'];
+
+const Values: React.FC = () => {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
+  const [active, setActive] = useState(0);
+  useEffect(() => scrollYProgress.on('change', (v) => setActive(Math.min(VALUES.length - 1, Math.max(0, Math.floor(v * VALUES.length * 0.999))))), [scrollYProgress]);
+
+  return (
+    <section ref={ref} className="relative h-[260vh]">
+      <div className="sticky top-0 h-screen flex items-center px-5 md:px-12">
+        <div className="max-w-7xl w-full mx-auto grid lg:grid-cols-[1fr_1fr] gap-10 lg:gap-16 items-center">
+          <div>
+            <Label>Our values</Label>
+            <ul className="mt-6 md:mt-10 space-y-1 md:space-y-2">
+              {VALUES.map((v, i) => (
+                <li key={v.number} className="flex items-baseline gap-4 md:gap-6">
+                  <span className={`font-mono text-sm transition-colors duration-500 ${active === i ? 'text-[#703FEC]' : 'text-zinc-300'}`}>{v.number}</span>
+                  <motion.span
+                    animate={{ x: active === i ? 12 : 0 }}
+                    transition={{ type: 'spring', stiffness: 200, damping: 24 }}
+                    className={`text-5xl md:text-[6.5rem] font-bold tracking-[-0.055em] leading-[1.02] transition-colors duration-500 ${active === i ? 'text-black' : 'text-zinc-200'}`}
+                  >
+                    {v.title}
+                  </motion.span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8 md:mt-12 flex gap-2">
+              {VALUES.map((v, i) => (
+                <span key={v.number} className="h-1 w-12 rounded-full bg-zinc-200 overflow-hidden">
+                  <motion.span className="block h-full bg-[#703FEC]" animate={{ width: active >= i ? '100%' : '0%' }} transition={{ duration: 0.5, ease }} />
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <motion.div
+            animate={{ backgroundColor: VALUE_BG[active] }}
+            transition={{ duration: 0.7, ease }}
+            className="relative h-[46vh] lg:h-[64vh] min-h-[320px] rounded-[2rem] md:rounded-[3rem] overflow-hidden text-white flex flex-col"
+          >
+            <div className="flex-1 grid place-items-center">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={active}
+                  initial={{ opacity: 0, scale: 0.85, rotate: -6 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  exit={{ opacity: 0, scale: 0.9, rotate: 6 }}
+                  transition={{ duration: 0.6, ease }}
+                >
+                  <ValueVisual i={active} />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+            <div className="p-7 md:p-10">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={active}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.45, ease }}
+                  className="max-w-md text-base md:text-lg leading-relaxed text-white/80"
+                >
+                  {VALUES[active].description}
+                </motion.p>
+              </AnimatePresence>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ------------------------------------------------------------------ */
 
 export const Studio: React.FC<{ setView?: (view: 'home' | 'contact' | 'studio' | 'work') => void }> = ({ setView }) => {
-  const [openValue, setOpenValue] = useState<number | null>(0);
 
   return (
     <div className="bg-white min-h-screen pt-28 md:pt-36">
@@ -358,46 +508,11 @@ export const Studio: React.FC<{ setView?: (view: 'home' | 'contact' | 'studio' |
       <Team onTalk={() => setView?.('contact')} />
 
       <div className="h-20 md:h-32" />
-      <Globe />
+      <WorldClock />
 
       <Process />
 
-      {/* Values: hover to open */}
-      <section className="px-5 md:px-12 pb-24 md:pb-36">
-        <div className="max-w-7xl mx-auto">
-          <Label>Our values</Label>
-          <ul className="mt-8 md:mt-12 border-t border-zinc-200">
-            {VALUES.map((v, i) => (
-              <li key={v.number} className="border-b border-zinc-200">
-                <button
-                  onPointerEnter={() => setOpenValue(i)}
-                  onClick={() => setOpenValue(openValue === i ? null : i)}
-                  className="group relative w-full text-left py-7 md:py-10 overflow-hidden"
-                >
-                  <motion.span aria-hidden className="absolute inset-0 bg-[#703FEC] origin-left" initial={false} animate={{ scaleX: openValue === i ? 1 : 0 }} transition={{ duration: 0.6, ease }} />
-                  <span className="relative grid md:grid-cols-[6rem_1fr_1.2fr] gap-3 md:gap-8 items-baseline px-1 md:px-4">
-                    <span className={`font-mono text-sm transition-colors duration-500 ${openValue === i ? 'text-white/70' : 'text-[#703FEC]'}`}>{v.number}</span>
-                    <span className={`text-4xl md:text-6xl font-bold tracking-[-0.045em] transition-colors duration-500 ${openValue === i ? 'text-white' : 'text-black'}`}>{v.title}</span>
-                    <AnimatePresence initial={false}>
-                      {openValue === i && (
-                        <motion.span
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0 }}
-                          transition={{ duration: 0.4, ease }}
-                          className="text-base md:text-lg leading-relaxed text-white/85"
-                        >
-                          {v.description}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <Values />
     </div>
   );
 };

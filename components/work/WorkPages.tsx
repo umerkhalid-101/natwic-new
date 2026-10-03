@@ -60,14 +60,6 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
         <Label>Selected work</Label>
         <h1 className="mt-6 flex items-start gap-3 md:gap-5 text-[22vw] md:text-[13vw] font-bold leading-[0.82] tracking-[-0.06em] text-black">
           <Reveal>Work</Reveal>
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease, delay: 0.4 }}
-            className="mt-[0.1em] text-[0.16em] font-mono font-medium tracking-normal text-[#703FEC]"
-          >
-            ({pad(PROJECTS.length)})
-          </motion.span>
         </h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -184,7 +176,6 @@ export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => v
         </button>
         <div className="mt-10 md:mt-14 flex items-center gap-4">
           <Label>{project.category}</Label>
-          <span className="font-mono text-xs text-zinc-400">{pad(index + 1)} / {pad(PROJECTS.length)}</span>
         </div>
         <h1 className="mt-5 text-[19vw] md:text-[11vw] font-bold leading-[0.85] tracking-[-0.06em]">
           <Reveal>{project.title}</Reveal>

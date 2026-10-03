@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PROJECTS } from './work/projects';
 import { Logo } from './Logo';
 import { Magnetic } from './Magnetic';
 import { lockScroll, unlockScroll } from './smoothScroll';
@@ -71,8 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
               onClick={() => setView('work')}
               className={`flex items-center gap-2 hover:text-[#703FEC] transition-colors group p-2 ${currentView === 'work' ? 'text-[#703FEC]' : ''}`}
             >
-              Work 
-              <span className="bg-[#703FEC] text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full font-bold group-hover:scale-110 transition-transform">{PROJECTS.length}</span>
+              Work
             </button>
           </Magnetic>
 

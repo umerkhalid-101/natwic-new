@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform, animate, MotionValue } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Magnetic } from './Magnetic';
 import { scrollToY } from './smoothScroll';
-import { StarWordmark } from './StarWordmark';
+import { FooterWordmark } from './FooterWordmark';
 
 interface FooterProps {
   setView?: (view: 'home' | 'contact' | 'studio' | 'privacy' | 'terms') => void;
@@ -55,97 +55,6 @@ const skyFor = (h: number) =>
   : h >= 17 && h < 20 ? { a: 'rgba(243,53,12,0.3)', b: 'rgba(170,70,200,0.26)' } // sunset
   : { a: 'rgba(112,63,236,0.3)', b: 'rgba(40,30,120,0.25)' }; // night
 
-/* ------------------------------------------------------------------ */
-/* Pull to launch: keep scrolling at the very bottom to fly back up    */
-/* ------------------------------------------------------------------ */
-
-const LAUNCH_AT = 520;
-
-const usePullToLaunch = (pull: MotionValue<number>, onLaunch: () => void) => {
-  useEffect(() => {
-    let release = 0;
-    let launching = false;
-    let touchY: number | null = null;
-    const atBottom = () => window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
-    const springBack = () => animate(pull, 0, { type: 'spring', stiffness: 220, damping: 22 });
-    const add = (d: number) => {
-      if (launching) return;
-      const v = Math.max(0, Math.min(LAUNCH_AT, pull.get() + d));
-      pull.set(v);
-      if (v >= LAUNCH_AT) {
-        launching = true;
-        onLaunch();
-        springBack();
-        window.setTimeout(() => { launching = false; }, 1800);
-      }
-      window.clearTimeout(release);
-      release = window.setTimeout(springBack, 240);
-    };
-    const onWheel = (e: WheelEvent) => {
-      if (!atBottom()) return;
-      if (e.deltaY > 0) add(e.deltaY * 0.45);
-      else if (pull.get() > 0) add(e.deltaY);
-    };
-    const onTouchStart = (e: TouchEvent) => { touchY = atBottom() ? e.touches[0].clientY : null; };
-    const onTouchMove = (e: TouchEvent) => {
-      if (touchY === null || !atBottom()) return;
-      const dy = touchY - e.touches[0].clientY;
-      if (dy > 0) pull.set(Math.min(LAUNCH_AT, dy * 1.1));
-    };
-    const onTouchEnd = () => {
-      if (touchY !== null && pull.get() >= LAUNCH_AT * 0.95 && !launching) { launching = true; onLaunch(); window.setTimeout(() => { launching = false; }, 1800); }
-      touchY = null;
-      springBack();
-    };
-    window.addEventListener('wheel', onWheel, { passive: true });
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchmove', onTouchMove, { passive: true });
-    window.addEventListener('touchend', onTouchEnd);
-    return () => {
-      window.clearTimeout(release);
-      window.removeEventListener('wheel', onWheel);
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchend', onTouchEnd);
-    };
-  }, [pull, onLaunch]);
-};
-
-const LaunchMeter: React.FC<{ pull: MotionValue<number>; launched: number }> = ({ pull, launched }) => {
-  const opacity = useTransform(pull, [0, 30], [0, 1]);
-  const dash = useTransform(pull, [0, LAUNCH_AT], [113, 0]);
-  const lift = useTransform(pull, [0, LAUNCH_AT], [0, -6]);
-  const label = useTransform(pull, (v) => (v >= LAUNCH_AT * 0.9 ? 'Release for liftoff' : 'Keep scrolling to launch'));
-  return (
-    <>
-      <motion.div style={{ opacity }} className="pointer-events-none fixed left-1/2 -translate-x-1/2 bottom-6 z-[90] flex items-center gap-3 rounded-full bg-white/10 border border-white/15 backdrop-blur-md pl-1.5 pr-4 py-1.5 text-white">
-        <svg viewBox="0 0 40 40" className="w-9 h-9 -rotate-90">
-          <circle cx="20" cy="20" r="18" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="2.5" />
-          <motion.circle cx="20" cy="20" r="18" fill="none" stroke="#8c63ff" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="113" style={{ strokeDashoffset: dash }} />
-        </svg>
-        <motion.span style={{ y: lift }} className="absolute left-[19px] top-1/2 -translate-x-1/2 -translate-y-1/2 text-sm">↑</motion.span>
-        <motion.span className="text-[11px] font-semibold tracking-wide">{label}</motion.span>
-      </motion.div>
-      {/* The launch itself: a streak that shoots up the screen */}
-      <AnimatePresence>
-        {launched > 0 && (
-          <motion.div
-            key={launched}
-            initial={{ y: 0, opacity: 1 }}
-            animate={{ y: '-120vh', opacity: [1, 1, 0] }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.1, ease: [0.5, 0, 0.75, 0] }}
-            className="pointer-events-none fixed left-1/2 -translate-x-1/2 bottom-10 z-[90] flex flex-col items-center"
-          >
-            <span className="w-12 h-12 rounded-full bg-[#703FEC] text-white grid place-items-center text-xl shadow-[0_0_40px_rgba(112,63,236,0.9)]">↑</span>
-            <span className="w-[2px] h-40 bg-gradient-to-b from-[#8c63ff] to-transparent" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
-};
-
 const CopyEmail: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
@@ -182,11 +91,6 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
   const ref = React.useRef<HTMLElement>(null);
   const here = useHere();
   const sky = skyFor(here?.hour ?? 22);
-  const pull = useMotionValue(0);
-  const stretch = useTransform(pull, [0, LAUNCH_AT], [1, 1.45]);
-  const [launched, setLaunched] = useState(0);
-  const launch = React.useCallback(() => { setLaunched((n) => n + 1); scrollToY(0); }, []);
-  usePullToLaunch(pull, launch);
   // Like the space section, the white top nav steps aside while the dark footer is on screen
   useEffect(() => {
     const el = ref.current;
@@ -293,11 +197,7 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
       </div>
     </div>
 
-    {/* Finale: the stars drift down into the wordmark; keep scrolling and it stretches, then launches you back up */}
-    <motion.div style={{ scaleY: stretch, transformOrigin: '50% 100%' }}>
-      <StarWordmark />
-    </motion.div>
-    <LaunchMeter pull={pull} launched={launched} />
+    <FooterWordmark />
   </footer>
 );
 };

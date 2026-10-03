@@ -45,7 +45,9 @@ export const scrollToTop = () => {
   else window.scrollTo(0, 0);
 };
 
-export const scrollToY = (y: number) => {
-  if (lenis) lenis.scrollTo(y, { duration: 1.4 });
+export const scrollToY = (y: number, duration = 1.4, lock = false) => {
+  // force: still runs if Lenis is mid-scroll or stopped. lock: wheel/trackpad input
+  // (including trackpad momentum) can't cancel the trip until it arrives
+  if (lenis) lenis.scrollTo(y, { duration, force: true, lock });
   else window.scrollTo({ top: y, behavior: 'smooth' });
 };

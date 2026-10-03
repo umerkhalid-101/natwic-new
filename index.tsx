@@ -1,7 +1,7 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import App from './App';
-import { viewFromPath } from './seo';
+import { viewFromPath, slugFromPath } from './seo';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -12,6 +12,6 @@ if (!rootElement) {
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <App initialView={viewFromPath(window.location.pathname)} />
+    <App initialView={viewFromPath(window.location.pathname)} initialSlug={slugFromPath(window.location.pathname)} />
   </React.StrictMode>
 );

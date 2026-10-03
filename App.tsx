@@ -13,17 +13,19 @@ import { Footer } from './components/Footer';
 import { Seo } from './components/Seo';
 import { Loader } from './components/Loader';
 import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './components/smoothScroll';
-import { ROUTE_META, View, viewFromPath } from './seo';
+import { ROUTE_META, View, viewFromPath, slugFromPath, caseMeta } from './seo';
 
 const Contact = lazy(() => import('./components/Contact').then(m => ({ default: m.Contact })));
 const Studio = lazy(() => import('./components/Studio').then(m => ({ default: m.Studio })));
 const Privacy = lazy(() => import('./components/Privacy').then(m => ({ default: m.Privacy })));
 const Terms = lazy(() => import('./components/Terms').then(m => ({ default: m.Terms })));
-const WorkComingSoon = lazy(() => import('./components/WorkComingSoon').then(m => ({ default: m.WorkComingSoon })));
+const WorkIndex = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.WorkIndex })));
+const CaseStudyPage = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.CaseStudyPage })));
 
 // `initialView` lets the build-time pre-renderer render each page
-const App: React.FC<{ initialView?: View }> = ({ initialView = 'home' }) => {
+const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ initialView = 'home', initialSlug = null }) => {
   const [view, setView] = useState<View>(initialView);
+  const [slug, setSlug] = useState<string | null>(initialSlug);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -33,7 +35,10 @@ const App: React.FC<{ initialView?: View }> = ({ initialView = 'home' }) => {
 
   // Handle URL synchronization on mount and popstate
   useEffect(() => {
-    const handleUrlChange = () => setView(viewFromPath(window.location.pathname));
+    const handleUrlChange = () => {
+      setView(viewFromPath(window.location.pathname));
+      setSlug(slugFromPath(window.location.pathname));
+    };
 
     // Check initial URL
     handleUrlChange();
@@ -46,8 +51,17 @@ const App: React.FC<{ initialView?: View }> = ({ initialView = 'home' }) => {
   // Custom setter that updates the URL so Google can index specific pages
   const changeView = (newView: View) => {
     setView(newView);
+    setSlug(null);
     const path = newView === 'home' ? '/' : `/${newView}`;
     window.history.pushState({}, '', path);
+    scrollToTop();
+  };
+
+  // Case studies live at /work/<slug>
+  const openCase = (next: string) => {
+    setView('work');
+    setSlug(next);
+    window.history.pushState({}, '', `/work/${next}`);
     scrollToTop();
   };
 
@@ -85,10 +99,17 @@ const App: React.FC<{ initialView?: View }> = ({ initialView = 'home' }) => {
             </>
           )}
 
-          {view === 'work' && (
+          {view === 'work' && !slug && (
             <>
               <Seo {...ROUTE_META.work} view="work" />
-              <WorkComingSoon setView={changeView as any} />
+              <WorkIndex onOpen={openCase} onContact={() => changeView('contact')} />
+            </>
+          )}
+
+          {view === 'work' && slug && (
+            <>
+              <Seo {...caseMeta(slug)} view={`work/${slug}`} />
+              <CaseStudyPage slug={slug} onOpen={openCase} onAll={() => changeView('work')} onContact={() => changeView('contact')} />
             </>
           )}
 
@@ -115,7 +136,7 @@ const App: React.FC<{ initialView?: View }> = ({ initialView = 'home' }) => {
         </Suspense>
       </main>
 
-      {view !== 'work' && <Footer setView={changeView as any} currentView={view} />}
+      <Footer setView={changeView as any} currentView={view} />
     </div>
   );
 };

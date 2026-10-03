@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, MotionValue, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import type { UniverseScene } from './universe/scene';
-import { WORKS, Work, pad } from './CaseStudy';
+import { PROJECTS as WORKS, Project as Work, pad } from './work/projects';
 import { Magnetic } from './Magnetic';
 
 type View = 'home' | 'contact' | 'studio' | 'work';

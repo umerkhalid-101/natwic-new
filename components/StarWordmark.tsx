@@ -76,8 +76,8 @@ export const StarWordmark: React.FC = () => {
       if (!probe) return;
       probe.font = '800 100px Inter, sans-serif';
       // Wider than the screen, so it bleeds off the sides; the bottom of the letters runs off the page
-      const fontSize = (100 * w * 1.14) / probe.measureText(WORD).width;
-      const wordH = Math.round(fontSize * 0.6);
+      const fontSize = (100 * w * 1.12) / probe.measureText(WORD).width;
+      const wordH = Math.round(fontSize * 0.72);
       const top = Math.round(wordH * FALL_ZONE);
       h = wordH + top;
       wrap.style.height = `${wordH}px`;
@@ -95,7 +95,7 @@ export const StarWordmark: React.FC = () => {
       o.textAlign = 'center';
       o.textBaseline = 'alphabetic';
       o.fillStyle = '#fff';
-      o.fillText(WORD, w / 2, h + fontSize * 0.12);
+      o.fillText(WORD, w / 2, h + fontSize * 0.04);
       const data = o.getImageData(0, 0, w, h).data;
       const inside = (x: number, y: number) => data[((y | 0) * w + (x | 0)) * 4 + 3] > 140;
 

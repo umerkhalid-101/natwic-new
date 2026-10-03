@@ -572,9 +572,17 @@ const Social: React.FC = () => {
     return () => ro.disconnect();
   }, []);
 
-  // Slow drift while on screen and not being dragged
+  // Drift for a few seconds on arrival and while hovered; idle otherwise, so stacked cards cost nothing
+  const [hovered, setHovered] = useState(false);
+  const [intro, setIntro] = useState(false);
   useEffect(() => {
-    if (!inView || reduced()) return;
+    if (!inView) return;
+    setIntro(true);
+    const t = window.setTimeout(() => setIntro(false), 6000);
+    return () => clearTimeout(t);
+  }, [inView]);
+  useEffect(() => {
+    if (!inView || reduced() || !(hovered || intro)) return;
     let raf = 0;
     let last = performance.now();
     const tick = (now: number) => {
@@ -585,7 +593,7 @@ const Social: React.FC = () => {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, rot]);
+  }, [inView, rot, hovered, intro]);
 
   // Which post faces the viewer
   useEffect(() => rot.on('change', (r) => {
@@ -611,7 +619,7 @@ const Social: React.FC = () => {
   const radius = cardW * 1.05;
 
   return (
-    <div ref={ref} className="absolute inset-0 bg-[#0B0B10] overflow-hidden">
+    <div ref={ref} className="absolute inset-0 bg-[#0B0B10] overflow-hidden" onPointerEnter={() => setHovered(true)} onPointerLeave={() => setHovered(false)}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_60%,rgba(112,63,236,0.45),transparent_55%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_10%,rgba(243,53,12,0.18),transparent_40%)]" />
       <div className="absolute left-1/2 bottom-[8%] -translate-x-1/2 w-[60%] h-6 rounded-[50%] bg-black/60 blur-xl" />

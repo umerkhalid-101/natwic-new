@@ -9,8 +9,8 @@ export const initSmoothScroll = () => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo out
+    // Eases towards the target each frame, so it tracks the wheel closely and never feels heavy
+    lerp: 0.12,
     smoothWheel: true,
     wheelMultiplier: 1,
     touchMultiplier: 1.5,

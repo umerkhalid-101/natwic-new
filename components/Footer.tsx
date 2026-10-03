@@ -58,8 +58,24 @@ const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.3em] text-white/35">{children}</p>
 );
 
-export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => (
-  <footer className="relative z-10 -mt-10 md:-mt-16 overflow-hidden rounded-t-[2.5rem] md:rounded-t-[4rem] bg-[#0A0A0A] text-white shadow-[0_-30px_80px_rgba(0,0,0,0.25)]">
+export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
+  const ref = React.useRef<HTMLElement>(null);
+  // Like the space section, the white top nav steps aside while the dark footer is on screen
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const root = document.documentElement;
+    // Fires once the footer reaches the top half of the screen
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) root.dataset.footer = '1';
+      else delete root.dataset.footer;
+    }, { rootMargin: '0px 0px -50% 0px' });
+    io.observe(el);
+    return () => { io.disconnect(); delete root.dataset.footer; };
+  }, []);
+
+  return (
+  <footer ref={ref} className="relative z-10 -mt-10 md:-mt-16 overflow-hidden rounded-t-[2.5rem] md:rounded-t-[4rem] bg-[#0A0A0A] text-white shadow-[0_-30px_80px_rgba(0,0,0,0.25)]">
     {/* A soft glow rising behind the wordmark */}
     <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[70%] bg-[radial-gradient(ellipse_60%_55%_at_50%_100%,rgba(112,63,236,0.28),transparent_70%)]" />
 
@@ -149,3 +165,4 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => (
     <StarWordmark />
   </footer>
 );
+};

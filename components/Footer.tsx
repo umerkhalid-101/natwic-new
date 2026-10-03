@@ -65,9 +65,9 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
       </div>
 
       <div className="relative py-12 pb-24 select-none pointer-events-none">
-        <h1 className="text-[20vw] font-bold tracking-tighter leading-none text-white/[0.03] absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
+        <div aria-hidden className="text-[20vw] font-bold tracking-tighter leading-none text-white/[0.03] absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
           NATWIC STUDIO
-        </h1>
+        </div>
       </div>
     </footer>
   );

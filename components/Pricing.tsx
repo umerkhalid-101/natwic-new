@@ -72,9 +72,9 @@ export const Pricing: React.FC<PricingProps> = ({ setView }) => {
           
           {/* Big Blurred Background Text */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-0">
-             <h1 className="text-[18vw] font-black text-white/[0.04] blur-[8px] leading-none whitespace-nowrap select-none tracking-tighter">
+             <div aria-hidden className="text-[18vw] font-black text-white/[0.04] blur-[8px] leading-none whitespace-nowrap select-none tracking-tighter">
                 START PROJECT
-             </h1>
+             </div>
           </div>
        </div>
 
@@ -97,7 +97,7 @@ export const Pricing: React.FC<PricingProps> = ({ setView }) => {
                transition={{ delay: 0.1 }}
                className="text-5xl md:text-7xl font-bold tracking-tighter text-white drop-shadow-lg"
              >
-               Ready to elevate?
+               Tell us what you’re building.
              </motion.h2>
           </div>
 

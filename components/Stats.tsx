@@ -53,14 +53,14 @@ export const Stats: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.2, duration: 0.8 }}
-                  className="p-8 border border-zinc-100 rounded-3xl hover:border-[#703FEC]/30 transition-colors"
+                  className="h-full flex flex-col p-8 border border-zinc-100 rounded-3xl hover:border-[#703FEC]/30 transition-colors"
                 >
                   <div className="flex gap-1.5 mb-6">
                     {[...Array(t.stars)].map((_, i) => (
                       <div key={i} className="w-2.5 h-2.5 bg-[#703FEC] rounded-full" />
                     ))}
                   </div>
-                  <p className="text-sm font-medium leading-relaxed mb-8">{t.quote}</p>
+                  <p className="flex-1 text-sm font-medium leading-relaxed mb-8">{t.quote}</p>
                   <div className="flex items-center gap-3">
                     <span className="w-8 h-8 rounded-full bg-zinc-100 text-zinc-600 grid place-items-center text-[11px] font-bold shrink-0">
                       {t.author.charAt(0)}

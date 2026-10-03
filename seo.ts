@@ -10,7 +10,7 @@ export const ROUTE_META: Record<View, { title: string; description: string }> = 
   home: {
     title: 'Natwic — Web Design & Branding Studio for Startups and Small Businesses',
     description:
-      'Natwic is a Dubai-based design studio building fast websites, brands and content for startups, SaaS teams and small businesses worldwide.',
+      'Natwic is a web design and branding studio for startups, SaaS teams and small businesses worldwide. Based in Dubai, working remotely with clients everywhere.',
   },
   studio: {
     title: 'Our Studio | Natwic',

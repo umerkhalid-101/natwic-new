@@ -10,11 +10,11 @@ const reducedMotion = () => typeof window !== 'undefined' && window.matchMedia('
 
 const EXPERTS = [
   // Outer ring
-  { id: 1, name: 'Umer', role: 'Founder · Design & development', img: 'https://lh3.googleusercontent.com/d/1-KWP8MBvRL9kjnqY53zzJtS0d-U3wHLg', radius: 185, speed: 50, offset: 0 },
-  { id: 2, name: 'Faiq', role: 'Content, SEO & ads', img: 'https://lh3.googleusercontent.com/d/1F2UfBQhDUeie8MloYGRXKMF82vgSPSCP', radius: 185, speed: 50, offset: 180 },
+  { id: 1, name: 'Umer', role: 'Founder · Design & development', img: '/team/umer.jpg', radius: 185, speed: 50, offset: 0 },
+  { id: 2, name: 'Faiq', role: 'Content, SEO & ads', img: '/team/faiq.jpg', radius: 185, speed: 50, offset: 180 },
   // Inner ring
-  { id: 3, name: 'Hassan', role: 'Partnerships', img: 'https://lh3.googleusercontent.com/d/1M6RiGlZRzBvq0wXWo2NvJWLVHdhmMxZ1', radius: 115, speed: 40, offset: 90 },
-  { id: 4, name: 'Tanseer', role: 'Brand designer', img: 'https://lh3.googleusercontent.com/d/1gmuo0GEVy94utuLhnlf6OUcOi3NGHiyF', radius: 115, speed: 40, offset: 270 },
+  { id: 3, name: 'Hassan', role: 'Partnerships', img: '/team/hassan.jpg', radius: 115, speed: 40, offset: 90 },
+  { id: 4, name: 'Tanseer', role: 'Brand designer', img: '/team/tanseer.jpg', radius: 115, speed: 40, offset: 270 },
 ];
 const nameOf = (id: number) => EXPERTS.find((e) => e.id === id)?.name ?? 'Umer';
 const FOUNDER = 1; // takes anything a visitor writes in their own words

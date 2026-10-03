@@ -20,10 +20,10 @@ const VALUES = [
 ];
 
 const TEAM = [
-  { id: 1, name: 'Umer Khalid', role: 'Founder', image: 'https://lh3.googleusercontent.com/d/1-KWP8MBvRL9kjnqY53zzJtS0d-U3wHLg' },
-  { id: 2, name: 'Faiq Ahmed', role: 'Co-founder', image: 'https://lh3.googleusercontent.com/d/1F2UfBQhDUeie8MloYGRXKMF82vgSPSCP' },
-  { id: 3, name: 'Hassan Daniyal Ghauri', role: 'Head of Business', image: 'https://lh3.googleusercontent.com/d/1M6RiGlZRzBvq0wXWo2NvJWLVHdhmMxZ1' },
-  { id: 4, name: 'Tanseer Khoso', role: 'Head of Design', image: 'https://lh3.googleusercontent.com/d/1gmuo0GEVy94utuLhnlf6OUcOi3NGHiyF' },
+  { id: 1, name: 'Umer Khalid', role: 'Founder', image: '/team/umer.jpg' },
+  { id: 2, name: 'Faiq Ahmed', role: 'Co-founder', image: '/team/faiq.jpg' },
+  { id: 3, name: 'Hassan Daniyal Ghauri', role: 'Head of Business', image: '/team/hassan.jpg' },
+  { id: 4, name: 'Tanseer Khoso', role: 'Head of Design', image: '/team/tanseer.jpg' },
 ];
 
 // Utility component for the "Masked Reveal" text animation

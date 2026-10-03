@@ -114,7 +114,7 @@ export const Partners: React.FC = () => {
           transition={{ duration: 1.2, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="text-zinc-400 max-w-2xl mx-auto text-base md:text-lg font-medium leading-relaxed"
         >
-          From high-growth startups to enterprise giants, we help industry leaders define what’s next through pure intent and design excellence.
+          Startups, SaaS teams and small businesses around the world trust us with their web design, branding and launches.
         </motion.p>
       </div>
 

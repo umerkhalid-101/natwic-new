@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 const BASE_URL = 'https://www.natwic.com';
-const DEFAULT_IMAGE = 'https://lh3.googleusercontent.com/d/1TNWPq9K4wbLxAey0l4zm8fNPya-DOx62';
+const DEFAULT_IMAGE = 'https://www.natwic.com/brand/og-image.jpg';
 
 interface SeoProps {
   title: string;

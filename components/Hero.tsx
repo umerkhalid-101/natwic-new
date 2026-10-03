@@ -33,9 +33,9 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
       {/* Main Heading */}
       <div className="w-full px-2 mb-2 md:mb-6 select-none relative z-10 text-center pointer-events-none">
         <MaskedText>
-          <h1 className="text-[13vw] md:text-[14vw] font-black text-black leading-[0.85] tracking-[-0.07em] inline-block whitespace-nowrap">
+          <p aria-label="Natwic Studio" className="text-[13vw] md:text-[14vw] font-black text-black leading-[0.85] tracking-[-0.07em] inline-block whitespace-nowrap">
             NatwicStudio
-          </h1>
+          </p>
         </MaskedText>
       </div>
 
@@ -79,6 +79,11 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
                   Not just a studio,<br/><span className="italic text-white/40 font-medium">we are Natwic.</span>
                 </h2>
               </MaskedText>
+              <MaskedText delay={0.7}>
+                <h1 className="mt-4 md:mt-7 max-w-xl text-sm md:text-lg font-medium leading-relaxed text-white/60">
+                  Web design and branding for startups, SaaS teams and small businesses — wherever you are.
+                </h1>
+              </MaskedText>
             </div>
 
             <Magnetic strength={0.2}>
@@ -90,12 +95,12 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
                 className="flex items-center gap-4 md:gap-5 bg-white/5 border border-white/10 p-2 md:p-3 pr-6 md:pr-8 rounded-[1.5rem] md:rounded-[2rem] hover:bg-white/10 transition-all cursor-pointer group"
               >
                 <div className="relative shrink-0">
-                  <img src="https://i.pravatar.cc/100?u=natwic_mark" className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="Studio Lead" loading="lazy" />
+                  <span aria-hidden className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/10 text-white grid place-items-center text-sm md:text-lg font-bold transition-colors duration-700 group-hover:bg-[#703FEC]">M</span>
                   <div className="absolute -top-1 -right-1 w-2.5 md:w-3.5 h-2.5 md:h-3.5 bg-[#703FEC] rounded-full border-2 border-zinc-950" />
                 </div>
                 <div className="text-white">
                   <p className="text-xs md:text-sm font-bold leading-none mb-1 md:mb-1.5 group-hover:text-[#703FEC] transition-colors duration-500">Contact Mark</p>
-                  <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-[0.25em]">Principal Design</p>
+                  <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-[0.25em]">Customer support</p>
                 </div>
               </motion.div>
             </Magnetic>

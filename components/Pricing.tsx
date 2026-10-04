@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { QuickBrief, Brief } from './QuickBrief';
 
 /**
  * GOOGLE SHEETS INTEGRATION INSTRUCTIONS:
@@ -22,193 +23,46 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const YOUR_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwqQ2130Za78V8VFQ2p-1Le5mvGsly5B6wwfJjPLM1n8KPboQBU02a3fHCeGYaCOQIs/exec';
 
-const SERVICES_OPTIONS = [
-  "Web Design & Development",
-  "Branding & Identity",
-  "Digital Marketing",
-  "Content Strategy",
-  "Other"
-];
+// The home page sheet's columns: name, email, service, message (plus where it came from)
+const sendToSheet = (b: Brief) =>
+  fetch(YOUR_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: b.name, email: b.email, service: b.services.join(', ') || 'Not specified', message: b.message, source: 'Quote Section' }),
+  });
 
 interface PricingProps {
   setView?: (view: 'home' | 'contact' | 'studio') => void;
 }
 
-export const Pricing: React.FC<PricingProps> = ({ setView }) => {
-  const [formState, setFormState] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    service: 'Web Design & Development',
-    message: ''
-  });
+/** The home page's project form: a short brief, sent from right here. */
+export const Pricing: React.FC<PricingProps> = () => (
+  <section className="relative overflow-hidden rounded-[3rem] mx-2 md:mx-6 my-2 bg-[#080808] text-white border border-white/5 px-5 py-24 md:py-32">
+    <div aria-hidden className="pointer-events-none absolute inset-0">
+      <div className="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(112,63,236,0.14)_0%,transparent_65%)]" />
+      <div className="absolute bottom-[-30%] right-[-10%] w-[50vw] h-[50vw] bg-[radial-gradient(circle,rgba(112,63,236,0.08)_0%,transparent_65%)]" />
+      <div className="absolute inset-0 bg-[url('/media/noise.svg')] opacity-[0.12]" />
+    </div>
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormState('submitting');
-    
-    try {
-        await fetch(YOUR_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...formData, source: 'Quote Section' })
-        });
-        setFormState('success');
-    } catch (error) {
-        console.error('Submission error:', error);
-        setFormState('error');
-    }
-  };
+    <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-12 lg:gap-16 items-center">
+      <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
+        <p className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-white/50">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC] shadow-[0_0_10px_rgba(112,63,236,0.8)]" />
+          Get a free quote
+        </p>
+        <h2 className="mt-6 text-5xl md:text-7xl font-bold tracking-[-0.05em] leading-[0.98]">
+          Tell us what you’re <span className="italic text-[#b9a1ff]">building.</span>
+        </h2>
+        <p className="mt-6 max-w-sm text-lg text-white/55 leading-relaxed">A few lines is all we need. We’ll reply within 24 hours.</p>
+        <a href="mailto:hello@natwic.com" className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-white/70 hover:text-white transition-colors">
+          Rather email? <span className="text-[#b9a1ff]">hello@natwic.com</span>
+        </a>
+      </motion.div>
 
-  return (
-    <section className="py-32 px-4 bg-[#080808] text-white relative overflow-hidden rounded-[3rem] mx-2 md:mx-6 my-2 min-h-[90vh] flex items-center justify-center border border-white/5 shadow-2xl">
-       {/* Ambient Background */}
-       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
-          {/* Gradients rather than blur filters: same glow, no per-frame filter cost */}
-          <div className="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(112,63,236,0.09)_0%,transparent_65%)]" />
-          <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(37,99,235,0.05)_0%,transparent_65%)]" />
-          <div className="absolute inset-0 bg-[url('/media/noise.svg')] opacity-[0.15]" />
-          
-          {/* Big Blurred Background Text */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-0">
-             <div aria-hidden className="text-[18vw] font-black text-white/[0.04] blur-[8px] leading-none whitespace-nowrap select-none tracking-tighter">
-                START PROJECT
-             </div>
-          </div>
-       </div>
-
-       <div className="max-w-4xl mx-auto relative z-10 w-full px-2">
-          <div className="text-center mb-16">
-             <motion.div 
-               initial={{ opacity: 0, y: 20 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true }}
-               className="flex items-center justify-center gap-3 mb-6"
-             >
-                <span className="w-12 h-[1px] bg-gradient-to-r from-transparent to-[#703FEC]"></span>
-                <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-[#703FEC] drop-shadow-[0_0_10px_rgba(112,63,236,0.8)]">Get a Free Quote</p>
-                <span className="w-12 h-[1px] bg-gradient-to-l from-transparent to-[#703FEC]"></span>
-             </motion.div>
-             <motion.h2 
-               initial={{ opacity: 0, y: 20 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true }}
-               transition={{ delay: 0.1 }}
-               className="text-5xl md:text-7xl font-bold tracking-tighter text-white drop-shadow-lg"
-             >
-               Tell us what you’re building.
-             </motion.h2>
-          </div>
-
-          <motion.div 
-             initial={{ opacity: 0, y: 60 }}
-             whileInView={{ opacity: 1, y: 0 }}
-             viewport={{ once: true }}
-             transition={{ delay: 0.2, duration: 0.8 }}
-             className="relative perspective-[1200px]"
-          >
-            {/* The Floating Card */}
-            <motion.div
-              animate={{ y: [-10, 10, -10] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-              className="bg-zinc-900/70 border border-white/10 p-8 md:p-14 rounded-[3rem] shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden group hover:border-white/20 transition-colors duration-500"
-            >
-               {/* Shine effect */}
-               <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent opacity-60" />
-               <div className="absolute -bottom-20 -right-20 w-[30rem] h-[30rem] bg-[radial-gradient(circle,rgba(112,63,236,0.12)_0%,transparent_60%)] pointer-events-none opacity-70 group-hover:opacity-100 transition-opacity duration-700" />
-
-               <AnimatePresence mode="wait">
-                  {formState === 'success' ? (
-                     <motion.div 
-                       initial={{ opacity: 0, scale: 0.9 }}
-                       animate={{ opacity: 1, scale: 1 }}
-                       className="py-24 text-center"
-                     >
-                       <div className="w-24 h-24 bg-gradient-to-tr from-[#703FEC] to-blue-600 rounded-full flex items-center justify-center text-5xl mx-auto mb-10 shadow-[0_0_40px_rgba(112,63,236,0.4)] text-white">✓</div>
-                       <h3 className="text-4xl font-bold mb-4 tracking-tight">Request Received</h3>
-                       <p className="text-zinc-400 mb-10 max-w-sm mx-auto text-lg">We've received your details. Our strategists will analyze your needs and send a quote shortly.</p>
-                       <button 
-                         onClick={() => { setFormState('idle'); setFormData({ name: '', email: '', service: 'Web Design & Development', message: '' }); }}
-                         className="text-xs font-bold uppercase tracking-widest border-b border-white/30 pb-1 hover:border-white transition-colors"
-                       >
-                         Request another quote
-                       </button>
-                     </motion.div>
-                  ) : (
-                     <form onSubmit={handleSubmit} className="space-y-10">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                           <div className="space-y-3 group/input">
-                              <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-4 group-focus-within/input:text-[#703FEC] transition-colors">Name</label>
-                              <input 
-                                required
-                                type="text" 
-                                placeholder="Your Name"
-                                className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-5 text-white placeholder:text-white/20 focus:outline-none focus:border-[#703FEC] focus:bg-white/[0.05] transition-all hover:border-white/20"
-                                value={formData.name}
-                                onChange={e => setFormData({...formData, name: e.target.value})}
-                              />
-                           </div>
-                           <div className="space-y-3 group/input">
-                              <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-4 group-focus-within/input:text-[#703FEC] transition-colors">Email</label>
-                              <input 
-                                required
-                                type="email" 
-                                placeholder="your@email.com"
-                                className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-5 text-white placeholder:text-white/20 focus:outline-none focus:border-[#703FEC] focus:bg-white/[0.05] transition-all hover:border-white/20"
-                                value={formData.email}
-                                onChange={e => setFormData({...formData, email: e.target.value})}
-                              />
-                           </div>
-                        </div>
-
-                        <div className="space-y-3 group/input">
-                          <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-4 group-focus-within/input:text-[#703FEC] transition-colors">I'm interested in</label>
-                          <div className="relative">
-                              <select 
-                                className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-5 text-white focus:outline-none focus:border-[#703FEC] focus:bg-white/[0.05] transition-all appearance-none cursor-pointer hover:border-white/20"
-                                value={formData.service}
-                                onChange={e => setFormData({...formData, service: e.target.value})}
-                              >
-                                  {SERVICES_OPTIONS.map(opt => (
-                                    <option key={opt} value={opt} className="bg-[#111] text-white">{opt}</option>
-                                  ))}
-                              </select>
-                              <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-white/50">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                  <path d="M6 9l6 6 6-6"/>
-                                </svg>
-                              </div>
-                          </div>
-                        </div>
-
-                        <div className="space-y-3 group/input">
-                          <label className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 ml-4 group-focus-within/input:text-[#703FEC] transition-colors">Project Details</label>
-                          <textarea 
-                            required
-                            rows={4}
-                            placeholder="Tell us about your goals, timeline, and budget..."
-                            className="w-full bg-white/[0.03] border border-white/10 rounded-2xl px-6 py-5 text-white placeholder:text-white/20 focus:outline-none focus:border-[#703FEC] focus:bg-white/[0.05] transition-all resize-none hover:border-white/20"
-                            value={formData.message}
-                            onChange={e => setFormData({...formData, message: e.target.value})}
-                          />
-                        </div>
-
-                        <div className="pt-6">
-                          <button 
-                            disabled={formState === 'submitting'}
-                            type="submit"
-                            className="w-full bg-white text-black font-bold uppercase tracking-[0.2em] py-6 rounded-2xl hover:bg-[#703FEC] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_50px_rgba(112,63,236,0.4)] transform active:scale-[0.99] duration-300 relative overflow-hidden"
-                          >
-                            <span className="relative z-10">{formState === 'submitting' ? 'Processing...' : 'Get Free Quote'}</span>
-                          </button>
-                        </div>
-                     </form>
-                  )}
-               </AnimatePresence>
-            </motion.div>
-          </motion.div>
-       </div>
-    </section>
-  );
-};
+      <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}>
+        <QuickBrief send={sendToSheet} tone="dark" />
+      </motion.div>
+    </div>
+  </section>
+);

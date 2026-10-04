@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { SOCIALS } from './socials';
 import { Logo } from './Logo';
 import { Magnetic } from './Magnetic';
 import { lockScroll, unlockScroll } from './smoothScroll';
@@ -152,9 +153,9 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
              >
                 <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-6">Connect</p>
                 <div className="flex flex-col gap-4">
-                    <a href="#" className="text-xl font-medium tracking-tight">Instagram ↗</a>
-                    <a href="#" className="text-xl font-medium tracking-tight">LinkedIn ↗</a>
-                    <a href="#" className="text-xl font-medium tracking-tight">Behance ↗</a>
+                    {SOCIALS.map((s) => (
+                      <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="text-xl font-medium tracking-tight">{s.name} ↗</a>
+                    ))}
                 </div>
              </motion.div>
           </motion.div>

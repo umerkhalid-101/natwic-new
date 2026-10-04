@@ -536,7 +536,7 @@ const RingCard: React.FC<{
     >
       <div className="flex items-center gap-1.5 px-2 py-1.5 bg-white">
         <span className="w-4 h-4 rounded-full grid place-items-center border border-black/10">
-          <img src="/brand/mark-128.png" alt="" className="w-2.5 h-2.5" draggable={false} />
+          <img src="/brand/mark-128.png" alt="" width={10} height={10} className="w-2.5 h-2.5" draggable={false} />
         </span>
         <span className="text-[8px] md:text-[9px] font-semibold text-black">{p.handle}</span>
       </div>

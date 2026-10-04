@@ -5,37 +5,44 @@ const PARTNERS_DATA = [
   { 
     name: 'Axion Dynamic', 
     description: 'Elevating digital performance through dynamic solutions.',
-    logoId: '15uiZnmVk_mzvVP3RwzGyRUhw3ifAbTkX'
+    logo: '/partners/axion-dynamic.webp',
+    size: [480, 288]
   },
   { 
     name: 'Breakthirty', 
     description: 'Redefining the boundaries of modern brand expression.',
-    logoId: '1hJU5_5tgyej1oF8NH5JfTNo5JWvj4cCd'
+    logo: '/partners/breakthirty.webp',
+    size: [480, 223]
   },
   { 
     name: 'Cayano', 
     description: 'Strategic craftsmanship for global visionaries.',
-    logoId: '1AuhG27gKMn-kJTf6T2sbLefArBGdTXXR'
+    logo: '/partners/cayano.webp',
+    size: [480, 125]
   },
   { 
     name: 'Folionomics', 
     description: 'Data-driven design for the financial elite.',
-    logoId: '16Lxqy2zghfMrWbXPk-a4ZtAfiQf5ObAy'
+    logo: '/partners/folionomics.webp',
+    size: [480, 128]
   },
   { 
     name: 'Mailmunch', 
     description: 'Scaling conversions with intuitive user experiences.',
-    logoId: '1AxeHTLI6MEvgt8Qj9dDln9NedLSHkc6y'
+    logo: '/partners/mailmunch.webp',
+    size: [480, 160]
   },
   { 
     name: 'Salams', 
     description: 'Building meaningful connections through elegant tech.',
-    logoId: '1JqI3RcLBtnK-E1UJMaGJZ0thde9h2HGm'
+    logo: '/partners/salams.webp',
+    size: [205, 48]
   },
   { 
     name: 'Zwilt', 
     description: 'Pioneering the future of digital product design.',
-    logoId: '1tp8gVcN2t-3ACGca0yJlguB1aSNmdQSg'
+    logo: '/partners/zwilt.webp',
+    size: [480, 173]
   },
 ];
 
@@ -132,8 +139,12 @@ export const Partners: React.FC = () => {
               <div className="w-full aspect-square rounded-[2.5rem] md:rounded-[3rem] bg-zinc-50 flex items-center justify-center mb-8 md:mb-10 border border-zinc-100/50 shadow-[0_20px_50px_rgba(0,0,0,0.01)] relative overflow-hidden transition-all duration-700 hover:shadow-[0_40px_80px_rgba(0,0,0,0.04)]">
                 <div className="w-2/3 h-2/3 flex items-center justify-center relative z-10 p-6">
                   <img 
-                    src={`https://lh3.googleusercontent.com/d/${partner.logoId}`}
-                    alt={`${partner.name}`}
+                    src={partner.logo}
+                    alt={`${partner.name} logo`}
+                    width={partner.size[0]}
+                    height={partner.size[1]}
+                    loading="lazy"
+                    decoding="async"
                     className="max-w-full max-h-[80px] md:max-h-[100px] object-contain grayscale opacity-40 group-hover/item:grayscale-0 group-hover/item:opacity-100 transition-all duration-700 transform group-hover/item:scale-110"
                   />
                 </div>

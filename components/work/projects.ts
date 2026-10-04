@@ -13,6 +13,10 @@ export type Project = {
   domain: string;
   url: string;
   image: string;
+  /** Intrinsic cover size, for width/height on <img> */
+  imageSize: [number, number];
+  /** Describes the cover screenshot for screen readers and image search */
+  imageAlt: string;
   summary: string;
   challenge: string;
   approach: string;
@@ -29,7 +33,9 @@ export const PROJECTS: Project[] = [
     services: ['Product design', 'Web development', 'Search UX'],
     domain: 'unitaw.com',
     url: 'https://unitaw.com/',
-    image: '/work/unitaw.jpg',
+    image: '/work/unitaw.webp',
+    imageSize: [1200, 900],
+    imageAlt: 'Unita homepage with an AI-assisted search bar for finding verified businesses',
     summary: 'A directory where verified businesses find each other.',
     challenge:
       'Unita checks every company against national trade registers before it is listed. The site had to make that trust obvious at a glance, and make searching across companies, chambers, creators and countries feel effortless.',
@@ -47,7 +53,9 @@ export const PROJECTS: Project[] = [
     services: ['Product design', 'UI system', 'Front-end'],
     domain: 'folionomics.com',
     url: 'https://www.folionomics.com/',
-    image: '/work/folionomics.jpg',
+    image: '/work/folionomics.webp',
+    imageSize: [1200, 900],
+    imageAlt: 'Folionomics homepage in a dark theme with an interactive demo charting portfolio net worth',
     summary: 'Wallets and DeFi positions in one clear view.',
     challenge:
       'Crypto investors juggle wallets and DeFi positions across different apps. Folionomics needed a privacy-first product that shows everything in one place, without asking anyone to sign in first.',
@@ -65,7 +73,9 @@ export const PROJECTS: Project[] = [
     services: ['Web design', 'Development', 'Conversion'],
     domain: 'breakthirty.com',
     url: 'https://www.breakthirty.com/',
-    image: '/work/breakthirty.jpg',
+    image: '/work/breakthirty.webp',
+    imageSize: [1200, 900],
+    imageAlt: 'Breakthirty homepage with the headline about focusing on growth and a row of marketing services',
     summary: 'A growth agency site built to turn visitors into audits.',
     challenge:
       'A growth agency for Shopify and Amazon sellers offers a long list of services. The site needed to present all of it without overwhelming the store owners it is for.',
@@ -83,7 +93,9 @@ export const PROJECTS: Project[] = [
     services: ['Web design', 'Development', 'Messaging'],
     domain: 'beyondhut.com',
     url: 'https://beyondhut.com/',
-    image: '/work/beyondhut.jpg',
+    image: '/work/beyondhut.webp',
+    imageSize: [1200, 716],
+    imageAlt: 'Beyond Hut homepage offering trained remote staff to build a property team without the overhead',
     summary: 'Remote property teams, without the overhead.',
     challenge:
       'Beyond Hut places trained remote staff with UK property businesses. The site had to make a new kind of hire feel safe, simple and clearly worth it.',
@@ -101,7 +113,9 @@ export const PROJECTS: Project[] = [
     services: ['Web design', 'Development', 'Property search'],
     domain: 'cayano.co.uk',
     url: 'https://cayano.co.uk/',
-    image: '/work/cayano.jpg',
+    image: '/work/cayano.webp',
+    imageSize: [1200, 900],
+    imageAlt: 'Cayano homepage with an aerial view of London and a Book a Valuation button',
     summary: 'Property management that puts people first.',
     challenge:
       'A London lettings and management agency works with landlords and tenants, two audiences with very different needs. It wanted one site that serves both well.',

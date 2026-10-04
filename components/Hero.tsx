@@ -58,9 +58,11 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
         />
 
         <img
-          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=75&w=1600"
+          src="/media/hero-texture.webp"
+          width={1600}
+          height={1216}
           className="absolute inset-0 w-full h-full object-cover opacity-10 scale-110 z-0"
-          alt="Natwic Background"
+          alt=""
           loading="eager"
           decoding="async"
         />

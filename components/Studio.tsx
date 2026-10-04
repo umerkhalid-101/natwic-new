@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useInView, useMotionValue, useScroll, useSpring, useTransform, animate } from 'framer-motion';
 import { Magnetic } from './Magnetic';
+import { BASE_URL } from '../seo';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -11,11 +12,25 @@ const VALUES = [
 ];
 
 const TEAM = [
-  { name: 'Umer Khalid', first: 'Umer', role: 'Founder', focus: 'Design & development', handles: ['Web & product design', 'Development', 'Creative direction'], image: '/team/umer.jpg' },
-  { name: 'Faiq Ahmed', first: 'Faiq', role: 'Co-founder', focus: 'Content, SEO & ads', handles: ['Content & copy', 'SEO', 'Paid ads'], image: '/team/faiq.jpg' },
-  { name: 'Hassan Daniyal Ghauri', first: 'Hassan', role: 'Head of Business', focus: 'Partnerships', handles: ['Partnerships', 'Client relationships', 'Project planning'], image: '/team/hassan.jpg' },
-  { name: 'Tanseer Khoso', first: 'Tanseer', role: 'Head of Design', focus: 'Brand design', handles: ['Brand identity', 'Visual systems', 'Art direction'], image: '/team/tanseer.jpg' },
+  { name: 'Umer Khalid', first: 'Umer', role: 'Founder', focus: 'Design & development', handles: ['Web & product design', 'Development', 'Creative direction'], image: '/team/umer.webp', size: [426, 640] as const },
+  { name: 'Faiq Ahmed', first: 'Faiq', role: 'Co-founder', focus: 'Content, SEO & ads', handles: ['Content & copy', 'SEO', 'Paid ads'], image: '/team/faiq.webp', size: [426, 640] as const },
+  { name: 'Hassan Daniyal Ghauri', first: 'Hassan', role: 'Head of Business', focus: 'Partnerships', handles: ['Partnerships', 'Client relationships', 'Project planning'], image: '/team/hassan.webp', size: [426, 640] as const },
+  { name: 'Tanseer Khoso', first: 'Tanseer', role: 'Head of Design', focus: 'Brand design', handles: ['Brand identity', 'Visual systems', 'Art direction'], image: '/team/tanseer.webp', size: [640, 640] as const },
 ];
+
+// Person structured data for each team member, linked to the studio
+const TEAM_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@graph': TEAM.map((m) => ({
+    '@type': 'Person',
+    name: m.name,
+    jobTitle: m.role,
+    description: `${m.role} at Natwic Studio. Focus: ${m.focus}.`,
+    image: `${BASE_URL}${m.image}`,
+    knowsAbout: m.handles,
+    worksFor: { '@id': `${BASE_URL}/#organization` },
+  })),
+};
 
 // Where we work: home plus the cities our clients work from. Add more as { name, country, tz, lat, lon }.
 type City = { name: string; country: string; tz: string; lat: number; lon: number; home?: boolean };
@@ -112,7 +127,11 @@ const Portrait: React.FC<{ m: typeof TEAM[number]; index: number; active: boolea
     >
       <motion.img
         src={m.image}
-        alt={m.name}
+        alt={`Portrait of ${m.name}, ${m.role} at Natwic`}
+        width={m.size[0]}
+        height={m.size[1]}
+        loading="lazy"
+        decoding="async"
         style={{ x: ix, y: iy, scale: 1.15 }}
         className={`absolute inset-0 w-full h-full object-cover object-top transition-[filter] duration-700 ${active ? 'grayscale-0' : 'grayscale'}`}
       />
@@ -153,6 +172,7 @@ const Team: React.FC<{ onTalk: () => void }> = ({ onTalk }) => {
   const [active, setActive] = useState(0);
   return (
     <section className="px-3 md:px-6">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(TEAM_SCHEMA) }} />
       <div className="max-w-7xl mx-auto px-2 md:px-6 mb-10 md:mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
           <Label>The team</Label>

@@ -78,8 +78,12 @@ export const FAQ: React.FC = () => {
             className="w-full aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl"
           >
             <img 
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=1200" 
-              className="w-full h-full object-cover" 
+              src="/media/faq-portrait.webp"
+              width={960}
+              height={1438}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover"
               alt=""
             />
           </motion.div>

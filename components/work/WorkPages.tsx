@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
 import { PROJECTS, Project, pad, projectBySlug } from './projects';
 import { Magnetic } from '../Magnetic';
+import { BASE_URL, caseUrl } from '../../seo';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -26,7 +27,7 @@ const BrowserFrame: React.FC<{ project: Project; className?: string }> = ({ proj
       {['#FF5F57', '#FEBC2E', '#28C840'].map((c) => <span key={c} className="w-2 h-2 rounded-full" style={{ background: c }} />)}
       <span className="ml-3 rounded-full bg-black/[0.05] px-3 py-1 text-[9px] md:text-[11px] text-black/50">{project.domain}</span>
     </div>
-    <img src={project.image} alt={`${project.title} website`} className="block w-full h-auto" />
+    <img src={project.image} alt={project.imageAlt} width={project.imageSize[0]} height={project.imageSize[1]} className="block w-full h-auto" />
   </div>
 );
 
@@ -99,8 +100,8 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
                 </span>
               </button>
               {/* Phones get the cover inline */}
-              <button onClick={() => onOpen(p.slug)} className="md:hidden block w-full pb-6" aria-label={`Open ${p.title}`}>
-                <img src={p.image} alt="" loading="lazy" className="w-full aspect-[4/3] object-cover object-top rounded-2xl" />
+              <button onClick={() => onOpen(p.slug)} className="md:hidden block w-full pb-6">
+                <img src={p.image} alt={p.imageAlt} width={p.imageSize[0]} height={p.imageSize[1]} loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover object-top rounded-2xl" />
               </button>
             </motion.li>
           ))}
@@ -123,7 +124,7 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
               transition={{ duration: 0.45, ease }}
               className="absolute -translate-x-1/2 -translate-y-1/2 w-[380px] aspect-[4/3] overflow-hidden rounded-3xl shadow-[0_30px_80px_rgba(0,0,0,0.25)]"
             >
-              <img src={PROJECTS[hovered].image} alt="" className="w-full h-full object-cover object-top" />
+              <img src={PROJECTS[hovered].image} alt="" width={PROJECTS[hovered].imageSize[0]} height={PROJECTS[hovered].imageSize[1]} className="w-full h-full object-cover object-top" />
               <span className="absolute left-3 top-3 rounded-full bg-black/75 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white">{PROJECTS[hovered].category}</span>
             </motion.div>
           )}
@@ -149,7 +150,39 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
 /* /work/<slug>: a case study                                          */
 /* ------------------------------------------------------------------ */
 
-export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => void; onAll: () => void; onContact: () => void }> = ({ slug, onOpen, onAll, onContact }) => {
+// Real links for crawlers; plain clicks stay in the app
+const spaClick = (go: () => void) => (e: React.MouseEvent) => {
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+  e.preventDefault();
+  go();
+};
+
+const Breadcrumb: React.FC<{ project: Project; onHome: () => void; onAll: () => void }> = ({ project, onHome, onAll }) => {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Work', item: `${BASE_URL}/work` },
+      { '@type': 'ListItem', position: 3, name: project.title, item: caseUrl(project.slug) },
+    ],
+  };
+  const link = 'text-zinc-500 hover:text-black transition-colors';
+  return (
+    <nav aria-label="Breadcrumb">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <ol className="flex flex-wrap items-center gap-2 text-sm font-semibold">
+        <li><a href="/" onClick={spaClick(onHome)} className={link}>Home</a></li>
+        <li aria-hidden className="text-zinc-300">/</li>
+        <li><a href="/work" onClick={spaClick(onAll)} className={link}>Work</a></li>
+        <li aria-hidden className="text-zinc-300">/</li>
+        <li aria-current="page" className="text-black">{project.title}</li>
+      </ol>
+    </nav>
+  );
+};
+
+export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => void; onAll: () => void; onHome: () => void; onContact: () => void }> = ({ slug, onOpen, onAll, onHome, onContact }) => {
   const project = projectBySlug(slug) ?? PROJECTS[0];
   const index = PROJECTS.indexOf(project);
   const next = PROJECTS[(index + 1) % PROJECTS.length];
@@ -171,9 +204,7 @@ export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => v
   return (
     <article key={project.slug} className="bg-white min-h-screen pt-28 md:pt-36 pb-0">
       <header className="px-5 md:px-12 max-w-7xl mx-auto">
-        <button onClick={onAll} className="group inline-flex items-center gap-2 text-sm font-semibold text-zinc-500 hover:text-black transition-colors">
-          <span className="transition-transform group-hover:-translate-x-1">←</span> All work
-        </button>
+        <Breadcrumb project={project} onHome={onHome} onAll={onAll} />
         <div className="mt-10 md:mt-14 flex items-center gap-4">
           <Label>{project.category}</Label>
         </div>
@@ -263,6 +294,8 @@ export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => v
             <motion.img
               src={next.image}
               alt=""
+              width={next.imageSize[0]}
+              height={next.imageSize[1]}
               initial={false}
               animate={{ opacity: nextHover ? 1 : 0, y: nextHover ? 0 : 30, rotate: nextHover ? -3 : 0 }}
               transition={{ duration: 0.6, ease }}

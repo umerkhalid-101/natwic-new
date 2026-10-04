@@ -4,7 +4,6 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Partners } from './components/Partners';
 import { WhyUs } from './components/WhyUs';
-import { Universe } from './components/Universe';
 import { Services } from './components/Services';
 import { Stats } from './components/Stats';
 import { Pricing } from './components/Pricing';
@@ -15,6 +14,10 @@ import { Loader } from './components/Loader';
 import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './components/smoothScroll';
 import { ROUTE_META, View, viewFromPath, slugFromPath, caseMeta } from './seo';
 
+// The scroll universe (and three.js inside it) loads as its own chunk
+const Universe = lazy(() => import('./components/Universe').then(m => ({ default: m.Universe })));
+// Same footprint as the real section, so nothing jumps while it loads
+const UniverseFallback = () => <section id="work" aria-hidden className="relative h-[1090vh] bg-[#050505]" style={{ marginBottom: '-70vh' }} />;
 const Contact = lazy(() => import('./components/Contact').then(m => ({ default: m.Contact })));
 const Studio = lazy(() => import('./components/Studio').then(m => ({ default: m.Studio })));
 const Privacy = lazy(() => import('./components/Privacy').then(m => ({ default: m.Privacy })));
@@ -83,7 +86,9 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
             <Hero setView={changeView} />
             <Partners />
             <WhyUs onStart={() => changeView('contact')} />
-            <Universe setView={changeView} />
+            <Suspense fallback={<UniverseFallback />}>
+              <Universe setView={changeView} />
+            </Suspense>
             <Services setView={changeView} />
             <Stats />
             <Pricing setView={changeView} />
@@ -109,7 +114,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
           {view === 'work' && slug && (
             <>
               <Seo {...caseMeta(slug)} view={`work/${slug}`} />
-              <CaseStudyPage slug={slug} onOpen={openCase} onAll={() => changeView('work')} onContact={() => changeView('contact')} />
+              <CaseStudyPage slug={slug} onOpen={openCase} onAll={() => changeView('work')} onHome={() => changeView('home')} onContact={() => changeView('contact')} />
             </>
           )}
 

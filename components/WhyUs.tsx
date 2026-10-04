@@ -10,11 +10,11 @@ const reducedMotion = () => typeof window !== 'undefined' && window.matchMedia('
 
 const EXPERTS = [
   // Outer ring
-  { id: 1, name: 'Umer', role: 'Founder · Design & development', img: '/team/umer.jpg', radius: 185, speed: 50, offset: 0 },
-  { id: 2, name: 'Faiq', role: 'Content, SEO & ads', img: '/team/faiq.jpg', radius: 185, speed: 50, offset: 180 },
+  { id: 1, name: 'Umer', role: 'Founder · Design & development', img: '/team/umer.webp', radius: 185, speed: 50, offset: 0 },
+  { id: 2, name: 'Faiq', role: 'Content, SEO & ads', img: '/team/faiq.webp', radius: 185, speed: 50, offset: 180 },
   // Inner ring
-  { id: 3, name: 'Hassan', role: 'Partnerships', img: '/team/hassan.jpg', radius: 115, speed: 40, offset: 90 },
-  { id: 4, name: 'Tanseer', role: 'Brand designer', img: '/team/tanseer.jpg', radius: 115, speed: 40, offset: 270 },
+  { id: 3, name: 'Hassan', role: 'Partnerships', img: '/team/hassan.webp', radius: 115, speed: 40, offset: 90 },
+  { id: 4, name: 'Tanseer', role: 'Brand designer', img: '/team/tanseer.webp', radius: 115, speed: 40, offset: 270 },
 ];
 const nameOf = (id: number) => EXPERTS.find((e) => e.id === id)?.name ?? 'Umer';
 const FOUNDER = 1; // takes anything a visitor writes in their own words
@@ -429,7 +429,6 @@ const ExpertOrbital: React.FC<{ speaker: number | null }> = ({ speaker }) => {
       {EXPERTS.map((e, i) => (
         <motion.button
           key={e.id}
-          aria-label={e.name}
           aria-pressed={focus === e.id}
           onPointerEnter={(ev) => ev.pointerType === 'mouse' && setHover(e.id)}
           onClick={() => setHover((f) => (f === e.id ? null : e.id))}
@@ -438,7 +437,9 @@ const ExpertOrbital: React.FC<{ speaker: number | null }> = ({ speaker }) => {
         >
           <img
             src={e.img}
-            alt=""
+            alt={`${e.name}, ${e.role} at Natwic`}
+            width={56}
+            height={56}
             draggable={false}
             className={`w-full h-full object-cover object-top transition-[filter] duration-500 ${focus === e.id ? 'grayscale-0' : 'grayscale'}`}
           />

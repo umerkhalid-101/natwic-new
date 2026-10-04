@@ -35,7 +35,7 @@ export const Stats: React.FC = () => {
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-zinc-200 rounded-full overflow-hidden border-2 border-white shadow-md">
-                    <img src="/team/adeel-raza.jpg" alt="Adeel Raza" width={48} height={48} loading="lazy" className="w-full h-full object-cover" />
+                    <img src="/team/adeel-raza.webp" alt="Portrait of Adeel Raza from Mailmunch" width={48} height={48} loading="lazy" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <p className="font-bold">Adeel Raza</p>

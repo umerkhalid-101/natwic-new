@@ -68,7 +68,7 @@ export const Pricing: React.FC<PricingProps> = ({ setView }) => {
           {/* Gradients rather than blur filters: same glow, no per-frame filter cost */}
           <div className="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(112,63,236,0.09)_0%,transparent_65%)]" />
           <div className="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-[radial-gradient(circle,rgba(37,99,235,0.05)_0%,transparent_65%)]" />
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15]" />
+          <div className="absolute inset-0 bg-[url('/media/noise.svg')] opacity-[0.15]" />
           
           {/* Big Blurred Background Text */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full text-center z-0">

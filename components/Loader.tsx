@@ -96,7 +96,7 @@ export const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => 
             </AnimatePresence>
 
             {/* Background Texture */}
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] pointer-events-none z-0" />
+            <div className="absolute inset-0 bg-[url('/media/noise.svg')] opacity-[0.05] pointer-events-none z-0" />
         </div>
     </motion.div>
   );

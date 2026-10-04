@@ -29,7 +29,7 @@ export const AboutUs: React.FC = () => {
                 <div className="absolute top-[30%] right-[10%] w-[50%] h-[50%] bg-[#703FEC] rounded-full mix-blend-screen blur-[100px] opacity-50" />
                 
                 {/* Grain overlay for texture */}
-                <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
+                <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: 'url("/media/noise.svg")' }} />
             </div>
 
             {/* Glass Card - Mobile: Flow layout / Desktop: Absolute centered */}

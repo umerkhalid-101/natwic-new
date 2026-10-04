@@ -406,7 +406,7 @@ const FloatingProject: React.FC<{ p: MotionValue<number>; work: Work; index: num
         className="group block w-full text-left rounded-[2.5rem] bg-[#0F0F0F] border border-white/[0.07] p-3 shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04]"
       >
         <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-zinc-900">
-          <img src={work.image} alt={`${work.title} website`} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
+          <img src={work.image} alt={work.imageAlt} width={work.imageSize[0]} height={work.imageSize[1]} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
           <span className="absolute left-4 top-4 rounded-full bg-black/70 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white">{work.category}</span>
         </div>
         <div className="flex items-center justify-between gap-4 px-4 pt-5 pb-3">

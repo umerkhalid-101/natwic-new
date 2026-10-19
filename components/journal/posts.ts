@@ -12,6 +12,7 @@ export interface Post {
   author?: string;
   tags: string[];
   draft: boolean;
+  featured: boolean; // "Pin to front pages" in the CMS
   body: string; // Markdown
   readingMinutes: number;
 }
@@ -36,6 +37,7 @@ const toPost = (file: string, raw: string): Post => {
     author: data.author || undefined,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     draft: Boolean(data.draft),
+    featured: Boolean(data.featured),
     body,
     readingMinutes: Math.max(1, Math.round(body.split(/\s+/).filter(Boolean).length / 220)),
   };
@@ -46,6 +48,10 @@ export const POSTS: Post[] = Object.entries(files)
   .map(([file, raw]) => toPost(file, raw))
   .filter((p) => import.meta.env.DEV || !p.draft)
   .sort((a, b) => b.date.localeCompare(a.date));
+
+// For the deck on the home, studio and work pages: pinned posts first, then the newest
+export const frontPagePosts = (count: number) =>
+  [...POSTS.filter((p) => p.featured), ...POSTS.filter((p) => !p.featured)].slice(0, count);
 
 export const postBySlug = (slug: string) => POSTS.find((p) => p.slug === slug);
 

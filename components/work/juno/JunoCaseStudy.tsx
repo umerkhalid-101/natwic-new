@@ -10,7 +10,7 @@ import { BASE_URL, caseUrl } from '../../../seo';
 import { projectBySlug, creativeWorkSchema } from '../projects';
 import { MoreWork, NextProject } from '../WorkPages';
 import {
-  HERO, HERO_SIDES, TASKS, HEADLINES, CHALLENGE, GOALS, APPROACH, STORY_INTRO, BEATS, CAPABILITY_STILLS, PAGES, DETAILS,
+  HERO, HERO_SIDES, TASKS, HEADLINES, SHIFT, CHALLENGE, GOALS, APPROACH, STORY_INTRO, BEATS, CAPABILITY_STILLS, PAGES, DETAILS,
   DESIGN_SYSTEM, RESULTS, CLOSING, Media, srcSet, sizeOf,
 } from './juno';
 
@@ -223,7 +223,7 @@ const MARQUEE_CSS = `
 const HeadlineMarquee: React.FC = () => {
   const rows = [HEADLINES.slice(0, 6), HEADLINES.slice(6)];
   return (
-    <section aria-label="Headlines we wrote for Juno" className="mt-20 md:mt-28 overflow-hidden select-none">
+    <section aria-label="Headlines from the new Juno site" className="mt-20 md:mt-28 overflow-hidden select-none">
       <style>{MARQUEE_CSS}</style>
       {rows.map((row, r) => (
         <div key={r} className="flex whitespace-nowrap py-2 md:py-3">
@@ -240,6 +240,71 @@ const HeadlineMarquee: React.FC = () => {
     </section>
   );
 };
+
+/* ------------------------------------------------------------------ */
+/* The shift: drag between the old homepage and ours                    */
+/* ------------------------------------------------------------------ */
+
+const BeforeAfter: React.FC = () => {
+  const [pos, setPos] = useState(50);
+  const ref = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+  const moveTo = (clientX: number) => {
+    const r = ref.current?.getBoundingClientRect();
+    if (r) setPos(Math.min(100, Math.max(0, ((clientX - r.left) / r.width) * 100)));
+  };
+  return (
+    <div
+      ref={ref}
+      className="relative select-none overflow-hidden rounded-xl md:rounded-2xl border border-white/10 shadow-[0_40px_120px_rgba(0,0,0,0.5)] cursor-ew-resize touch-pan-y"
+      onPointerDown={(e) => { dragging.current = true; (e.target as Element).setPointerCapture?.(e.pointerId); moveTo(e.clientX); }}
+      onPointerMove={(e) => dragging.current && moveTo(e.clientX)}
+      onPointerUp={() => { dragging.current = false; }}
+    >
+      <Still src={SHIFT.after.image} alt={SHIFT.after.alt} sizes="(min-width: 1024px) 72rem, 100vw" />
+      <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
+        <Still src={SHIFT.before.image} alt={SHIFT.before.alt} sizes="(min-width: 1024px) 72rem, 100vw" />
+      </div>
+      <span className="pointer-events-none absolute left-3 top-3 md:left-5 md:top-5 rounded-full bg-black/75 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white">Before</span>
+      <span className="pointer-events-none absolute right-3 top-3 md:right-5 md:top-5 rounded-full bg-[#703FEC] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white">After</span>
+      <div className="pointer-events-none absolute inset-y-0 w-px bg-white/80" style={{ left: `${pos}%` }}>
+        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white text-black grid place-items-center text-sm font-bold shadow-[0_10px_30px_rgba(0,0,0,0.4)]">↔</span>
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        value={Math.round(pos)}
+        onChange={(e) => setPos(Number(e.target.value))}
+        aria-label="Compare the old and new Juno homepage"
+        className="absolute inset-x-0 bottom-0 h-10 w-full opacity-0 cursor-ew-resize focus-visible:opacity-100"
+      />
+    </div>
+  );
+};
+
+const Shift: React.FC = () => (
+  <DarkBand className="mt-20 md:mt-28 py-20 md:py-28">
+    <div className="px-5 md:px-12 max-w-7xl mx-auto">
+      <SectionHead eyebrow="The shift" title="Same promise. A whole new story." tone="light">
+        <p>{SHIFT.intro}</p>
+      </SectionHead>
+      <FadeUp className="mt-12 md:mt-16"><BeforeAfter /></FadeUp>
+      <p className="mt-4 text-sm text-white/45">Drag to compare the old runjuno.ai homepage with ours.</p>
+      <ol className="mt-12 md:mt-16 grid md:grid-cols-3 gap-4">
+        {SHIFT.changes.map((c, i) => (
+          <li key={c.title}>
+            <FadeUp delay={i * 0.08} className="h-full rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-7 md:p-8">
+              <span className="font-mono text-xs text-[#b9a1ff]">{pad2(i + 1)}</span>
+              <h3 className="mt-6 text-2xl md:text-3xl font-bold tracking-[-0.03em]">{c.title}</h3>
+              <p className="mt-3 text-base text-white/60 leading-relaxed">{c.text}</p>
+            </FadeUp>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </DarkBand>
+);
 
 /* ------------------------------------------------------------------ */
 /* The homepage story                                                  */
@@ -278,9 +343,10 @@ const StorySticky: React.FC = () => {
               ))}
             </ol>
             <AnimatePresence mode="wait">
-              <motion.p key={active} initial={reduce ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.45, ease }} className="mt-8 text-lg text-white/60 leading-relaxed max-w-md">
-                {beat.text}
-              </motion.p>
+              <motion.div key={active} initial={reduce ? false : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.45, ease }} className="mt-8 max-w-md">
+                <p className="text-sm text-white/40"><span className="mr-2 font-bold uppercase tracking-[0.2em] text-[10px] text-white/50">Before</span>{beat.before}</p>
+                <p className="mt-3 text-lg text-white/75 leading-relaxed"><span className="mr-2 font-bold uppercase tracking-[0.2em] text-[10px] text-[#b9a1ff]">Now</span>{beat.text}</p>
+              </motion.div>
             </AnimatePresence>
           </div>
           <div className="relative">
@@ -305,7 +371,8 @@ const StoryList: React.FC = () => (
         <FadeUp>
           <Counter n={i + 1} total={BEATS.length} tone="light" />
           <h3 className="mt-4 text-3xl md:text-5xl font-bold tracking-[-0.04em] leading-[1.05]">{b.title}</h3>
-          <p className="mt-4 text-lg text-white/60 leading-relaxed max-w-xl">{b.text}</p>
+          <p className="mt-4 text-sm text-white/40 max-w-xl"><span className="mr-2 font-bold uppercase tracking-[0.2em] text-[10px] text-white/50">Before</span>{b.before}</p>
+          <p className="mt-2 text-lg text-white/75 leading-relaxed max-w-xl"><span className="mr-2 font-bold uppercase tracking-[0.2em] text-[10px] text-[#b9a1ff]">Now</span>{b.text}</p>
         </FadeUp>
         <FadeUp delay={0.1} className="mt-8"><Frame media={b.media} /></FadeUp>
       </li>
@@ -493,12 +560,19 @@ export const JunoCaseStudy: React.FC = () => {
         <div className="mt-12 md:mt-16 grid md:grid-cols-2 gap-4 md:gap-6">
           {CHALLENGE.before.map((m, i) => (
             <FadeUp key={m.file} delay={i * 0.08}>
-              <div className={i ? 'md:rotate-1' : 'md:-rotate-1'}><Placeholder file={m.file} tone="dark" /></div>
-              <p className="mt-3 text-sm text-zinc-500">Before: {m.alt}</p>
+              <figure className={i ? 'md:rotate-1' : 'md:-rotate-1'}>
+                <div className="relative overflow-hidden rounded-xl md:rounded-2xl border border-zinc-200 bg-zinc-100 shadow-[0_30px_80px_rgba(0,0,0,0.12)]">
+                  {m.image ? <Still src={m.image} alt={m.alt} sizes="(min-width: 768px) 45vw, 100vw" className="grayscale-[35%]" /> : <Placeholder file={m.file} tone="dark" />}
+                  <span className="absolute left-3 top-3 rounded-full bg-black/75 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white">Before</span>
+                </div>
+                <figcaption className="mt-3 text-sm text-zinc-500">{i ? 'The old features page' : 'The old homepage'}, runjuno.ai</figcaption>
+              </figure>
             </FadeUp>
           ))}
         </div>
       </section>
+
+      <Shift />
 
       {/* 3. What we set out to do */}
       <section className="px-5 md:px-12 max-w-7xl mx-auto mt-28 md:mt-40">

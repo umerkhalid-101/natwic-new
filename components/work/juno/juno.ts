@@ -20,12 +20,12 @@ export type Media = {
 export const HERO = {
   eyebrow: 'Case Study · AI SaaS',
   title: 'Juno: Turning an abstract AI product into a story buyers get in 30 seconds',
-  subtitle: 'We redesigned and rebuilt the full marketing site for Juno, an AI chief of staff that does real work across your apps.',
+  subtitle: 'Juno had a powerful AI product and a site that undersold it. We rebuilt the story, the design system and all nine pages around one idea: show the work, don’t describe it.',
   meta: [
     { k: 'Client', v: 'Juno' },
     { k: 'Industry', v: 'AI / B2B SaaS' },
     { k: 'Services', v: 'Brand direction, Web design, Design system, Development' },
-    { k: 'Timeline', v: '[TODO: timeline]' },
+    { k: 'Timeline', v: '1 week' },
   ],
   media: {
     image: `${DIR}/juno-homepage-hero.webp`,
@@ -38,9 +38,21 @@ export const HERO = {
 export const CHALLENGE = {
   text: 'Juno had a powerful product and a website that didn’t explain it. “AI assistant” is a crowded, vague category, and B2B buyers need to understand a product like this and trust it before they hand it real work.',
   before: [
-    { image: null, video: null, file: 'juno-before-home.webp (16:10)', alt: 'The previous runjuno.ai homepage' },
-    { image: null, video: null, file: 'juno-before-inner.webp (16:10)', alt: 'An inner page of the previous runjuno.ai site' },
+    { image: `${DIR}/juno-before-home.webp`, video: null, file: 'juno-before-home.webp', alt: 'The previous runjuno.ai homepage: the mascot above Knows your company. Gets things done. on a plain dark gradient.' },
+    { image: `${DIR}/juno-before-inner.webp`, video: null, file: 'juno-before-inner.webp', alt: 'The previous runjuno.ai features page: So much built in. above a grid of feature cards.' },
   ] as Media[],
+};
+
+/** Before and after, shown as a drag slider: the old homepage against ours */
+export const SHIFT = {
+  before: { image: `${DIR}/juno-before-home.webp`, alt: 'Before: the old runjuno.ai homepage.' },
+  after: { image: `${DIR}/juno-homepage-hero.webp`, alt: 'After: the Juno homepage we designed.' },
+  intro: 'In one week, we kept the promise and changed everything around it: what visitors see first, how the product proves itself, and how all nine pages hold together.',
+  changes: [
+    { title: 'Pain before pitch', text: 'The old homepage opened on the promise. Ours opens on the overdue alerts every founder recognizes, then makes Juno the answer.' },
+    { title: 'Shown, not told', text: 'Apps, Juno’s own computer and automations now run as live UI in one sequence, so visitors watch the product work.' },
+    { title: 'One story, nine pages', text: 'One cast and one design system run through every page, where the old site introduced new sample brands section by section.' },
+  ],
 };
 
 export const GOALS = [
@@ -61,34 +73,41 @@ export const APPROACH = {
 
 export const STORY_INTRO = 'We built the homepage to read like a story, not a feature list.';
 
-export const BEATS: { title: string; text: string; media: Media }[] = [
+/** Each beat: what we did, what the old homepage did, and what the page says now */
+export const BEATS: { title: string; before: string; text: string; media: Media }[] = [
   {
-    title: 'The chaos',
+    title: 'We opened on the pain',
+    before: 'The old homepage opened straight on the product promise.',
     text: '“You started a company. Now it runs you.” A pile of overdue Slack, Gmail, HubSpot, and Linear alerts makes the pain instantly familiar.',
     media: { image: `${DIR}/juno-beat-1-chaos.webp`, video: null, file: 'juno-beat-1-chaos.mp4', alt: 'Stacked alert cards from Slack, Gmail, HubSpot and Linear beside the headline You started a company. Now it runs you.' },
   },
   {
-    title: 'The reveal',
+    title: 'Then made Juno the answer',
+    before: 'The product arrived before the problem did.',
     text: '“What if someone took this off your plate? That’s Juno.”',
     media: { image: `${DIR}/juno-beat-2-reveal.webp`, video: null, file: 'juno-beat-2-reveal.mp4', alt: 'The Juno mascot at the center of a ring of connected app icons, under the headline Finally, someone has the whole picture.' },
   },
   {
-    title: 'Capabilities, shown not told',
-    text: 'Apps built from a sentence, Juno’s own computer for tools with no integration, and automations that run on a schedule.',
+    title: 'We showed it working',
+    before: 'Juno’s own computer sat near the end of the page, after the integrations.',
+    text: 'Apps built from a sentence, Juno’s own computer for tools with no integration, and automations that run on a schedule, back to back.',
     media: { image: `${DIR}/juno-beat-3-computer.webp`, video: null, file: 'juno-beat-3-capabilities.mp4', alt: 'Juno working on its own computer, filling in an app store submission with a live activity log beside it.' },
   },
   {
-    title: 'Integrations',
-    text: '“Your whole stack. One Juno.”',
+    title: 'One stack, one teammate',
+    before: 'We kept this line from the old site.',
+    text: '“Your whole stack. One Juno.” Ask in one tool, get it done in another.',
     media: { image: `${DIR}/juno-beat-4-integrations.webp`, video: null, file: 'juno-beat-4-integrations.mp4', alt: 'Juno connected to Slack, Gmail, Google Drive, Notion, HubSpot, Linear and other tools.' },
   },
   {
-    title: 'FAQ as a Juno chat',
-    text: 'The FAQ itself demonstrates the product.',
+    title: 'We turned the FAQ into a demo',
+    before: 'The old homepage had no FAQ at all.',
+    text: 'Juno answers the questions in a chat, so the FAQ itself demonstrates the product.',
     media: { image: `${DIR}/juno-beat-5-faq.webp`, video: null, file: 'juno-beat-5-faq.mp4', alt: 'A list of questions on the left and Juno answering the selected one in a chat card on the right.' },
   },
   {
-    title: 'CTA',
+    title: 'And closed on action',
+    before: 'It ended on “Imagine having Juno on your team.”',
     text: '“Put Juno to work.”',
     media: { image: `${DIR}/juno-beat-6-cta.webp`, video: null, file: 'juno-beat-6-cta.mp4', alt: 'The closing section of the Juno homepage with the headline Put Juno to work and a Request access button.' },
   },
@@ -113,7 +132,7 @@ export const PAGES = [
 
 export const DETAILS: { title: string; text: string; media: Media }[] = [
   { title: 'Needs your yes', text: 'An approval card repeats on every page, so trust is shown, not just claimed.', media: { image: `${DIR}/juno-detail-approval-card.webp`, video: null, file: 'juno-detail-approval-card.webp', alt: 'Juno’s run log for an app store submission, ending in a Needs your yes card asking: Submit Orbit 2.4.0 for app review? with Approve and Review buttons.' } },
-  { title: 'One fictional company', text: 'The same people (Maya, Sam, Leo, Priya), customer (Northwind), and launch (Scheduled Reports) run through all nine pages.', media: { image: `${DIR}/juno-detail-shared-cast.webp`, video: null, file: 'juno-detail-shared-cast.webp', alt: 'The recurring cast of the Juno site: Maya Chen, Sam Rivera, Leo Park, Priya Shah and the customer Northwind, shown in Slack, HubSpot, Linear and customer update cards.' } },
+  { title: 'One fictional company', text: 'The same people (Maya, Sam, Leo, Priya), customer (Northwind), and launch (Scheduled Reports) run through all nine pages. The old homepage brought in new sample brands section by section.', media: { image: `${DIR}/juno-detail-shared-cast.webp`, video: null, file: 'juno-detail-shared-cast.webp', alt: 'The recurring cast of the Juno site: Maya Chen, Sam Rivera, Leo Park, Priya Shah and the customer Northwind, shown in Slack, HubSpot, Linear and customer update cards.' } },
   { title: 'Live UI instead of screenshots', text: 'Animation explains; it never just decorates.', media: { image: `${DIR}/juno-detail-live-ui.webp`, video: null, file: 'juno-detail-live-ui.mp4', alt: 'Juno’s live command palette, typing Ask Juno to build a launch page, with 16 features grouped by what they do.' } },
   { title: 'Copy voice', text: 'Short, human lines over feature lists.', media: { image: `${DIR}/juno-detail-copy-samples.webp`, video: null, file: 'juno-detail-copy-samples.webp', alt: 'Short headlines from the Juno site: Knows your company. Gets things done. Off your plate. On Juno’s. Keep Juno close. Put Juno to work.' } },
 ];
@@ -184,5 +203,5 @@ const SIZES: Record<string, [number, number]> = { [`${DIR}/juno-detail-live-ui.w
 export const sizeOf = (src: string): [number, number] => SIZES[src] ?? [1600, 1000];
 
 /** Stills that also exist at 2x, as name@2x.webp */
-export const has2x = (src: string | null) => !!src && /juno-(page|beat|homepage)-/.test(src);
+export const has2x = (src: string | null) => !!src && /juno-(page|beat|homepage|before)-/.test(src);
 export const srcSet = (src: string) => (has2x(src) ? `${src} 1600w, ${src.replace('.webp', '@2x.webp')} 3200w` : undefined);

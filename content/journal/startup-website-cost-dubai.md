@@ -14,6 +14,7 @@ tags:
   - UAE
   - Buyer Guides
 draft: false
+featured: true
 ---
 
 If you've asked three studios in Dubai to quote the same five-page website, you probably got three numbers that aren't even in the same ballpark. That's not you misreading the quotes. It's how this market works, and it's exactly why "what's a fair startup website cost in Dubai?" is so hard to answer straight.

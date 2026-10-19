@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Magnetic } from './Magnetic';
+import { Link } from './nav';
 
 const MaskedText: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => (
   <div className="overflow-hidden py-8 -my-8" style={{ transform: 'translateZ(0)' }}>
@@ -14,11 +15,7 @@ const MaskedText: React.FC<{ children: React.ReactNode; delay?: number }> = ({ c
   </div>
 );
 
-interface HeroProps {
-  setView?: (view: 'home' | 'contact' | 'studio') => void;
-}
-
-export const Hero: React.FC<HeroProps> = ({ setView }) => {
+export const Hero: React.FC = () => {
   const { scrollY } = useScroll();
   const scale = useTransform(scrollY, [0, 600], [1, 0.96]);
 
@@ -92,11 +89,11 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
             </div>
 
             <Magnetic strength={0.2}>
+              <Link href="/contact" className="block">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.9, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                onClick={() => setView?.('contact')}
                 className="flex items-center gap-4 md:gap-5 bg-white/5 border border-white/10 p-2 md:p-3 pr-6 md:pr-8 rounded-[1.5rem] md:rounded-[2rem] hover:bg-white/10 transition-all cursor-pointer group"
               >
                 <div className="relative shrink-0">
@@ -108,6 +105,7 @@ export const Hero: React.FC<HeroProps> = ({ setView }) => {
                   <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-[0.25em]">Customer support</p>
                 </div>
               </motion.div>
+              </Link>
             </Magnetic>
           </div>
         </div>

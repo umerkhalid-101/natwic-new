@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, motionValue, useInView } from 'framer-motion';
+import { Link } from './nav';
 
 const ease = [0.23, 1, 0.32, 1] as const;
 const reducedMotion = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -105,13 +106,14 @@ const NextCard: React.FC<{ next: Next; onStart: (brief: string) => void }> = ({ 
     ) : (
       <p className="mt-2.5 text-[13px] leading-snug text-black/70 line-clamp-3">“{next.brief}”</p>
     )}
-    <button
+    <Link
+      href="/contact"
       onClick={() => onStart(next.brief)}
       className="mt-4 inline-flex items-center gap-2.5 whitespace-nowrap rounded-full bg-black text-white pl-4 pr-3.5 py-2.5 text-[12px] font-semibold tracking-tight transition-all duration-300 hover:bg-[#703FEC] hover:scale-[1.03]"
     >
       Start a project with {nameOf(next.by)}
       <span className="w-1.5 h-1.5 rounded-full bg-[#F3350C] animate-pulse" />
-    </button>
+    </Link>
   </div>
 );
 
@@ -455,14 +457,13 @@ const ExpertOrbital: React.FC<{ speaker: number | null }> = ({ speaker }) => {
 
 /* ------------------------------------------------------------------ */
 
-export const WhyUs: React.FC<{ onStart: () => void }> = ({ onStart }) => {
+export const WhyUs: React.FC = () => {
   const [speaker, setSpeaker] = useState<number | null>(null);
 
-  // Contact picks the brief up and pre-fills its message box
+  // Contact picks the brief up and pre-fills its message box; the link itself opens Contact
   const startWith = useCallback((brief: string) => {
     try { sessionStorage.setItem('natwic:brief', brief); } catch { /* storage blocked: Contact opens empty */ }
-    onStart();
-  }, [onStart]);
+  }, []);
 
   return (
     <section className="py-24 md:py-32 px-4 md:px-12 bg-white text-black overflow-hidden relative">

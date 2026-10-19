@@ -3,6 +3,8 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useScroll, useTrans
 import { PROJECTS, Project, pad, projectBySlug } from './projects';
 import { Magnetic } from '../Magnetic';
 import { BASE_URL, caseUrl } from '../../seo';
+import { Link } from '../nav';
+import { SERVICE_FOR_CASE, serviceBySlug, servicePath } from '../services/services';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -35,7 +37,7 @@ const BrowserFrame: React.FC<{ project: Project; className?: string }> = ({ proj
 /* /work: the index                                                     */
 /* ------------------------------------------------------------------ */
 
-export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: () => void }> = ({ onOpen, onContact }) => {
+export const WorkIndex: React.FC = () => {
   const [hovered, setHovered] = useState<number | null>(null);
   // Preview that trails the cursor, tilting with its speed
   const mx = useMotionValue(0);
@@ -84,8 +86,8 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
               transition={{ duration: 0.9, ease, delay: i * 0.06 }}
               className="border-t border-zinc-200 last:border-b"
             >
-              <button
-                onClick={() => onOpen(p.slug)}
+              <Link
+                href={`/work/${p.slug}`}
                 onPointerEnter={() => setHovered(i)}
                 className={`group w-full text-left py-6 md:py-9 grid grid-cols-[auto_1fr_auto] md:grid-cols-[4rem_1fr_14rem_10rem] items-center gap-4 md:gap-6 transition-opacity duration-500 ${hovered !== null && hovered !== i ? 'md:opacity-30' : ''}`}
               >
@@ -98,11 +100,11 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
                   <span className="hidden md:inline">{p.domain}</span>
                   <span className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-zinc-200 grid place-items-center text-black transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
                 </span>
-              </button>
+              </Link>
               {/* Phones get the cover inline */}
-              <button onClick={() => onOpen(p.slug)} className="md:hidden block w-full pb-6">
+              <Link href={`/work/${p.slug}`} tabIndex={-1} aria-hidden className="md:hidden block w-full pb-6">
                 <img src={p.image} alt={p.imageAlt} width={p.imageSize[0]} height={p.imageSize[1]} loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover object-top rounded-2xl" />
-              </button>
+              </Link>
             </motion.li>
           ))}
         </ul>
@@ -136,10 +138,10 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
           Your project could be <span className="italic text-[#703FEC]">next.</span>
         </h2>
         <Magnetic strength={0.3}>
-          <button onClick={onContact} className="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
+          <Link href="/contact" className="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
             Start a project
             <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-          </button>
+          </Link>
         </Magnetic>
       </section>
     </div>
@@ -150,14 +152,7 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
 /* /work/<slug>: a case study                                          */
 /* ------------------------------------------------------------------ */
 
-// Real links for crawlers; plain clicks stay in the app
-const spaClick = (go: () => void) => (e: React.MouseEvent) => {
-  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-  e.preventDefault();
-  go();
-};
-
-const Breadcrumb: React.FC<{ project: Project; onHome: () => void; onAll: () => void }> = ({ project, onHome, onAll }) => {
+const Breadcrumb: React.FC<{ project: Project }> = ({ project }) => {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -172,9 +167,9 @@ const Breadcrumb: React.FC<{ project: Project; onHome: () => void; onAll: () => 
     <nav aria-label="Breadcrumb">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <ol className="flex flex-wrap items-center gap-2 text-sm font-semibold">
-        <li><a href="/" onClick={spaClick(onHome)} className={link}>Home</a></li>
+        <li><Link href="/" className={link}>Home</Link></li>
         <li aria-hidden className="text-zinc-300">/</li>
-        <li><a href="/work" onClick={spaClick(onAll)} className={link}>Work</a></li>
+        <li><Link href="/work" className={link}>Work</Link></li>
         <li aria-hidden className="text-zinc-300">/</li>
         <li aria-current="page" className="text-black">{project.title}</li>
       </ol>
@@ -182,10 +177,13 @@ const Breadcrumb: React.FC<{ project: Project; onHome: () => void; onAll: () => 
   );
 };
 
-export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => void; onAll: () => void; onHome: () => void; onContact: () => void }> = ({ slug, onOpen, onAll, onHome, onContact }) => {
+export const CaseStudyPage: React.FC<{ slug: string }> = ({ slug }) => {
   const project = projectBySlug(slug) ?? PROJECTS[0];
   const index = PROJECTS.indexOf(project);
   const next = PROJECTS[(index + 1) % PROJECTS.length];
+  // Two more after the next one, so every case study links to three others
+  const more = [2, 3].map((k) => PROJECTS[(index + k) % PROJECTS.length]);
+  const service = serviceBySlug(SERVICE_FOR_CASE[project.slug] ?? 'web-design')!;
 
   const coverRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: coverRef, offset: ['start end', 'end start'] });
@@ -204,7 +202,7 @@ export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => v
   return (
     <article key={project.slug} className="bg-white min-h-screen pt-28 md:pt-36 pb-0">
       <header className="px-5 md:px-12 max-w-7xl mx-auto">
-        <Breadcrumb project={project} onHome={onHome} onAll={onAll} />
+        <Breadcrumb project={project} />
         <div className="mt-10 md:mt-14 flex items-center gap-4">
           <Label>{project.category}</Label>
         </div>
@@ -220,8 +218,8 @@ export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => v
               {project.services.map((s) => <span key={s} className="rounded-full bg-zinc-100 px-4 py-2 text-xs font-semibold">{s}</span>)}
             </div>
             <Magnetic strength={0.3}>
-              <a href={project.url} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3 rounded-full bg-[#703FEC] text-white pl-6 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-black transition-colors">
-                Visit {project.domain}
+              <a href={project.url} target="_blank" rel="noopener" aria-label={`Visit live site: ${project.domain} (opens in a new tab)`} className="group inline-flex items-center gap-3 rounded-full bg-[#703FEC] text-white pl-6 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-black transition-colors">
+                Visit live site
                 <span className="w-10 h-10 rounded-full bg-white text-black grid place-items-center transition-transform duration-500 group-hover:-rotate-45">↗</span>
               </a>
             </Magnetic>
@@ -277,13 +275,53 @@ export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => v
         ))}
       </section>
 
+      {/* The service behind this project */}
+      <section className="px-5 md:px-12 max-w-7xl mx-auto mt-16 md:mt-24">
+        <Link href={servicePath(service.slug)} className="group flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-[2rem] border border-zinc-200 px-7 md:px-10 py-7 md:py-8 hover:border-black transition-colors">
+          <span>
+            <span className="block text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500">Service</span>
+            <span className="mt-2 block text-2xl md:text-3xl font-bold tracking-[-0.03em]">{service.name}</span>
+          </span>
+          <span className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.25em] text-black">
+            How we work on projects like this
+            <span className="w-10 h-10 rounded-full bg-black text-white grid place-items-center transition-[transform,background-color] duration-500 group-hover:-rotate-45 group-hover:bg-[#703FEC]">→</span>
+          </span>
+        </Link>
+      </section>
+
+      {/* More work */}
+      <section className="px-5 md:px-12 max-w-7xl mx-auto mt-24 md:mt-36">
+        <div className="flex items-end justify-between gap-6">
+          <h2 className="text-4xl md:text-6xl font-bold tracking-[-0.045em] leading-[1.02]">More work</h2>
+          <Link href="/work" className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500 hover:text-black transition-colors">All projects →</Link>
+        </div>
+        <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          {more.map((p, i) => (
+            <motion.div key={p.slug} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease, delay: i * 0.08 }}>
+              <Link href={`/work/${p.slug}`} className="group block">
+                <div className="overflow-hidden rounded-[2rem] bg-zinc-100">
+                  <img src={p.image} alt={p.imageAlt} width={p.imageSize[0]} height={p.imageSize[1]} loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
+                </div>
+                <div className="mt-5 flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em] group-hover:text-[#703FEC] transition-colors">{p.title}</p>
+                    <p className="mt-1 text-sm text-zinc-500">{p.category}</p>
+                  </div>
+                  <span className="w-11 h-11 shrink-0 rounded-full border border-zinc-200 grid place-items-center text-black transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
       {/* Next project */}
       <section className="mt-24 md:mt-36 border-t border-zinc-200">
-        <button
-          onClick={() => onOpen(next.slug)}
+        <Link
+          href={`/work/${next.slug}`}
           onPointerEnter={() => setNextHover(true)}
           onPointerLeave={() => setNextHover(false)}
-          className="group relative w-full overflow-hidden px-5 md:px-12 py-16 md:py-24 text-left"
+          className="group relative block w-full overflow-hidden px-5 md:px-12 py-16 md:py-24 text-left"
         >
           <motion.div aria-hidden className="absolute inset-0 bg-[#0A0A0A] origin-bottom" initial={false} animate={{ scaleY: nextHover ? 1 : 0 }} transition={{ duration: 0.6, ease }} />
           <div className="relative max-w-7xl mx-auto flex items-end justify-between gap-6">
@@ -302,15 +340,15 @@ export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => v
               className="hidden md:block w-[340px] aspect-[4/3] object-cover object-top rounded-2xl shadow-2xl"
             />
           </div>
-        </button>
+        </Link>
       </section>
 
       <section className="px-5 md:px-12 max-w-7xl mx-auto py-16 md:py-20 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em]">Want something like this?</p>
-        <button onClick={onContact} className="group inline-flex items-center gap-4 self-start rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
+        <Link href="/contact" className="group inline-flex items-center gap-4 self-start rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
           Start a project
           <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-        </button>
+        </Link>
       </section>
     </article>
   );

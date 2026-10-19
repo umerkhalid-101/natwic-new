@@ -4,6 +4,7 @@ import { Magnetic } from './Magnetic';
 import { BASE_URL } from '../seo';
 import { DaylightMap } from './studio/DaylightMap';
 import { Values } from './studio/Values';
+import { Link } from './nav';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -68,7 +69,7 @@ const CountUp: React.FC<{ to: number; suffix?: string }> = ({ to, suffix = '' })
 /* Team: hover a portrait to bring that person forward                 */
 /* ------------------------------------------------------------------ */
 
-const Portrait: React.FC<{ m: typeof TEAM[number]; index: number; active: boolean; onEnter: () => void; onTalk: () => void }> = ({ m, index, active, onEnter, onTalk }) => {
+const Portrait: React.FC<{ m: typeof TEAM[number]; index: number; active: boolean; onEnter: () => void }> = ({ m, index, active, onEnter }) => {
   const px = useMotionValue(0);
   const py = useMotionValue(0);
   const ix = useSpring(useTransform(px, [-0.5, 0.5], [18, -18]), { stiffness: 120, damping: 18 });
@@ -116,13 +117,14 @@ const Portrait: React.FC<{ m: typeof TEAM[number]; index: number; active: boolea
               <div className="mt-2 flex flex-wrap gap-2">
                 {m.handles.map((h) => <span key={h} className="rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold">{h}</span>)}
               </div>
-              <button
-                onClick={(e) => { e.stopPropagation(); onTalk(); }}
+              <Link
+                href="/contact"
+                onClick={(e) => e.stopPropagation()}
                 className="group mt-5 inline-flex items-center gap-3 rounded-full bg-white text-black pl-5 pr-1.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#703FEC] hover:text-white transition-colors"
               >
                 Talk to {m.first}
                 <span className="w-8 h-8 rounded-full bg-[#703FEC] text-white grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-              </button>
+              </Link>
             </motion.div>
           )}
         </AnimatePresence>
@@ -131,7 +133,7 @@ const Portrait: React.FC<{ m: typeof TEAM[number]; index: number; active: boolea
   );
 };
 
-const Team: React.FC<{ onTalk: () => void }> = ({ onTalk }) => {
+const Team: React.FC = () => {
   const [active, setActive] = useState(0);
   return (
     <section className="px-3 md:px-6">
@@ -147,7 +149,7 @@ const Team: React.FC<{ onTalk: () => void }> = ({ onTalk }) => {
       {/* Desktop: an accordion of portraits */}
       <div className="hidden md:flex gap-3 h-[620px] max-w-[1400px] mx-auto">
         {TEAM.map((m, i) => (
-          <Portrait key={m.name} m={m} index={i} active={active === i} onEnter={() => setActive(i)} onTalk={onTalk} />
+          <Portrait key={m.name} m={m} index={i} active={active === i} onEnter={() => setActive(i)} />
         ))}
       </div>
 
@@ -155,7 +157,7 @@ const Team: React.FC<{ onTalk: () => void }> = ({ onTalk }) => {
       <div className="md:hidden flex gap-3 overflow-x-auto snap-x snap-mandatory -mx-3 px-3 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {TEAM.map((m, i) => (
           <div key={m.name} className="snap-center shrink-0 w-[78vw] h-[460px] flex">
-            <Portrait m={m} index={i} active onEnter={() => undefined} onTalk={onTalk} />
+            <Portrait m={m} index={i} active onEnter={() => undefined} />
           </div>
         ))}
       </div>
@@ -223,7 +225,7 @@ const Process: React.FC = () => {
 
 /* ------------------------------------------------------------------ */
 
-export const Studio: React.FC<{ setView?: (view: 'home' | 'contact' | 'studio' | 'work') => void }> = ({ setView }) => {
+export const Studio: React.FC = () => {
 
   return (
     <div className="bg-white min-h-screen pt-28 md:pt-36">
@@ -275,7 +277,7 @@ export const Studio: React.FC<{ setView?: (view: 'home' | 'contact' | 'studio' |
         </div>
       </section>
 
-      <Team onTalk={() => setView?.('contact')} />
+      <Team />
 
       <div className="h-20 md:h-32" />
       <DaylightMap />

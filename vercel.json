@@ -1,4 +1,90 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "studio"
+        }
+      ],
+      "destination": "/studio",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "work"
+        }
+      ],
+      "destination": "/work",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "journal"
+        }
+      ],
+      "destination": "/journal",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "contact"
+        }
+      ],
+      "destination": "/contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "privacy"
+        }
+      ],
+      "destination": "/privacy",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "terms"
+        }
+      ],
+      "destination": "/terms",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "services"
+        }
+      ],
+      "destination": "/services",
+      "statusCode": 301
+    }
+  ]
 }

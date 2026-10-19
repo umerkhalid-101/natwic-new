@@ -7,6 +7,8 @@ import { Seo } from '../Seo';
 import { Magnetic } from '../Magnetic';
 import { scrollToY } from '../smoothScroll';
 import { BASE_URL, postUrl } from '../../seo';
+import { Link } from '../nav';
+import { SERVICE_PAGES, servicePath } from '../services/services';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const absolute = (src?: string) => (src && src.startsWith('/') ? `${BASE_URL}${src}` : src);
@@ -127,7 +129,7 @@ const TocList: React.FC<{ items: TocItem[]; active: string | null; onPick?: () =
 /* /journal: the index                                                 */
 /* ------------------------------------------------------------------ */
 
-export const JournalIndex: React.FC<{ onOpen: (slug: string) => void; onContact: () => void }> = ({ onOpen, onContact }) => {
+export const JournalIndex: React.FC<{ onOpen: (slug: string) => void }> = ({ onOpen }) => {
   const [lead, ...rest] = POSTS;
 
   return (
@@ -192,21 +194,35 @@ export const JournalIndex: React.FC<{ onOpen: (slug: string) => void; onContact:
           Got something to <span className="italic text-[#703FEC]">build?</span>
         </h2>
         <Magnetic strength={0.3}>
-          <button onClick={onContact} className="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
+          <Link href="/contact" className="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
             Start a project
             <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-          </button>
+          </Link>
         </Magnetic>
       </section>
     </div>
   );
 };
 
+/** Up to three service pages that fit a post, picked from its tags */
+const SERVICE_HINTS: [RegExp, string][] = [
+  [/saas|software|product/i, 'saas-website-design'],
+  [/brand|logo|identity/i, 'branding'],
+  [/redesign|rebuild|migrat/i, 'website-redesign'],
+  [/webflow|next\.?js|develop|cms/i, 'webflow-nextjs-development'],
+  [/web|site|design|startup|pricing/i, 'web-design'],
+];
+const servicesFor = (tags: string[]) => {
+  const picked = SERVICE_HINTS.filter(([re]) => tags.some((t) => re.test(t))).map(([, slug]) => slug);
+  const slugs = [...new Set([...picked, 'web-design', 'branding', 'website-redesign'])].slice(0, 3);
+  return slugs.map((slug) => SERVICE_PAGES.find((sv) => sv.slug === slug)!);
+};
+
 /* ------------------------------------------------------------------ */
 /* /journal/<slug>: a post                                             */
 /* ------------------------------------------------------------------ */
 
-export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => void; onAll: () => void; onHome: () => void; onContact: () => void }> = ({ slug, onOpen, onAll, onHome, onContact }) => {
+export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => void }> = ({ slug, onOpen }) => {
   const post = postBySlug(slug);
   const { html, toc: headings } = useMemo(() => (post ? renderPost(post.body) : { html: '', toc: [] as TocItem[] }), [post]);
   const active = useActiveHeading(headings);
@@ -227,12 +243,13 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
         <Seo title="Post not found | Natwic" description="This journal post does not exist." view={`journal/${slug}`} />
         <Label>Journal</Label>
         <h1 className="mt-6 text-5xl md:text-7xl font-bold tracking-[-0.045em] leading-[1.02]">This post doesn’t exist.</h1>
-        <a href="/journal" onClick={spaClick(onAll)} className="mt-10 inline-block rounded-full bg-black text-white px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">All posts</a>
+        <Link href="/journal" className="mt-10 inline-block rounded-full bg-black text-white px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">All posts</Link>
       </div>
     );
   }
 
   const more = relatedPosts(post, 3);
+  const services = servicesFor(post.tags);
   const url = postUrl(post.slug);
   const { title, description } = postMeta(post);
 
@@ -270,9 +287,9 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
       <header className="px-5 md:px-12 max-w-4xl mx-auto">
         <nav aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2 text-sm font-semibold">
-            <li><a href="/" onClick={spaClick(onHome)} className={crumb}>Home</a></li>
+            <li><Link href="/" className={crumb}>Home</Link></li>
             <li aria-hidden className="text-zinc-300">/</li>
-            <li><a href="/journal" onClick={spaClick(onAll)} className={crumb}>Journal</a></li>
+            <li><Link href="/journal" className={crumb}>Journal</Link></li>
           </ol>
         </nav>
         <Meta post={post} className="mt-10 md:mt-14" />
@@ -330,19 +347,36 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
         <div className="journal-prose px-5 md:px-12 max-w-3xl mx-auto mt-14 md:mt-20" dangerouslySetInnerHTML={{ __html: html }} />
       )}
 
+      <section className="mt-24 md:mt-36 px-5 md:px-12 max-w-7xl mx-auto border-t border-zinc-200 pt-14 md:pt-20">
+        <Label>Related services</Label>
+        <h2 className="mt-5 text-4xl md:text-6xl font-bold tracking-[-0.045em] leading-[1.02]">
+          Need a hand with <span className="italic text-[#703FEC]">this?</span>
+        </h2>
+        <ul className="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-3 gap-4">
+          {services.map((sv) => (
+            <li key={sv.slug}>
+              <Link href={servicePath(sv.slug)} className="group flex h-full items-center justify-between gap-4 rounded-[2rem] border border-zinc-200 px-7 py-6 hover:border-black transition-colors">
+                <span className="text-xl md:text-2xl font-bold tracking-[-0.03em] leading-tight">{sv.name}</span>
+                <span className="w-10 h-10 shrink-0 rounded-full bg-black text-white grid place-items-center transition-[transform,background-color] duration-500 group-hover:-rotate-45 group-hover:bg-[#703FEC]">→</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       {more.length > 0 && (
         <section className="mt-24 md:mt-36 px-5 md:px-12 max-w-7xl mx-auto border-t border-zinc-200 pt-14 md:pt-20">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <Label>Keep reading</Label>
+              <Label>Related posts</Label>
               <h2 className="mt-5 text-4xl md:text-6xl font-bold tracking-[-0.045em] leading-[1.02]">
                 More from the <span className="italic text-[#703FEC]">journal.</span>
               </h2>
             </div>
-            <a href="/journal" onClick={spaClick(onAll)} className="group inline-flex items-center gap-3 self-start md:self-auto text-[11px] font-bold uppercase tracking-[0.25em] text-black">
+            <Link href="/journal" className="group inline-flex items-center gap-3 self-start md:self-auto text-[11px] font-bold uppercase tracking-[0.25em] text-black">
               All posts
               <span className="w-10 h-10 rounded-full border border-zinc-200 grid place-items-center transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
-            </a>
+            </Link>
           </div>
           <div className={`mt-12 md:mt-16 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 ${more.length > 2 ? 'lg:grid-cols-3' : ''}`}>
             {more.map((p, i) => <PostCard key={p.slug} post={p} onOpen={onOpen} delay={i * 0.08} />)}
@@ -352,10 +386,10 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
 
       <section className="px-5 md:px-12 max-w-7xl mx-auto py-16 md:py-24 mt-16 md:mt-20 border-t border-zinc-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em]">Want us to build something like this for you?</p>
-        <button onClick={onContact} className="group inline-flex items-center gap-4 self-start rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
+        <Link href="/contact" className="group inline-flex items-center gap-4 self-start rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
           Start a project
           <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-        </button>
+        </Link>
       </section>
     </article>
   );

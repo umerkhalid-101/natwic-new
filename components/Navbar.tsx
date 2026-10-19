@@ -4,13 +4,21 @@ import { SOCIALS } from './socials';
 import { Logo } from './Logo';
 import { Magnetic } from './Magnetic';
 import { lockScroll, unlockScroll } from './smoothScroll';
+import { Link } from './nav';
+
+export const NAV_ITEMS = [
+  { label: 'Home', view: 'home', href: '/' },
+  { label: 'Studio', view: 'studio', href: '/studio' },
+  { label: 'Work', view: 'work', href: '/work' },
+  { label: 'Journal', view: 'journal', href: '/journal' },
+  { label: 'Contact', view: 'contact', href: '/contact' },
+] as const;
 
 interface NavbarProps {
-  setView: (view: 'home' | 'contact' | 'studio' | 'work' | 'journal') => void;
-  currentView: 'home' | 'contact' | 'studio' | 'work' | 'journal';
+  currentView: string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
+export const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Lock body scroll when mobile menu is open
@@ -23,10 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
     return unlockScroll;
   }, [isMobileMenuOpen]);
 
-  const handleNavClick = (view: 'home' | 'contact' | 'studio' | 'work' | 'journal') => {
-    setView(view);
-    setIsMobileMenuOpen(false);
-  };
+  const closeMenu = () => setIsMobileMenuOpen(false);
 
   return (
     <>
@@ -37,62 +42,31 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
         data-site-nav
         className="fixed top-0 left-0 w-full z-[100] px-6 py-4 md:px-12 flex justify-between items-center bg-white/80 backdrop-blur-md border-b border-zinc-100"
       >
-        <div 
-          className="flex items-center text-black cursor-pointer relative z-[101]" 
-          onClick={() => handleNavClick('home')}
+        <Link
+          href="/"
+          aria-label="Natwic home"
+          className="flex items-center text-black cursor-pointer relative z-[101]"
+          onClick={closeMenu}
         >
           <Magnetic>
              <Logo />
           </Magnetic>
-        </div>
+        </Link>
         
         {/* Desktop Menu - Visible on Large screens */}
         <div className="hidden lg:flex items-center gap-10 text-sm font-semibold uppercase tracking-[0.15em] text-black">
-          <Magnetic>
-            <button 
-              onClick={() => setView('home')} 
-              className={`hover:text-[#703FEC] transition-colors p-2 ${currentView === 'home' ? 'text-[#703FEC]' : ''}`}
-            >
-              Home
-            </button>
-          </Magnetic>
-          
-          <Magnetic>
-            <button 
-              onClick={() => setView('studio')}
-              className={`hover:text-[#703FEC] transition-colors p-2 ${currentView === 'studio' ? 'text-[#703FEC]' : ''}`}
-            >
-              Studio
-            </button>
-          </Magnetic>
+          {NAV_ITEMS.map((item) => (
+            <Magnetic key={item.view}>
+              <Link
+                href={item.href}
+                aria-current={currentView === item.view ? 'page' : undefined}
+                className={`block hover:text-[#703FEC] transition-colors p-2 ${currentView === item.view ? 'text-[#703FEC]' : ''}`}
+              >
+                {item.label}
+              </Link>
+            </Magnetic>
+          ))}
 
-          <Magnetic>
-            <button 
-              onClick={() => setView('work')}
-              className={`flex items-center gap-2 hover:text-[#703FEC] transition-colors group p-2 ${currentView === 'work' ? 'text-[#703FEC]' : ''}`}
-            >
-              Work
-            </button>
-          </Magnetic>
-
-          <Magnetic>
-            <button 
-              onClick={() => setView('journal')}
-              className={`hover:text-[#703FEC] transition-colors p-2 ${currentView === 'journal' ? 'text-[#703FEC]' : ''}`}
-            >
-              Journal
-            </button>
-          </Magnetic>
-
-          <Magnetic>
-            <button 
-              onClick={() => setView('contact')}
-              className={`hover:text-[#703FEC] transition-colors p-2 ${currentView === 'contact' ? 'text-[#703FEC]' : ''}`}
-            >
-              Contact
-            </button>
-          </Magnetic>
-          
           <Magnetic>
             <div className="flex flex-col gap-1 w-5 cursor-pointer ml-4 group p-2">
               <div className="h-[1px] bg-black w-full group-hover:bg-[#703FEC] transition-colors" />
@@ -105,6 +79,8 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
         <button 
           className="lg:hidden flex flex-col gap-1.5 w-8 h-8 justify-center items-end cursor-pointer text-black relative z-[101] p-1"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMobileMenuOpen}
         >
           <motion.div 
             animate={{ rotate: isMobileMenuOpen ? 45 : 0, y: isMobileMenuOpen ? 6 : 0 }}
@@ -132,25 +108,20 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
             className="fixed inset-0 z-[90] bg-white pt-24 px-6 pb-6 flex flex-col lg:hidden"
           >
              <div className="flex flex-col gap-2 mt-10">
-                {[
-                  { label: 'Home', action: () => handleNavClick('home') },
-                  { label: 'Studio', action: () => handleNavClick('studio') },
-                  { label: 'Work', action: () => handleNavClick('work') },
-                  { label: 'Journal', action: () => handleNavClick('journal') },
-                  { label: 'Contact', action: () => handleNavClick('contact') }
-                ].map((item, i) => (
+                {NAV_ITEMS.map((item, i) => (
                   <motion.div
                     key={item.label}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 + (i * 0.1), duration: 0.5 }}
                   >
-                    <button 
-                      onClick={item.action}
-                      className="text-[13vw] font-bold text-left hover:text-[#703FEC] transition-colors leading-[0.9] tracking-tighter"
+                    <Link
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="inline-block text-[13vw] font-bold text-left hover:text-[#703FEC] transition-colors leading-[0.9] tracking-tighter"
                     >
                       {item.label}
-                    </button>
+                    </Link>
                   </motion.div>
                 ))}
              </div>

@@ -12,6 +12,7 @@ import { Footer } from './components/Footer';
 import { Seo } from './components/Seo';
 import { Loader } from './components/Loader';
 import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './components/smoothScroll';
+import { NavContext } from './components/nav';
 import { ROUTE_META, View, viewFromPath, slugFromPath, caseMeta } from './seo';
 
 // The scroll universe (and three.js inside it) loads as its own chunk
@@ -54,32 +55,21 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
     return () => window.removeEventListener('popstate', handleUrlChange);
   }, []);
 
-  // Custom setter that updates the URL so Google can index specific pages
-  const changeView = (newView: View) => {
-    setView(newView);
-    setSlug(null);
-    const path = newView === 'home' ? '/' : `/${newView}`;
-    window.history.pushState({}, '', path);
+  // Every internal link lands here, so Google sees one real path per page
+  const go = (path: string) => {
+    const pathname = path.split(/[?#]/)[0] || '/';
+    setView(viewFromPath(pathname));
+    setSlug(slugFromPath(pathname));
+    if (pathname !== window.location.pathname) window.history.pushState({}, '', pathname);
     scrollToTop();
   };
 
-  // Case studies live at /work/<slug>
-  const openCase = (next: string) => {
-    setView('work');
-    setSlug(next);
-    window.history.pushState({}, '', `/work/${next}`);
-    scrollToTop();
-  };
-
+  const changeView = (newView: View) => go(newView === 'home' ? '/' : `/${newView}`);
   // Journal posts live at /journal/<slug>
-  const openPost = (next: string) => {
-    setView('journal');
-    setSlug(next);
-    window.history.pushState({}, '', `/journal/${next}`);
-    scrollToTop();
-  };
+  const openPost = (next: string) => go(`/journal/${next}`);
 
   return (
+    <NavContext.Provider value={go}>
     <div className="relative min-h-screen bg-white text-black selection:bg-[#703FEC] selection:text-white">
       
       {/* Loading Screen Overlay */}
@@ -88,21 +78,21 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
       </AnimatePresence>
 
 
-      <Navbar setView={changeView as any} currentView={view as 'home' | 'contact' | 'studio' | 'work' | 'journal'} />
+      <Navbar currentView={view} />
       
       <main>
         {view === 'home' && (
           <>
             <Seo {...ROUTE_META.home} view="home" />
-            <Hero setView={changeView} />
+            <Hero />
             <Partners />
-            <WhyUs onStart={() => changeView('contact')} />
+            <WhyUs />
             <Suspense fallback={<UniverseFallback />}>
-              <Universe setView={changeView} />
+              <Universe />
             </Suspense>
-            <Services setView={changeView} />
+            <Services />
             <Stats />
-            <Pricing setView={changeView} />
+            <Pricing />
             <Suspense fallback={null}>
               <JournalTeaser onOpen={openPost} onAll={() => changeView('journal')} />
             </Suspense>
@@ -114,7 +104,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
           {view === 'studio' && (
             <>
               <Seo {...ROUTE_META.studio} view="studio" />
-              <Studio setView={changeView} />
+              <Studio />
               <JournalTeaser onOpen={openPost} onAll={() => changeView('journal')} />
             </>
           )}
@@ -122,7 +112,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
           {view === 'work' && !slug && (
             <>
               <Seo {...ROUTE_META.work} view="work" />
-              <WorkIndex onOpen={openCase} onContact={() => changeView('contact')} />
+              <WorkIndex />
               <JournalTeaser onOpen={openPost} onAll={() => changeView('journal')} />
             </>
           )}
@@ -130,25 +120,25 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
           {view === 'work' && slug && (
             <>
               <Seo {...caseMeta(slug)} view={`work/${slug}`} />
-              <CaseStudyPage slug={slug} onOpen={openCase} onAll={() => changeView('work')} onHome={() => changeView('home')} onContact={() => changeView('contact')} />
+              <CaseStudyPage slug={slug} />
             </>
           )}
 
           {view === 'journal' && !slug && (
             <>
               <Seo {...ROUTE_META.journal} view="journal" />
-              <JournalIndex onOpen={openPost} onContact={() => changeView('contact')} />
+              <JournalIndex onOpen={openPost} />
             </>
           )}
 
           {view === 'journal' && slug && (
-            <JournalPost slug={slug} onOpen={openPost} onAll={() => changeView('journal')} onHome={() => changeView('home')} onContact={() => changeView('contact')} />
+            <JournalPost slug={slug} onOpen={openPost} />
           )}
 
           {view === 'contact' && (
             <>
               <Seo {...ROUTE_META.contact} view="contact" />
-              <Contact isStandalone={true} setView={changeView as any} />
+              <Contact isStandalone={true} />
             </>
           )}
 
@@ -170,6 +160,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
 
       <Footer setView={changeView as any} currentView={view} />
     </div>
+    </NavContext.Provider>
   );
 };
 

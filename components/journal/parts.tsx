@@ -21,12 +21,8 @@ export const Reveal: React.FC<{ children: React.ReactNode; delay?: number }> = (
   </span>
 );
 
-// Real links for crawlers; plain clicks stay in the app
-export const spaClick = (go: () => void) => (e: React.MouseEvent) => {
-  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-  e.preventDefault();
-  go();
-};
+import { spaClick } from '../nav';
+export { spaClick };
 
 export const Meta: React.FC<{ post: Post; className?: string }> = ({ post, className = '' }) => (
   <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 ${className}`}>

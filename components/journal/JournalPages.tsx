@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Marked } from 'marked';
-import { POSTS, Post, postBySlug, postMeta, formatDate } from './posts';
+import { POSTS, postBySlug, postMeta, relatedPosts } from './posts';
+import { ease, Label, Reveal, spaClick, Meta, Cover, PostCard } from './parts';
 import { Seo } from '../Seo';
 import { Magnetic } from '../Magnetic';
 import { scrollToY } from '../smoothScroll';
 import { BASE_URL, postUrl } from '../../seo';
-
-const ease = [0.16, 1, 0.3, 1] as const;
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const absolute = (src?: string) => (src && src.startsWith('/') ? `${BASE_URL}${src}` : src);
@@ -47,28 +46,6 @@ const md = new Marked({
     },
   },
 });
-
-const Label: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <p className={`flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500 ${className}`}>
-    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
-    {children}
-  </p>
-);
-
-const Reveal: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => (
-  <span className="block overflow-hidden pb-[0.08em]">
-    <motion.span className="block" initial={{ y: '105%' }} animate={{ y: 0 }} transition={{ duration: 1.1, ease, delay }}>
-      {children}
-    </motion.span>
-  </span>
-);
-
-// Real links for crawlers; plain clicks stay in the app
-const spaClick = (go: () => void) => (e: React.MouseEvent) => {
-  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-  e.preventDefault();
-  go();
-};
 
 const renderPost = (body: string) => {
   toc = [];
@@ -146,28 +123,6 @@ const TocList: React.FC<{ items: TocItem[]; active: string | null; onPick?: () =
   );
 };
 
-const Meta: React.FC<{ post: Post; className?: string }> = ({ post, className = '' }) => (
-  <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 ${className}`}>
-    <time dateTime={post.date}>{formatDate(post.date)}</time>
-    <span aria-hidden className="text-zinc-300">·</span>
-    <span>{post.readingMinutes} min read</span>
-    {post.draft && <span className="rounded-full bg-amber-100 text-amber-800 px-2.5 py-1 tracking-[0.15em]">Draft</span>}
-  </p>
-);
-
-const Cover: React.FC<{ post: Post; className?: string; eager?: boolean }> = ({ post, className = '', eager }) =>
-  post.cover ? (
-    <img
-      src={post.cover}
-      alt={post.coverAlt}
-      loading={eager ? 'eager' : 'lazy'}
-      decoding="async"
-      className={`block w-full h-auto transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.04] ${className}`}
-    />
-  ) : (
-    <div aria-hidden className={`w-full aspect-[1200/630] bg-[#0A0A0A] bg-[radial-gradient(circle_at_30%_20%,rgba(112,63,236,0.55),transparent_60%)] ${className}`} />
-  );
-
 /* ------------------------------------------------------------------ */
 /* /journal: the index                                                 */
 /* ------------------------------------------------------------------ */
@@ -228,25 +183,7 @@ export const JournalIndex: React.FC<{ onOpen: (slug: string) => void; onContact:
 
       {rest.length > 0 && (
         <section className="mt-20 md:mt-28 px-5 md:px-12 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-14 border-t border-zinc-200 pt-14">
-          {rest.map((p, i) => (
-            <motion.a
-              key={p.slug}
-              href={`/journal/${p.slug}`}
-              onClick={spaClick(() => onOpen(p.slug))}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-5%' }}
-              transition={{ duration: 0.9, ease, delay: (i % 3) * 0.08 }}
-              className="group block"
-            >
-              <div className="overflow-hidden rounded-3xl">
-                <Cover post={p} />
-              </div>
-              <Meta post={p} className="mt-6" />
-              <h3 className="mt-3 text-2xl md:text-3xl font-bold tracking-[-0.035em] leading-[1.1] text-black transition-colors duration-500 group-hover:text-[#703FEC]">{p.title}</h3>
-              {p.excerpt && <p className="mt-3 text-zinc-600 leading-relaxed line-clamp-3">{p.excerpt}</p>}
-            </motion.a>
-          ))}
+          {rest.map((p, i) => <PostCard key={p.slug} post={p} onOpen={onOpen} delay={(i % 3) * 0.08} />)}
         </section>
       )}
 
@@ -295,8 +232,7 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
     );
   }
 
-  const index = POSTS.indexOf(post);
-  const more = POSTS.filter((p) => p !== post).slice(0, 2);
+  const more = relatedPosts(post, 3);
   const url = postUrl(post.slug);
   const { title, description } = postMeta(post);
 
@@ -395,18 +331,21 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
       )}
 
       {more.length > 0 && (
-        <section className="mt-24 md:mt-32 px-5 md:px-12 max-w-7xl mx-auto border-t border-zinc-200 pt-14">
-          <Label>{index === 0 ? 'Earlier posts' : 'More from the journal'}</Label>
-          <div className="mt-10 grid md:grid-cols-2 gap-10">
-            {more.map((p) => (
-              <a key={p.slug} href={`/journal/${p.slug}`} onClick={spaClick(() => onOpen(p.slug))} className="group grid grid-cols-[8rem_1fr] md:grid-cols-[12rem_1fr] gap-5 items-center">
-                <div className="overflow-hidden rounded-xl md:rounded-2xl"><Cover post={p} /></div>
-                <div>
-                  <Meta post={p} />
-                  <p className="mt-2 text-xl md:text-2xl font-bold tracking-[-0.03em] leading-tight text-black transition-colors duration-500 group-hover:text-[#703FEC]">{p.title}</p>
-                </div>
-              </a>
-            ))}
+        <section className="mt-24 md:mt-36 px-5 md:px-12 max-w-7xl mx-auto border-t border-zinc-200 pt-14 md:pt-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <Label>Keep reading</Label>
+              <h2 className="mt-5 text-4xl md:text-6xl font-bold tracking-[-0.045em] leading-[1.02]">
+                More from the <span className="italic text-[#703FEC]">journal.</span>
+              </h2>
+            </div>
+            <a href="/journal" onClick={spaClick(onAll)} className="group inline-flex items-center gap-3 self-start md:self-auto text-[11px] font-bold uppercase tracking-[0.25em] text-black">
+              All posts
+              <span className="w-10 h-10 rounded-full border border-zinc-200 grid place-items-center transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
+            </a>
+          </div>
+          <div className={`mt-12 md:mt-16 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 ${more.length > 2 ? 'lg:grid-cols-3' : ''}`}>
+            {more.map((p, i) => <PostCard key={p.slug} post={p} onOpen={onOpen} delay={i * 0.08} />)}
           </div>
         </section>
       )}

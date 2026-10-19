@@ -25,6 +25,7 @@ const Terms = lazy(() => import('./components/Terms').then(m => ({ default: m.Te
 const WorkIndex = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.WorkIndex })));
 const CaseStudyPage = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.CaseStudyPage })));
 const JournalIndex = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalIndex })));
+const JournalTeaser = lazy(() => import('./components/journal/JournalTeaser').then(m => ({ default: m.JournalTeaser })));
 const JournalPost = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalPost })));
 
 // `initialView` lets the build-time pre-renderer render each page
@@ -102,6 +103,9 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
             <Services setView={changeView} />
             <Stats />
             <Pricing setView={changeView} />
+            <Suspense fallback={null}>
+              <JournalTeaser onOpen={openPost} onAll={() => changeView('journal')} />
+            </Suspense>
             <FAQ />
           </>
         )}
@@ -111,6 +115,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
             <>
               <Seo {...ROUTE_META.studio} view="studio" />
               <Studio setView={changeView} />
+              <JournalTeaser onOpen={openPost} onAll={() => changeView('journal')} />
             </>
           )}
 
@@ -118,6 +123,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
             <>
               <Seo {...ROUTE_META.work} view="work" />
               <WorkIndex onOpen={openCase} onContact={() => changeView('contact')} />
+              <JournalTeaser onOpen={openPost} onAll={() => changeView('journal')} />
             </>
           )}
 

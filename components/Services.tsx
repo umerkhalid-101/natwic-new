@@ -66,6 +66,27 @@ const ServiceCard: React.FC<{
               })}
             </h3>
             <p className={`text-base md:text-xl leading-relaxed max-w-lg ${theme.muted}`}>{service.description}</p>
+            {service.links && (
+              <div className="mt-6 md:mt-8">
+                <span className={`block mb-3 text-[10px] font-bold uppercase tracking-[0.2em] ${theme.muted}`}>Explore</span>
+                <div className="flex flex-wrap gap-2">
+                  {service.links.map((l) => {
+                    const cls = `group/link inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#703FEC] hover:border-[#703FEC] hover:text-white ${theme.line}`;
+                    return l.external ? (
+                      <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                        {l.label}
+                        <span className="transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">↗</span>
+                      </a>
+                    ) : (
+                      <Link key={l.href} href={l.href} className={cls}>
+                        {l.label}
+                        <span className="transition-transform duration-300 group-hover/link:-rotate-45">→</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           <div>
@@ -131,6 +152,11 @@ export const Services: React.FC = () => {
               Four ways we help startups and small businesses grow, wherever they are. Pick one, or combine them into a single project.
             </p>
             <span className="text-[#703FEC] font-mono text-lg shrink-0">(04)</span>
+          </div>
+          <div className="md:self-end">
+            <Link href="/services" className="group inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-black hover:text-[#703FEC] transition-colors whitespace-nowrap">
+              All services <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </Link>
           </div>
         </div>
 

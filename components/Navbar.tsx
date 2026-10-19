@@ -6,8 +6,8 @@ import { Magnetic } from './Magnetic';
 import { lockScroll, unlockScroll } from './smoothScroll';
 
 interface NavbarProps {
-  setView: (view: 'home' | 'contact' | 'studio' | 'work') => void;
-  currentView: 'home' | 'contact' | 'studio' | 'work';
+  setView: (view: 'home' | 'contact' | 'studio' | 'work' | 'journal') => void;
+  currentView: 'home' | 'contact' | 'studio' | 'work' | 'journal';
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
@@ -23,7 +23,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
     return unlockScroll;
   }, [isMobileMenuOpen]);
 
-  const handleNavClick = (view: 'home' | 'contact' | 'studio' | 'work') => {
+  const handleNavClick = (view: 'home' | 'contact' | 'studio' | 'work' | 'journal') => {
     setView(view);
     setIsMobileMenuOpen(false);
   };
@@ -72,6 +72,15 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
               className={`flex items-center gap-2 hover:text-[#703FEC] transition-colors group p-2 ${currentView === 'work' ? 'text-[#703FEC]' : ''}`}
             >
               Work
+            </button>
+          </Magnetic>
+
+          <Magnetic>
+            <button 
+              onClick={() => setView('journal')}
+              className={`hover:text-[#703FEC] transition-colors p-2 ${currentView === 'journal' ? 'text-[#703FEC]' : ''}`}
+            >
+              Journal
             </button>
           </Magnetic>
 
@@ -127,6 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setView, currentView }) => {
                   { label: 'Home', action: () => handleNavClick('home') },
                   { label: 'Studio', action: () => handleNavClick('studio') },
                   { label: 'Work', action: () => handleNavClick('work') },
+                  { label: 'Journal', action: () => handleNavClick('journal') },
                   { label: 'Contact', action: () => handleNavClick('contact') }
                 ].map((item, i) => (
                   <motion.div

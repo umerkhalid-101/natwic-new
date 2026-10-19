@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Journal post body (Markdown from the CMS) */
+@layer components {
+  .journal-prose { @apply text-lg md:text-xl leading-[1.75] text-zinc-800; }
+  .journal-prose > * + * { @apply mt-6; }
+  .journal-prose h2 { @apply mt-16 text-3xl md:text-4xl font-bold tracking-[-0.04em] leading-tight text-black; }
+  .journal-prose h3 { @apply mt-12 text-2xl md:text-3xl font-bold tracking-[-0.03em] leading-tight text-black; }
+  .journal-prose h4 { @apply mt-10 text-xl font-bold text-black; }
+  .journal-prose a { @apply text-[#703FEC] underline underline-offset-4 decoration-[#703FEC]/30 hover:decoration-[#703FEC] transition-colors; }
+  .journal-prose strong { @apply font-semibold text-black; }
+  .journal-prose ul { @apply list-disc pl-6 space-y-2 marker:text-[#703FEC]; }
+  .journal-prose ol { @apply list-decimal pl-6 space-y-2 marker:text-zinc-400 marker:font-mono; }
+  .journal-prose blockquote { @apply my-12 border-l-2 border-[#703FEC] pl-6 md:pl-8 text-2xl md:text-3xl font-medium tracking-[-0.02em] leading-snug text-black; }
+  .journal-prose figure { @apply my-12 md:-mx-16; }
+  .journal-prose img { @apply w-full rounded-3xl; }
+  .journal-prose figcaption { @apply mt-3 text-sm text-zinc-500 text-center; }
+  .journal-prose code { @apply rounded-md bg-zinc-100 px-1.5 py-0.5 text-[0.85em] font-mono text-black; }
+  .journal-prose pre { @apply rounded-2xl bg-[#0A0A0A] text-zinc-100 p-6 overflow-x-auto text-sm leading-relaxed; }
+  .journal-prose pre code { @apply bg-transparent p-0 text-inherit; }
+  .journal-prose hr { @apply my-16 border-zinc-200; }
+  .journal-prose table { @apply w-full text-base border-collapse; }
+  .journal-prose th, .journal-prose td { @apply border-b border-zinc-200 py-3 pr-4 text-left; }
+}

@@ -1,4 +1,6 @@
 ---
+aliases:
+  - /journal/startup-website-cost-in-dubai-what-to-budget-in-2026
 title: 'Startup Website Cost in Dubai: What to Budget in 2026'
 date: 2026-10-19
 excerpt: What does a startup website cost in Dubai? We compared six 2026 price guides and mapped what to spend at each stage, plus the costs quotes leave out.

@@ -12,9 +12,8 @@ export type ServiceContent = {
   forWho: Block[];
   included: Block[];
   process: Block[];
-  /** How the project runs day to day, including remote work across time zones */
-  together: string[];
-  pricing: string[];
+  /** One line under 'Contact us for pricing' */
+  pricing: string;
   /** Case study slugs to link, 2 to 3 */
   cases: string[];
   faqs: { q: string; a: string }[];
@@ -54,14 +53,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       { title: 'Design', text: 'We design the key pages first, review them with you, then roll the system out across the rest of the site.' },
       { title: 'Build and launch', text: 'We build, test on real devices, connect your CMS and analytics, and launch. You get a short handover so your team knows how to run it.' },
     ],
-    together: [
-      'You don’t need to be in the same city, or even the same time zone, to build a great website together. We set up one shared space for the project with the plan, designs, staging links and feedback, so you always know what’s happening and what we need from you.',
-      'Each week we agree on what will be done, share progress in writing and meet on a short call at a time that works for both sides. Between calls you can leave comments directly on designs or on the staging site, and we pick them up at the start of our day. A website project shouldn’t take over your week, so we keep meetings short and decisions clear. You stay in control of the big choices without having to manage the details.',
-    ],
-    pricing: [
-      'Contact us for pricing. Every project is quoted on its own, because the cost of startup websites depends on the number of pages, how much copy support you need and any custom features such as integrations or interactive sections.',
-      'Every project starts with a fixed quote based on an agreed scope, so you know the cost before work begins.',
-    ],
+    pricing: 'Every project starts with a fixed quote based on an agreed scope, so you know the cost before work begins.',
     cases: ['breakthirty', 'beyond-hut', 'cayano'],
     faqs: [
       { q: 'How long does a startup website take?', a: 'Most marketing sites run in focused sprints of two to four weeks. A larger site with many page types or custom features can take longer. We agree on a timeline during planning and build the schedule around your launch date.' },
@@ -100,14 +92,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       { title: 'Refine', text: 'We develop the chosen direction into a complete identity, testing it on real applications like your website, deck and social profiles.' },
       { title: 'Deliver', text: 'You receive organized files, guidelines and templates, plus a walkthrough so your team knows how to use everything.' },
     ],
-    together: [
-      'Branding is a collaborative process, and it works just as well remotely as it does in a room. We run the strategy workshop on a video call, share creative directions as clear presentations you can review on your own time, and collect feedback in writing so every comment is captured.',
-      'We plan review calls at times that suit your working hours, wherever you are, and we give you enough context with every presentation that you can share it with co-founders or investors who can’t join live. The goal is an identity your whole team feels ownership of. That means honest feedback is welcome at every stage, and we explain the reasoning behind each decision so you can judge the work on what it needs to do, not only on personal taste. You finish with a brand you understand well enough to defend and extend.',
-    ],
-    pricing: [
-      'Contact us for pricing. Every project is quoted on its own, because the cost of brand identity projects depends on how much strategy work is needed and how many templates and applications you want included.',
-      'We quote a fixed price for an agreed scope before we start. If you need a website as well, we can plan both together.',
-    ],
+    pricing: 'We quote a fixed price for an agreed scope before we start. If you need a website as well, we can plan both together.',
     cases: ['juno', 'unita', 'breakthirty'],
     faqs: [
       { q: 'How long does a branding project take?', a: 'A focused identity project usually takes a few weeks from kickoff to final files. Larger projects with extensive strategy work or many applications take longer. We share a timeline before we begin.' },
@@ -146,14 +131,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       { title: 'Design', text: 'We design the homepage and key templates first, review them with you, then extend the system to the rest of the site.' },
       { title: 'Build and launch', text: 'We build, connect your CMS and analytics, test sign-up flows end to end, and launch with a short handover.' },
     ],
-    together: [
-      'SaaS teams move quickly, so we fit into the way you already work. We join your Slack or shared channel if that helps, keep designs in a shared file you can comment on, and post written updates so product, marketing and leadership can all follow along without another meeting.',
-      'We schedule reviews at a time that overlaps with your team’s working hours, whatever time zone you’re in, and we keep a running list of decisions so nothing gets lost when people are offline. When the product changes during the project, which it usually does, we adjust the plan together instead of pretending the scope is frozen. Your engineers can stay focused on the product while we handle the marketing site, and we coordinate with them only where the two need to connect, such as sign-up flows, pricing data or shared design components.',
-    ],
-    pricing: [
-      'Contact us for pricing. Every project is quoted on its own, because the cost of SaaS marketing sites depends on the number of templates, the amount of product animation and any integrations with your app or CRM.',
-      'You get a fixed quote for an agreed scope before we start, and we can phase larger sites so the most important pages launch first.',
-    ],
+    pricing: 'You get a fixed quote for an agreed scope before we start, and we can phase larger sites so the most important pages launch first.',
     cases: ['juno', 'unita'],
     faqs: [
       { q: 'Do you design product UI as well as the marketing site?', a: 'Yes. We design product interfaces and dashboards too, and keeping both with one team makes the website and the product feel like one experience.' },
@@ -192,14 +170,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       { title: 'Build', text: 'We build in stages and share staging links regularly so you can review progress on real devices.' },
       { title: 'Launch', text: 'We set up hosting, domains and redirects, run final checks and launch, then hand over with training.' },
     ],
-    together: [
-      'Development work suits remote collaboration well because almost everything can be reviewed on a link. We share staging builds throughout the project, so you can click through real pages on your own phone and laptop instead of looking at screenshots.',
-      'We track tasks and questions in one place, reply to feedback in writing and keep a short weekly call at a time that overlaps with your working hours, wherever your team is based. If you work with an in-house designer or another studio, we talk to them directly to clarify details, which saves you from relaying messages back and forth. When the build is done, you get documentation written for the people who will actually maintain the site, plus a recorded walkthrough your team can watch whenever it suits them. That way new team members can learn the CMS later without needing us on a call.',
-    ],
-    pricing: [
-      'Contact us for pricing. Every project is quoted on its own, because the cost of Webflow and Next.js builds depends on the number of templates, CMS complexity, animations and integrations.',
-      'We quote a fixed price after reviewing your designs or requirements, so the cost is clear before we start.',
-    ],
+    pricing: 'We quote a fixed price after reviewing your designs or requirements, so the cost is clear before we start.',
     cases: ['breakthirty', 'cayano', 'beyond-hut'],
     faqs: [
       { q: 'Should we choose Webflow or Next.js?', a: 'Webflow is usually best when a marketing team wants to edit and launch pages visually. Next.js is usually best when you need custom features, deep integrations or shared code with your product. We’ll recommend one after a short review.' },
@@ -238,14 +209,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       { title: 'Design', text: 'We design the key pages, review them with you and extend the system across the site.' },
       { title: 'Rebuild and launch', text: 'We build, migrate content, set up redirects, test everything and launch, then monitor closely for the first weeks.' },
     ],
-    together: [
-      'A redesign touches a lot of existing content and decisions, so clear communication matters. We start with a written audit you can share with your team, then keep every plan, design and staging link in one shared space so nobody has to search through email threads.',
-      'We meet on short calls at times that suit your time zone and handle most feedback in writing, which gives busy teams time to think before they respond. Before launch, we walk through the URL mapping and launch checklist with you so you know exactly what will change and when. Launch day is planned for a time that suits your audience, not just ours, and we watch analytics and search data closely in the weeks after. If something needs attention, we tell you what we found and what we’re doing about it, so you’re never left guessing about the state of your site.',
-    ],
-    pricing: [
-      'Contact us for pricing. Every project is quoted on its own, because the cost of website redesigns depends on the size of the current site, how much content needs to move and whether the brand is changing too.',
-      'You get a fixed quote after the audit and planning stage, so the cost reflects your actual site rather than a guess.',
-    ],
+    pricing: 'You get a fixed quote after the audit and planning stage, so the cost reflects your actual site rather than a guess.',
     cases: ['cayano', 'beyond-hut', 'breakthirty'],
     faqs: [
       { q: 'Will a redesign hurt our search rankings?', a: 'Not if it’s planned well. We map every important old URL to its new page, keep metadata that performs and check everything before launch. Some short-term movement can happen, and a careful migration keeps it small.' },

@@ -72,6 +72,14 @@ export const WorkIndex: React.FC = () => {
         >
           Websites and products we’ve designed and built for startups, SaaS teams and small businesses around the world.
         </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease, delay: 0.4 }}
+          className="mt-5 max-w-xl text-base md:text-lg text-zinc-500 leading-relaxed"
+        >
+          Each case study covers the problem, how we approached it and what we shipped, from a verified business directory and a crypto portfolio tracker to sites for a growth agency, a remote staffing company and a London lettings agency. Every project was run remotely, across time zones.
+        </motion.p>
       </section>
 
       {/* The list */}
@@ -92,8 +100,11 @@ export const WorkIndex: React.FC = () => {
                 className={`group w-full text-left py-6 md:py-9 grid grid-cols-[auto_1fr_auto] md:grid-cols-[4rem_1fr_14rem_10rem] items-center gap-4 md:gap-6 transition-opacity duration-500 ${hovered !== null && hovered !== i ? 'md:opacity-30' : ''}`}
               >
                 <span className="font-mono text-xs text-zinc-400">{pad(i + 1)}</span>
-                <span className="text-4xl md:text-7xl font-bold tracking-[-0.045em] leading-none text-black transition-[transform,color] duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:group-hover:translate-x-4 md:group-hover:text-[#703FEC]">
-                  {p.title}
+                <span className="min-w-0">
+                  <span className="block text-4xl md:text-7xl font-bold tracking-[-0.045em] leading-none text-black transition-[transform,color] duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:group-hover:translate-x-4 md:group-hover:text-[#703FEC]">
+                    {p.title}
+                  </span>
+                  <span className="mt-2 md:mt-3 block text-sm md:text-base text-zinc-500 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:group-hover:translate-x-4">{p.industry}: {p.services.join(', ')}</span>
                 </span>
                 <span className="hidden md:block text-sm text-zinc-500">{p.category}</span>
                 <span className="flex items-center justify-end gap-3 text-sm text-zinc-500">
@@ -193,10 +204,13 @@ export const CaseStudyPage: React.FC<{ slug: string }> = ({ slug }) => {
   const [nextHover, setNextHover] = useState(false);
   useEffect(() => { setNextHover(false); }, [slug]);
 
-  const sections = [
-    { n: '01', t: 'The challenge', b: project.challenge },
-    { n: '02', t: 'What we did', b: project.approach },
-    { n: '03', t: 'The result', b: project.outcome },
+  const sections: { n: string; t: string; b: React.ReactNode }[] = [
+    { n: '01', t: 'Overview', b: <>{project.summary}<span className="mt-4 block text-base md:text-lg text-zinc-500">{project.industry} · {project.services.join(', ')}</span></> },
+    { n: '02', t: 'The challenge', b: project.challenge },
+    { n: '03', t: 'Our approach', b: project.approach },
+    { n: '04', t: 'The solution', b: project.solution },
+    { n: '05', t: 'The results', b: <>{project.outcome}<span className="mt-4 block text-base md:text-lg text-zinc-500">{project.resultMetric}</span></> },
+    { n: '06', t: 'Tools used', b: project.tools.join(', ') },
   ];
 
   return (
@@ -255,6 +269,24 @@ export const CaseStudyPage: React.FC<{ slug: string }> = ({ slug }) => {
             <p className="text-xl md:text-3xl font-medium tracking-[-0.02em] leading-[1.35] text-zinc-900 max-w-3xl">{s.b}</p>
           </motion.div>
         ))}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 1, ease }}
+          className="grid md:grid-cols-[14rem_1fr] gap-4 md:gap-16 md:py-12 md:border-t border-zinc-200"
+        >
+          <div className="flex items-baseline gap-3">
+            <span className="font-mono text-xs text-[#703FEC]">07</span>
+            <h2 className="text-sm font-bold uppercase tracking-[0.25em] text-zinc-500">Visit live site</h2>
+          </div>
+          <div>
+            <a href={project.url} target="_blank" rel="noopener" className="group inline-flex items-center gap-4 text-xl md:text-3xl font-medium tracking-[-0.02em] text-zinc-900 hover:text-[#703FEC] transition-colors">
+              {project.domain}
+              <span className="w-10 h-10 rounded-full bg-black text-white grid place-items-center text-base transition-[transform,background-color] duration-500 group-hover:-rotate-45 group-hover:bg-[#703FEC]">↗</span>
+            </a>
+          </div>
+        </motion.div>
       </section>
 
       {/* Highlights */}

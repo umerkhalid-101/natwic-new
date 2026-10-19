@@ -301,7 +301,7 @@ export const ServicePage: React.FC<{ slug: string }> = ({ slug }) => {
               <p key={i} className={i === 0 ? 'text-xl md:text-3xl font-medium tracking-[-0.02em] leading-[1.35]' : 'mt-5 text-base md:text-lg text-white/60 leading-relaxed'}>{p}</p>
             ))}
             <div className="mt-8">
-              <Link href="/contact" className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.25em] text-[#b9a1ff] hover:text-white transition-colors">Get a quote →</Link>
+              <Link href="/contact" className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.25em] text-[#b9a1ff] hover:text-white transition-colors">Contact us for pricing →</Link>
             </div>
           </div>
         </Row>

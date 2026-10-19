@@ -5,6 +5,8 @@ import { BASE_URL } from '../seo';
 import { DaylightMap } from './studio/DaylightMap';
 import { Values } from './studio/Values';
 import { Link } from './nav';
+import { PROJECTS } from './work/projects';
+import { SERVICE_PAGES, servicePath } from './services/services';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -224,6 +226,58 @@ const Process: React.FC = () => {
 };
 
 /* ------------------------------------------------------------------ */
+/* What we do: every service and case study, one click away            */
+/* ------------------------------------------------------------------ */
+
+const ListLink: React.FC<{ href: string; title: string; meta: string }> = ({ href, title, meta }) => (
+  <li className="border-t border-zinc-200 last:border-b">
+    <Link href={href} className="group flex items-center justify-between gap-4 py-5">
+      <span>
+        <span className="block text-xl md:text-2xl font-bold tracking-[-0.03em] transition-colors group-hover:text-[#703FEC]">{title}</span>
+        <span className="mt-1 block text-sm text-zinc-500">{meta}</span>
+      </span>
+      <span className="w-10 h-10 shrink-0 rounded-full border border-zinc-200 grid place-items-center text-black transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
+    </Link>
+  </li>
+);
+
+const WhatWeDo: React.FC = () => (
+  <section className="px-5 md:px-12 py-24 md:py-32">
+    <div className="max-w-7xl mx-auto">
+      <Label>What we do</Label>
+      <div className="mt-5 grid lg:grid-cols-[1fr_1fr] gap-8 lg:gap-16 items-end">
+        <h2 className="text-4xl md:text-6xl font-bold tracking-[-0.045em] leading-[1.02]">
+          Remote by default, <span className="italic text-[#703FEC]">close by design.</span>
+        </h2>
+        <p className="text-lg text-zinc-600 leading-relaxed">
+          We work with founders in different countries, so the process is built for distance. You get one shared space for plans, designs and staging links, written updates between calls, and a regular call at a time that overlaps with your day. The same people plan, design and build your project from the first call to launch.
+        </p>
+      </div>
+      <div className="mt-14 md:mt-20 grid md:grid-cols-2 gap-12 md:gap-16">
+        <div>
+          <div className="flex items-baseline justify-between gap-4 mb-4">
+            <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-zinc-500">Services</h3>
+            <Link href="/services" className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500 hover:text-black transition-colors">All services →</Link>
+          </div>
+          <ul>
+            {SERVICE_PAGES.map((sv) => <ListLink key={sv.slug} href={servicePath(sv.slug)} title={sv.name} meta={sv.teaser} />)}
+          </ul>
+        </div>
+        <div>
+          <div className="flex items-baseline justify-between gap-4 mb-4">
+            <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-zinc-500">Case studies</h3>
+            <Link href="/work" className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500 hover:text-black transition-colors">All work →</Link>
+          </div>
+          <ul>
+            {PROJECTS.map((p) => <ListLink key={p.slug} href={`/work/${p.slug}`} title={p.title} meta={`${p.industry}: ${p.summary}`} />)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+/* ------------------------------------------------------------------ */
 
 export const Studio: React.FC = () => {
 
@@ -283,6 +337,8 @@ export const Studio: React.FC = () => {
       <DaylightMap />
 
       <Process />
+
+      <WhatWeDo />
 
       <Values />
     </div>

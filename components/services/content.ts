@@ -59,7 +59,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       'Each week we agree on what will be done, share progress in writing and meet on a short call at a time that works for both sides. Between calls you can leave comments directly on designs or on the staging site, and we pick them up at the start of our day. A website project shouldn’t take over your week, so we keep meetings short and decisions clear. You stay in control of the big choices without having to manage the details.',
     ],
     pricing: [
-      'Startup websites typically fall in the [PRICE RANGE] range, depending on the number of pages, how much copy support you need and any custom features such as integrations or interactive sections.',
+      'Contact us for pricing. Every project is quoted on its own, because the cost of startup websites depends on the number of pages, how much copy support you need and any custom features such as integrations or interactive sections.',
       'Every project starts with a fixed quote based on an agreed scope, so you know the cost before work begins.',
     ],
     cases: ['breakthirty', 'beyond-hut', 'cayano'],
@@ -105,7 +105,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       'We plan review calls at times that suit your working hours, wherever you are, and we give you enough context with every presentation that you can share it with co-founders or investors who can’t join live. The goal is an identity your whole team feels ownership of. That means honest feedback is welcome at every stage, and we explain the reasoning behind each decision so you can judge the work on what it needs to do, not only on personal taste. You finish with a brand you understand well enough to defend and extend.',
     ],
     pricing: [
-      'Brand identity projects typically fall in the [PRICE RANGE] range, depending on how much strategy work is needed and how many templates and applications you want included.',
+      'Contact us for pricing. Every project is quoted on its own, because the cost of brand identity projects depends on how much strategy work is needed and how many templates and applications you want included.',
       'We quote a fixed price for an agreed scope before we start. If you need a website as well, we can plan both together.',
     ],
     cases: ['unita', 'folionomics', 'breakthirty'],
@@ -151,7 +151,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       'We schedule reviews at a time that overlaps with your team’s working hours, whatever time zone you’re in, and we keep a running list of decisions so nothing gets lost when people are offline. When the product changes during the project, which it usually does, we adjust the plan together instead of pretending the scope is frozen. Your engineers can stay focused on the product while we handle the marketing site, and we coordinate with them only where the two need to connect, such as sign-up flows, pricing data or shared design components.',
     ],
     pricing: [
-      'SaaS marketing sites typically fall in the [PRICE RANGE] range, depending on the number of templates, the amount of product animation and any integrations with your app or CRM.',
+      'Contact us for pricing. Every project is quoted on its own, because the cost of SaaS marketing sites depends on the number of templates, the amount of product animation and any integrations with your app or CRM.',
       'You get a fixed quote for an agreed scope before we start, and we can phase larger sites so the most important pages launch first.',
     ],
     cases: ['folionomics', 'unita'],
@@ -197,7 +197,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       'We track tasks and questions in one place, reply to feedback in writing and keep a short weekly call at a time that overlaps with your working hours, wherever your team is based. If you work with an in-house designer or another studio, we talk to them directly to clarify details, which saves you from relaying messages back and forth. When the build is done, you get documentation written for the people who will actually maintain the site, plus a recorded walkthrough your team can watch whenever it suits them. That way new team members can learn the CMS later without needing us on a call.',
     ],
     pricing: [
-      'Webflow and Next.js builds typically fall in the [PRICE RANGE] range, depending on the number of templates, CMS complexity, animations and integrations.',
+      'Contact us for pricing. Every project is quoted on its own, because the cost of Webflow and Next.js builds depends on the number of templates, CMS complexity, animations and integrations.',
       'We quote a fixed price after reviewing your designs or requirements, so the cost is clear before we start.',
     ],
     cases: ['breakthirty', 'cayano', 'beyond-hut'],
@@ -243,7 +243,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       'We meet on short calls at times that suit your time zone and handle most feedback in writing, which gives busy teams time to think before they respond. Before launch, we walk through the URL mapping and launch checklist with you so you know exactly what will change and when. Launch day is planned for a time that suits your audience, not just ours, and we watch analytics and search data closely in the weeks after. If something needs attention, we tell you what we found and what we’re doing about it, so you’re never left guessing about the state of your site.',
     ],
     pricing: [
-      'Website redesigns typically fall in the [PRICE RANGE] range, depending on the size of the current site, how much content needs to move and whether the brand is changing too.',
+      'Contact us for pricing. Every project is quoted on its own, because the cost of website redesigns depends on the size of the current site, how much content needs to move and whether the brand is changing too.',
       'You get a fixed quote after the audit and planning stage, so the cost reflects your actual site rather than a guess.',
     ],
     cases: ['cayano', 'beyond-hut', 'breakthirty'],

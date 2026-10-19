@@ -67,8 +67,8 @@ export const CASE_SLUGS = PROJECTS.map((p) => p.slug);
 export const caseMeta = (slug: string) => {
   const p = projectBySlug(slug) ?? PROJECTS[0];
   return {
-    title: `${p.title}: ${p.category} case study | Natwic`,
-    description: `${p.summary} How Natwic designed and built ${p.domain}.`,
+    title: `${p.title} Case Study: ${p.industry} | Natwic`,
+    description: `${p.summary} How Natwic handled ${p.services.join(', ').toLowerCase()} for ${p.domain}, working remotely.`,
   };
 };
 export const caseUrl = (slug: string) => `${BASE_URL}/work/${slug}`;

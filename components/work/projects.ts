@@ -9,6 +9,8 @@ export type Project = {
   slug: string;
   title: string;
   category: string;
+  /** Who the client is, in a few words, for one-line summaries */
+  industry: string;
   services: string[];
   domain: string;
   url: string;
@@ -22,6 +24,12 @@ export type Project = {
   approach: string;
   outcome: string;
   highlights: string[];
+  /** What was delivered: key pages, features, integrations */
+  solution: string;
+  /** A measurable result, once the client has shared one */
+  resultMetric: string;
+  /** Platforms and tools the site was built with */
+  tools: string[];
 };
 
 export const PROJECTS: Project[] = [
@@ -30,6 +38,7 @@ export const PROJECTS: Project[] = [
     slug: 'unita',
     title: 'Unita',
     category: 'Web platform',
+    industry: 'B2B business directory',
     services: ['Product design', 'Web development', 'Search UX'],
     domain: 'unitaw.com',
     url: 'https://unitaw.com/',
@@ -44,12 +53,16 @@ export const PROJECTS: Project[] = [
     outcome:
       'A credible, easy-to-use platform that is already live across eight countries and ready to grow one verified listing at a time.',
     highlights: ['AI-assisted search', 'Verification explained in one line', 'Directory built to scale'],
+    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
+    resultMetric: '[RESULT METRIC]',
+    tools: ['[TOOLS USED]'],
   },
   {
     id: 2,
     slug: 'folionomics',
     title: 'Folionomics',
     category: 'Fintech · Product UI',
+    industry: 'Crypto portfolio tracking',
     services: ['Product design', 'UI system', 'Front-end'],
     domain: 'folionomics.com',
     url: 'https://www.folionomics.com/',
@@ -64,12 +77,16 @@ export const PROJECTS: Project[] = [
     outcome:
       'A product people can explore in seconds, read-only and private, with portfolio-aware swaps planned next.',
     highlights: ['Read-only, no sign-in demo', 'Dense data made readable', 'Dark UI system'],
+    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
+    resultMetric: '[RESULT METRIC]',
+    tools: ['[TOOLS USED]'],
   },
   {
     id: 3,
     slug: 'breakthirty',
     title: 'Breakthirty',
     category: 'Marketing agency · Website',
+    industry: 'E-commerce growth agency',
     services: ['Web design', 'Development', 'Conversion'],
     domain: 'breakthirty.com',
     url: 'https://www.breakthirty.com/',
@@ -84,12 +101,16 @@ export const PROJECTS: Project[] = [
     outcome:
       'A bright, confident site that explains a broad offer simply and gives every visitor an easy first step.',
     highlights: ['One clear promise up top', 'Services you can browse', 'Free audits as a way in'],
+    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
+    resultMetric: '[RESULT METRIC]',
+    tools: ['[TOOLS USED]'],
   },
   {
     id: 4,
     slug: 'beyond-hut',
     title: 'Beyond Hut',
     category: 'Remote staffing · Website',
+    industry: 'Remote property staffing',
     services: ['Web design', 'Development', 'Messaging'],
     domain: 'beyondhut.com',
     url: 'https://beyondhut.com/',
@@ -104,12 +125,16 @@ export const PROJECTS: Project[] = [
     outcome:
       'A calm, trustworthy site that answers "is this worth it?" before anyone has to ask.',
     highlights: ['Value up front', 'Cost comparison', 'Four-step onboarding'],
+    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
+    resultMetric: '[RESULT METRIC]',
+    tools: ['[TOOLS USED]'],
   },
   {
     id: 5,
     slug: 'cayano',
     title: 'Cayano',
     category: 'Property · Website',
+    industry: 'London lettings agency',
     services: ['Web design', 'Development', 'Property search'],
     domain: 'cayano.co.uk',
     url: 'https://cayano.co.uk/',
@@ -124,6 +149,9 @@ export const PROJECTS: Project[] = [
     outcome:
       'A clear, modern agency site where every visitor finds their next step quickly.',
     highlights: ['Separate landlord and tenant paths', 'Valuation booking up front', 'Property search'],
+    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
+    resultMetric: '[RESULT METRIC]',
+    tools: ['[TOOLS USED]'],
   },
 ];
 

@@ -516,6 +516,8 @@ const FEED = [
   { kind: 1, text: 'Call notes and next steps posted', meta: 'Calendar' },
 ];
 const KIND_STYLE = ['bg-[#703FEC] text-white', 'bg-[#b9a1ff] text-black', 'bg-white text-black'];
+const FEED_ROWS = 4;
+const FEED_ROW = 72; // row height plus gap, in px
 const KIND_ICON = ['◆', '◷', '✎'];
 
 export const RemoteFeed: React.FC<{ highlight: number | null }> = ({ highlight }) => {
@@ -529,7 +531,7 @@ export const RemoteFeed: React.FC<{ highlight: number | null }> = ({ highlight }
     return () => clearInterval(id);
   }, [inView, reduce]);
   // The newest four items, newest on top
-  const items = [0, 1, 2, 3].map((k) => ({ ...FEED[(head + 3 - k) % FEED.length], key: head + 3 - k }));
+  const items = Array.from({ length: FEED_ROWS }, (_, k) => ({ ...FEED[(head + FEED_ROWS - 1 - k) % FEED.length], key: head + FEED_ROWS - 1 - k }));
   return (
     <div ref={ref} className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl p-3 md:p-4 shadow-[0_40px_120px_rgba(0,0,0,0.5)]">
       <div className="flex items-center justify-between px-2 pb-3">
@@ -541,17 +543,18 @@ export const RemoteFeed: React.FC<{ highlight: number | null }> = ({ highlight }
           {['N', 'You'].map((a, i) => <span key={a} className={`grid place-items-center h-7 min-w-7 px-1.5 rounded-full border-2 border-[#0b0b12] text-[10px] font-bold ${i ? 'bg-white text-black' : 'bg-[#703FEC] text-white'}`}>{a}</span>)}
         </span>
       </div>
-      <ul className="relative space-y-2 overflow-hidden rounded-[1.25rem] bg-[#07070c] p-3 min-h-[17rem]">
+      {/* Rows sit in fixed slots and slide between them, so nothing reflows while one leaves */}
+      <ul className="relative overflow-hidden rounded-[1.25rem] bg-[#07070c]" style={{ height: FEED_ROWS * FEED_ROW + 16 }}>
         <AnimatePresence initial={false}>
           {items.map((it, k) => (
             <motion.li
               key={it.key}
-              layout
-              initial={{ opacity: 0, y: -24, scale: 0.96 }}
-              animate={{ opacity: highlight === null || highlight === it.kind ? 1 : 0.25, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 24 }}
-              transition={{ duration: 0.5, ease }}
-              className={`flex items-center gap-3 rounded-xl border px-3 py-3 ${k === 0 ? 'border-[#703FEC]/50 bg-[#703FEC]/10' : 'border-white/5 bg-white/[0.03]'}`}
+              initial={{ opacity: 0, y: -FEED_ROW + 8 }}
+              animate={{ opacity: highlight === null || highlight === it.kind ? 1 : 0.25, y: k * FEED_ROW + 8 }}
+              exit={{ opacity: 0, y: FEED_ROWS * FEED_ROW + 8 }}
+              transition={{ duration: 0.6, ease }}
+              style={{ height: FEED_ROW - 8 }}
+              className={`absolute inset-x-3 top-0 flex items-center gap-3 rounded-xl border px-3 transition-colors duration-500 ${k === 0 ? 'border-[#703FEC]/50 bg-[#703FEC]/10' : 'border-white/5 bg-white/[0.03]'}`}
             >
               <span className={`grid place-items-center w-8 h-8 shrink-0 rounded-lg text-sm ${KIND_STYLE[it.kind]}`}>{KIND_ICON[it.kind]}</span>
               <span className="min-w-0 flex-1">

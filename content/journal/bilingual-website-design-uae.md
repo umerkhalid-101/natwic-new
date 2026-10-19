@@ -22,16 +22,6 @@ This guide covers bilingual website design in the UAE the way I'd explain it to 
 
 Bilingual website design in the UAE means building one site that works fully in English (left to right) and Arabic (right to left), with separate URLs per language, native-quality Arabic copy, Arabic-specific typography, and a layout that mirrors correctly. Most early-stage startups should launch on an "Arabic-ready" build, then add Arabic to their highest-value pages first.
 
-## What's in this guide
-
-- [Do you actually need an Arabic website in the UAE?](#do-you-actually-need-an-arabic-website-in-the-uae)
-- [Arabic-ready: go bilingual without doubling your budget](#arabic-ready-go-bilingual-without-doubling-your-budget)
-- [What bilingual website design really involves](#what-bilingual-website-design-really-involves)
-- [Bilingual SEO basics most founders skip](#bilingual-seo-basics-most-founders-skip)
-- [Choosing a platform for an Arabic English website](#choosing-a-platform-for-an-arabic-english-website)
-- [Free bilingual launch checklist](#free-bilingual-launch-checklist)
-- [FAQ](#faq)
-
 ## Do you actually need an Arabic website in the UAE?
 
 Not always on day one. The real answer depends on who's buying from you.

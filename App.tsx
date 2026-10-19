@@ -25,9 +25,9 @@ const Studio = lazyPage(() => import('./components/Studio'), (m) => m.Studio);
 const Privacy = lazyPage(() => import('./components/Privacy'), (m) => m.Privacy);
 const Terms = lazyPage(() => import('./components/Terms'), (m) => m.Terms);
 const WorkIndex = lazyPage(() => import('./components/work/WorkPages'), (m) => m.WorkIndex);
-const CaseStudyPage = lazyPage(() => import('./components/work/WorkPages'), (m) => m.CaseStudyPage);
 const ServicesIndex = lazyPage(() => import('./components/services/ServicePages'), (m) => m.ServicesIndex);
 const ServicePage = lazyPage(() => import('./components/services/ServicePages'), (m) => m.ServicePage);
+const BuiltCaseStudy = lazyPage(() => import('./components/work/built/BuiltCaseStudy'), (m) => m.BuiltCaseStudy);
 const JunoCaseStudy = lazyPage(() => import('./components/work/juno/JunoCaseStudy'), (m) => m.JunoCaseStudy);
 const JournalIndex = lazyPage(() => import('./components/journal/JournalPages'), (m) => m.JournalIndex);
 const JournalTeaser = lazyPage(() => import('./components/journal/JournalTeaser'), (m) => m.JournalTeaser);
@@ -40,7 +40,7 @@ export const preloadRoute = (pathname: string) => {
   const pages: { preload: () => Promise<void> }[] = {
     home: [JournalTeaser],
     studio: [Studio, JournalTeaser],
-    work: slug ? [slug === 'juno' ? JunoCaseStudy : CaseStudyPage] : [WorkIndex, JournalTeaser],
+    work: slug ? [slug === 'juno' ? JunoCaseStudy : BuiltCaseStudy] : [WorkIndex, JournalTeaser],
     services: [slug ? ServicePage : ServicesIndex],
     journal: [slug ? JournalPost : JournalIndex],
     contact: [Contact],
@@ -151,7 +151,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
           {view === 'work' && slug && (
             <>
               <Seo {...caseMeta(slug)} view={`work/${slug}`} />
-              {slug === 'juno' ? <JunoCaseStudy /> : <CaseStudyPage slug={slug} />}
+              {slug === 'juno' ? <JunoCaseStudy /> : <BuiltCaseStudy slug={slug} />}
             </>
           )}
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
-import { PROJECTS, Project, pad, projectBySlug, creativeWorkSchema } from './projects';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { PROJECTS, pad } from './projects';
 import { Magnetic } from '../Magnetic';
-import { BASE_URL, caseUrl } from '../../seo';
 import { Link } from '../nav';
 import { SERVICE_FOR_CASE, serviceBySlug, servicePath } from '../services/services';
 
@@ -21,16 +20,6 @@ const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: 
       {children}
     </motion.span>
   </span>
-);
-
-const BrowserFrame: React.FC<{ project: Project; className?: string }> = ({ project, className = '' }) => (
-  <div className={`overflow-hidden rounded-xl md:rounded-2xl bg-white shadow-[0_30px_80px_rgba(0,0,0,0.18)] ${className}`}>
-    <div className="flex items-center gap-1.5 px-3 md:px-4 py-2 md:py-2.5 border-b border-black/[0.06] bg-zinc-50">
-      {['#FF5F57', '#FEBC2E', '#28C840'].map((c) => <span key={c} className="w-2 h-2 rounded-full" style={{ background: c }} />)}
-      <span className="ml-3 rounded-full bg-black/[0.05] px-3 py-1 text-[9px] md:text-[11px] text-black/50">{project.domain}</span>
-    </div>
-    <img src={project.image} alt={project.imageAlt} width={project.imageSize[0]} height={project.imageSize[1]} className="block w-full h-auto" />
-  </div>
 );
 
 /* ------------------------------------------------------------------ */
@@ -163,28 +152,22 @@ export const WorkIndex: React.FC = () => {
 /* /work/<slug>: a case study                                          */
 /* ------------------------------------------------------------------ */
 
-const Breadcrumb: React.FC<{ project: Project }> = ({ project }) => {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: 'Work', item: `${BASE_URL}/work` },
-      { '@type': 'ListItem', position: 3, name: project.title, item: caseUrl(project.slug) },
-    ],
-  };
-  const link = 'text-zinc-500 hover:text-black transition-colors';
+/** Link from a case study to the service page behind it */
+export const ServiceLink: React.FC<{ slug: string }> = ({ slug }) => {
+  const service = serviceBySlug(SERVICE_FOR_CASE[slug] ?? 'web-design')!;
   return (
-    <nav aria-label="Breadcrumb">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      <ol className="flex flex-wrap items-center gap-2 text-sm font-semibold">
-        <li><Link href="/" className={link}>Home</Link></li>
-        <li aria-hidden className="text-zinc-300">/</li>
-        <li><Link href="/work" className={link}>Work</Link></li>
-        <li aria-hidden className="text-zinc-300">/</li>
-        <li aria-current="page" className="text-black">{project.title}</li>
-      </ol>
-    </nav>
+    <section className="px-5 md:px-12 max-w-7xl mx-auto mt-16 md:mt-24">
+      <Link href={servicePath(service.slug)} className="group flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-[2rem] border border-zinc-200 px-7 md:px-10 py-7 md:py-8 hover:border-black transition-colors">
+        <span>
+          <span className="block text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500">Service</span>
+          <span className="mt-2 block text-2xl md:text-3xl font-bold tracking-[-0.03em]">{service.name}</span>
+        </span>
+        <span className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.25em] text-black">
+          How we work on projects like this
+          <span className="w-10 h-10 rounded-full bg-black text-white grid place-items-center transition-[transform,background-color] duration-500 group-hover:-rotate-45 group-hover:bg-[#703FEC]">→</span>
+        </span>
+      </Link>
+    </section>
   );
 };
 
@@ -253,148 +236,5 @@ export const NextProject: React.FC<{ slug: string }> = ({ slug }) => {
         </div>
       </Link>
     </section>
-  );
-};
-
-export const CaseStudyPage: React.FC<{ slug: string }> = ({ slug }) => {
-  const project = projectBySlug(slug) ?? PROJECTS[0];
-  const service = serviceBySlug(SERVICE_FOR_CASE[project.slug] ?? 'web-design')!;
-
-  const coverRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: coverRef, offset: ['start end', 'end start'] });
-  const coverScale = useTransform(scrollYProgress, [0, 0.45], [0.9, 1]);
-  const coverY = useTransform(scrollYProgress, [0, 1], ['4%', '-4%']);
-
-
-  const sections: { n: string; t: string; b: React.ReactNode }[] = [
-    { n: '01', t: 'Overview', b: <>{project.summary}<span className="mt-4 block text-base md:text-lg text-zinc-500">{project.industry} · {project.services.join(', ')}</span></> },
-    { n: '02', t: 'The challenge', b: project.challenge },
-    { n: '03', t: 'Our approach', b: project.approach },
-    { n: '04', t: 'The solution', b: project.solution },
-    { n: '05', t: 'The results', b: <>{project.outcome}<span className="mt-4 block text-base md:text-lg text-zinc-500">{project.resultMetric}</span></> },
-    { n: '06', t: 'Tools used', b: project.tools.join(', ') },
-  ];
-
-  return (
-    <article key={project.slug} className="bg-white min-h-screen pt-28 md:pt-36 pb-0">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(creativeWorkSchema(project, BASE_URL)) }} />
-      <header className="px-5 md:px-12 max-w-7xl mx-auto">
-        <Breadcrumb project={project} />
-        <div className="mt-10 md:mt-14 flex items-center gap-4">
-          <Label>{project.category}</Label>
-        </div>
-        <h1 className="mt-5 text-[19vw] md:text-[11vw] font-bold leading-[0.85] tracking-[-0.06em]">
-          <Reveal>{project.title}</Reveal>
-        </h1>
-        <div className="mt-8 md:mt-12 grid md:grid-cols-[1.4fr_1fr] gap-8 md:gap-16 items-end">
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.25 }} className="text-2xl md:text-4xl font-medium tracking-[-0.03em] leading-[1.15] text-zinc-800">
-            {project.summary}
-          </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.35 }} className="flex flex-col gap-5 md:items-end">
-            <div className="flex flex-wrap gap-2 md:justify-end">
-              {project.services.map((s) => <span key={s} className="rounded-full bg-zinc-100 px-4 py-2 text-xs font-semibold">{s}</span>)}
-            </div>
-            <Magnetic strength={0.3}>
-              <a href={project.url} target="_blank" rel="noopener" aria-label={`Visit live site: ${project.domain} (opens in a new tab)`} className="group inline-flex items-center gap-3 rounded-full bg-[#703FEC] text-white pl-6 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-black transition-colors">
-                Visit live site
-                <span className="w-10 h-10 rounded-full bg-white text-black grid place-items-center transition-transform duration-500 group-hover:-rotate-45">↗</span>
-              </a>
-            </Magnetic>
-          </motion.div>
-        </div>
-      </header>
-
-      {/* Cover, framed as the live site */}
-      <div ref={coverRef} className="mt-16 md:mt-24 px-3 md:px-6">
-        <motion.div style={{ scale: coverScale }} className="relative mx-auto max-w-[1400px] rounded-[2rem] md:rounded-[3rem] bg-[#0A0A0A] p-4 md:p-14 overflow-hidden">
-          <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(112,63,236,0.45),transparent_60%)]" />
-          <motion.div style={{ y: coverY }} className="relative">
-            <BrowserFrame project={project} />
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* Story */}
-      <section className="px-5 md:px-12 max-w-7xl mx-auto mt-20 md:mt-32 grid gap-14 md:gap-0">
-        {sections.map((s, i) => (
-          <motion.div
-            key={s.n}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-10%' }}
-            transition={{ duration: 1, ease, delay: i * 0.05 }}
-            className="grid md:grid-cols-[14rem_1fr] gap-4 md:gap-16 md:py-12 md:border-t border-zinc-200"
-          >
-            <div className="flex items-baseline gap-3">
-              <span className="font-mono text-xs text-[#703FEC]">{s.n}</span>
-              <h2 className="text-sm font-bold uppercase tracking-[0.25em] text-zinc-500">{s.t}</h2>
-            </div>
-            <p className="text-xl md:text-3xl font-medium tracking-[-0.02em] leading-[1.35] text-zinc-900 max-w-3xl">{s.b}</p>
-          </motion.div>
-        ))}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-10%' }}
-          transition={{ duration: 1, ease }}
-          className="grid md:grid-cols-[14rem_1fr] gap-4 md:gap-16 md:py-12 md:border-t border-zinc-200"
-        >
-          <div className="flex items-baseline gap-3">
-            <span className="font-mono text-xs text-[#703FEC]">07</span>
-            <h2 className="text-sm font-bold uppercase tracking-[0.25em] text-zinc-500">Visit live site</h2>
-          </div>
-          <div>
-            <a href={project.url} target="_blank" rel="noopener" className="group inline-flex items-center gap-4 text-xl md:text-3xl font-medium tracking-[-0.02em] text-zinc-900 hover:text-[#703FEC] transition-colors">
-              {project.domain}
-              <span className="w-10 h-10 rounded-full bg-black text-white grid place-items-center text-base transition-[transform,background-color] duration-500 group-hover:-rotate-45 group-hover:bg-[#703FEC]">↗</span>
-            </a>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Highlights */}
-      <section className="px-5 md:px-12 max-w-7xl mx-auto mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {project.highlights.map((h, i) => (
-          <motion.div
-            key={h}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, ease, delay: i * 0.08 }}
-            whileHover={{ y: -6 }}
-            className={`rounded-[2rem] p-8 md:p-10 min-h-[180px] flex flex-col justify-between ${['bg-zinc-100 text-black', 'bg-[#0A0A0A] text-white', 'bg-[#703FEC] text-white'][i % 3]}`}
-          >
-            <span className="font-mono text-xs opacity-60">{pad(i + 1)}</span>
-            <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em] leading-tight">{h}</p>
-          </motion.div>
-        ))}
-      </section>
-
-      {/* The service behind this project */}
-      <section className="px-5 md:px-12 max-w-7xl mx-auto mt-16 md:mt-24">
-        <Link href={servicePath(service.slug)} className="group flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-[2rem] border border-zinc-200 px-7 md:px-10 py-7 md:py-8 hover:border-black transition-colors">
-          <span>
-            <span className="block text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500">Service</span>
-            <span className="mt-2 block text-2xl md:text-3xl font-bold tracking-[-0.03em]">{service.name}</span>
-          </span>
-          <span className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.25em] text-black">
-            How we work on projects like this
-            <span className="w-10 h-10 rounded-full bg-black text-white grid place-items-center transition-[transform,background-color] duration-500 group-hover:-rotate-45 group-hover:bg-[#703FEC]">→</span>
-          </span>
-        </Link>
-      </section>
-
-      <MoreWork slug={project.slug} />
-
-      <NextProject slug={project.slug} />
-
-      <section className="px-5 md:px-12 max-w-7xl mx-auto py-16 md:py-20 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em]">Want something like this?</p>
-        <Link href="/contact" className="group inline-flex items-center gap-4 self-start rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
-          Start a project
-          <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-        </Link>
-      </section>
-    </article>
   );
 };

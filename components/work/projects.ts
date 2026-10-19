@@ -24,12 +24,6 @@ export type Project = {
   approach: string;
   outcome: string;
   highlights: string[];
-  /** What was delivered: key pages, features, integrations */
-  solution: string;
-  /** A measurable result, once the client has shared one */
-  resultMetric: string;
-  /** Platforms and tools the site was built with */
-  tools: string[];
   /** Overrides for the case study's <title>, meta description and share image */
   seoTitle?: string;
   seoDescription?: string;
@@ -58,9 +52,6 @@ export const PROJECTS: Project[] = [
     outcome:
       'A nine-page marketing site that tells Juno’s story, shows the product working and builds trust before anyone signs up.',
     highlights: ['A homepage told as a story', 'Trust shown, not claimed', 'Nine pages, one system'],
-    solution: 'A storytelling homepage and eight more pages built on one dark-mode design system, with live UI in place of screenshots.',
-    resultMetric: '[TODO: metrics, if available]',
-    tools: ['Next.js', 'React', 'Tailwind CSS', 'GSAP', 'Motion', 'Lenis'],
     seoTitle: 'Juno Case Study: AI SaaS Website Design | Natwic',
     seoDescription: 'How Natwic redesigned and rebuilt the marketing site for Juno, an AI chief of staff, turning an abstract AI product into a clear, trusted story.',
     ogImage: '/work/juno/juno-og.png',
@@ -85,8 +76,6 @@ export const PROJECTS: Project[] = [
     outcome:
       'A credible, easy-to-use platform that is already live across eight countries and ready to grow one verified listing at a time.',
     highlights: ['AI-assisted search', 'Verification explained in one line', 'Directory built to scale'],
-    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
-    resultMetric: '[RESULT METRIC]',
     tools: ['[TOOLS USED]'],
   },
   {
@@ -109,8 +98,6 @@ export const PROJECTS: Project[] = [
     outcome:
       'A bright, confident site that explains a broad offer simply and gives every visitor an easy first step.',
     highlights: ['One clear promise up top', 'Services you can browse', 'Free audits as a way in'],
-    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
-    resultMetric: '[RESULT METRIC]',
     tools: ['[TOOLS USED]'],
   },
   {
@@ -133,8 +120,6 @@ export const PROJECTS: Project[] = [
     outcome:
       'A calm, trustworthy site that answers "is this worth it?" before anyone has to ask.',
     highlights: ['Value up front', 'Cost comparison', 'Four-step onboarding'],
-    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
-    resultMetric: '[RESULT METRIC]',
     tools: ['[TOOLS USED]'],
   },
   {
@@ -157,8 +142,6 @@ export const PROJECTS: Project[] = [
     outcome:
       'A clear, modern agency site where every visitor finds their next step quickly.',
     highlights: ['Separate landlord and tenant paths', 'Valuation booking up front', 'Property search'],
-    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
-    resultMetric: '[RESULT METRIC]',
     tools: ['[TOOLS USED]'],
   },
 ];

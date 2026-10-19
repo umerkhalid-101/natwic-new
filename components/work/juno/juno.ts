@@ -7,15 +7,8 @@
 
 const DIR = '/work/juno';
 
-export type Media = {
-  /** Still image (also the video poster). null shows a labeled placeholder. */
-  image: string | null;
-  /** Looping clip, e.g. `${DIR}/juno-homepage-hero.mp4`. null until supplied. */
-  video: string | null;
-  /** File name to supply, shown on placeholders */
-  file: string;
-  alt: string;
-};
+import type { Media } from '../rich/blocks';
+export type { Media };
 
 export const HERO = {
   eyebrow: 'Case Study · AI SaaS',
@@ -211,11 +204,3 @@ export const HERO_SIDES = {
   left: { image: `${DIR}/juno-detail-live-ui.webp`, alt: 'Juno’s command palette with 16 features.' },
   right: { image: `${DIR}/juno-detail-approval-card.webp`, alt: 'Juno asking for approval before submitting an app.' },
 };
-
-/** Intrinsic size for stills that are not 1600 x 1000 (16:10) */
-const SIZES: Record<string, [number, number]> = { [`${DIR}/juno-detail-live-ui.webp`]: [1968, 1176] };
-export const sizeOf = (src: string): [number, number] => SIZES[src] ?? [1600, 1000];
-
-/** Stills that also exist at 2x, as name@2x.webp */
-export const has2x = (src: string | null) => !!src && /juno-(page|beat|homepage|before)-/.test(src);
-export const srcSet = (src: string) => (has2x(src) ? `${src} 1600w, ${src.replace('.webp', '@2x.webp')} 3200w` : undefined);

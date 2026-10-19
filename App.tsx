@@ -27,6 +27,7 @@ const WorkIndex = lazy(() => import('./components/work/WorkPages').then(m => ({ 
 const CaseStudyPage = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.CaseStudyPage })));
 const ServicesIndex = lazy(() => import('./components/services/ServicePages').then(m => ({ default: m.ServicesIndex })));
 const ServicePage = lazy(() => import('./components/services/ServicePages').then(m => ({ default: m.ServicePage })));
+const JunoCaseStudy = lazy(() => import('./components/work/juno/JunoCaseStudy').then(m => ({ default: m.JunoCaseStudy })));
 const JournalIndex = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalIndex })));
 const JournalTeaser = lazy(() => import('./components/journal/JournalTeaser').then(m => ({ default: m.JournalTeaser })));
 const JournalPost = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalPost })));
@@ -122,7 +123,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
           {view === 'work' && slug && (
             <>
               <Seo {...caseMeta(slug)} view={`work/${slug}`} />
-              <CaseStudyPage slug={slug} />
+              {slug === 'juno' ? <JunoCaseStudy /> : <CaseStudyPage slug={slug} />}
             </>
           )}
 

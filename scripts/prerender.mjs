@@ -32,9 +32,9 @@ for (const view of VIEWS) {
 // One page per case study, at /work/<slug>
 await mkdir(path.join(dist, 'work'), { recursive: true });
 for (const slug of CASE_SLUGS) {
-  const { title, description } = caseMeta(slug);
+  const { title, description, image } = caseMeta(slug);
   const body = await render('work', slug);
-  await writeFile(path.join(dist, 'work', `${slug}.html`), page(title, description, caseUrl(slug), body));
+  await writeFile(path.join(dist, 'work', `${slug}.html`), page(title, description, caseUrl(slug), body, image));
   console.log(`prerendered /work/${slug} → dist/work/${slug}.html (${(body.length / 1024).toFixed(0)} KB)`);
 }
 

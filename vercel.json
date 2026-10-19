@@ -85,6 +85,11 @@
       ],
       "destination": "/services",
       "statusCode": 301
+    },
+    {
+      "source": "/work/folionomics",
+      "destination": "/work",
+      "statusCode": 301
     }
   ]
 }

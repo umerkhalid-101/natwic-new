@@ -108,7 +108,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       'Contact us for pricing. Every project is quoted on its own, because the cost of brand identity projects depends on how much strategy work is needed and how many templates and applications you want included.',
       'We quote a fixed price for an agreed scope before we start. If you need a website as well, we can plan both together.',
     ],
-    cases: ['unita', 'folionomics', 'breakthirty'],
+    cases: ['juno', 'unita', 'breakthirty'],
     faqs: [
       { q: 'How long does a branding project take?', a: 'A focused identity project usually takes a few weeks from kickoff to final files. Larger projects with extensive strategy work or many applications take longer. We share a timeline before we begin.' },
       { q: 'Do you help with naming?', a: 'Our focus is visual identity. If you’re still choosing a name, we can share feedback on your shortlist and how each option might work visually.' },
@@ -154,7 +154,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       'Contact us for pricing. Every project is quoted on its own, because the cost of SaaS marketing sites depends on the number of templates, the amount of product animation and any integrations with your app or CRM.',
       'You get a fixed quote for an agreed scope before we start, and we can phase larger sites so the most important pages launch first.',
     ],
-    cases: ['folionomics', 'unita'],
+    cases: ['juno', 'unita'],
     faqs: [
       { q: 'Do you design product UI as well as the marketing site?', a: 'Yes. We design product interfaces and dashboards too, and keeping both with one team makes the website and the product feel like one experience.' },
       { q: 'How do you show a product that is still changing?', a: 'We design product visuals that can be updated easily, and favor simplified screens and short loops over detailed screenshots that go stale quickly.' },

@@ -30,9 +30,41 @@ export type Project = {
   resultMetric: string;
   /** Platforms and tools the site was built with */
   tools: string[];
+  /** Overrides for the case study's <title>, meta description and share image */
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: string;
 };
 
 export const PROJECTS: Project[] = [
+  {
+    id: 6,
+    slug: 'juno',
+    title: 'Juno',
+    category: 'AI SaaS · Website',
+    industry: 'AI chief of staff for teams',
+    services: ['Brand direction', 'Web design', 'Design system', 'Development'],
+    // Preview domain until runjuno.ai goes live; then update domain and url
+    domain: 'juno-lovat.vercel.app',
+    url: 'https://juno-lovat.vercel.app/',
+    image: '/work/juno/juno-card.webp',
+    imageSize: [1200, 900],
+    imageAlt: 'Juno homepage: a glowing mascot surrounded by tasks, above the headline Knows your company. Gets things done.',
+    summary: 'An AI chief of staff, explained in 30 seconds.',
+    challenge:
+      'Juno had a powerful product and a website that didn’t explain it. “AI assistant” is a crowded, vague category, and B2B buyers need to understand a product like this and trust it before they hand it real work.',
+    approach:
+      'We started with tone and design guidelines, then designed the homepage, then rolled the system out across all nine pages.',
+    outcome:
+      'A nine-page marketing site that tells Juno’s story, shows the product working and builds trust before anyone signs up.',
+    highlights: ['A homepage told as a story', 'Trust shown, not claimed', 'Nine pages, one system'],
+    solution: 'A storytelling homepage and eight more pages built on one dark-mode design system, with live UI in place of screenshots.',
+    resultMetric: '[TODO: metrics, if available]',
+    tools: ['Next.js', 'React', 'Tailwind CSS', 'GSAP', 'Motion', 'Lenis'],
+    seoTitle: 'Juno Case Study: AI SaaS Website Design | Natwic',
+    seoDescription: 'How Natwic redesigned and rebuilt the marketing site for Juno, an AI chief of staff, turning an abstract AI product into a clear, trusted story.',
+    ogImage: '/work/juno/juno-og.png',
+  },
   {
     id: 1,
     slug: 'unita',
@@ -53,30 +85,6 @@ export const PROJECTS: Project[] = [
     outcome:
       'A credible, easy-to-use platform that is already live across eight countries and ready to grow one verified listing at a time.',
     highlights: ['AI-assisted search', 'Verification explained in one line', 'Directory built to scale'],
-    solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
-    resultMetric: '[RESULT METRIC]',
-    tools: ['[TOOLS USED]'],
-  },
-  {
-    id: 2,
-    slug: 'folionomics',
-    title: 'Folionomics',
-    category: 'Fintech · Product UI',
-    industry: 'Crypto portfolio tracking',
-    services: ['Product design', 'UI system', 'Front-end'],
-    domain: 'folionomics.com',
-    url: 'https://www.folionomics.com/',
-    image: '/work/folionomics.webp',
-    imageSize: [1200, 900],
-    imageAlt: 'Folionomics homepage in a dark theme with an interactive demo charting portfolio net worth',
-    summary: 'Wallets and DeFi positions in one clear view.',
-    challenge:
-      'Crypto investors juggle wallets and DeFi positions across different apps. Folionomics needed a privacy-first product that shows everything in one place, without asking anyone to sign in first.',
-    approach:
-      'We designed a focused dark interface around a live demo: paste any wallet address and see net worth, history and positions straight away. Restrained colour and clear type keep dense financial data readable.',
-    outcome:
-      'A product people can explore in seconds, read-only and private, with portfolio-aware swaps planned next.',
-    highlights: ['Read-only, no sign-in demo', 'Dense data made readable', 'Dark UI system'],
     solution: '[SOLUTION DETAILS: key pages, features and integrations delivered]',
     resultMetric: '[RESULT METRIC]',
     tools: ['[TOOLS USED]'],

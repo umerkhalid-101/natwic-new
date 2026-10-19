@@ -59,7 +59,7 @@ export const servicePath = (slug: string) => `/services/${slug}`;
 /** The service page each case study links to, based on the work listed for it */
 export const SERVICE_FOR_CASE: Record<string, string> = {
   unita: 'saas-website-design',
-  folionomics: 'saas-website-design',
+  juno: 'saas-website-design',
   breakthirty: 'web-design',
   'beyond-hut': 'web-design',
   cayano: 'web-design',

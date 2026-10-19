@@ -78,7 +78,7 @@ export const WorkIndex: React.FC = () => {
           transition={{ duration: 1, ease, delay: 0.4 }}
           className="mt-5 max-w-xl text-base md:text-lg text-zinc-500 leading-relaxed"
         >
-          Each case study covers the problem, how we approached it and what we shipped, from a verified business directory and a crypto portfolio tracker to sites for a growth agency, a remote staffing company and a London lettings agency. Every project was run remotely, across time zones.
+          Each case study covers the problem, how we approached it and what we shipped, from an AI chief of staff for founders and a verified business directory to sites for a growth agency, a remote staffing company and a London lettings agency. Every project was run remotely, across time zones.
         </motion.p>
       </section>
 
@@ -188,12 +188,75 @@ const Breadcrumb: React.FC<{ project: Project }> = ({ project }) => {
   );
 };
 
+/** Two more case studies after the next one, so every case study links to three others */
+export const MoreWork: React.FC<{ slug: string }> = ({ slug }) => {
+  const index = PROJECTS.findIndex((p) => p.slug === slug);
+  const more = [2, 3].map((k) => PROJECTS[(index + k) % PROJECTS.length]);
+  return (
+    <section className="px-5 md:px-12 max-w-7xl mx-auto mt-24 md:mt-36">
+      <div className="flex items-end justify-between gap-6">
+        <h2 className="text-4xl md:text-6xl font-bold tracking-[-0.045em] leading-[1.02]">More work</h2>
+        <Link href="/work" className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500 hover:text-black transition-colors">All projects →</Link>
+      </div>
+      <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {more.map((p, i) => (
+          <motion.div key={p.slug} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease, delay: i * 0.08 }}>
+            <Link href={`/work/${p.slug}`} className="group block">
+              <div className="overflow-hidden rounded-[2rem] bg-zinc-100">
+                <img src={p.image} alt={p.imageAlt} width={p.imageSize[0]} height={p.imageSize[1]} loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
+              </div>
+              <div className="mt-5 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em] group-hover:text-[#703FEC] transition-colors">{p.title}</p>
+                  <p className="mt-1 text-sm text-zinc-500">{p.category}</p>
+                </div>
+                <span className="w-11 h-11 shrink-0 rounded-full border border-zinc-200 grid place-items-center text-black transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export const NextProject: React.FC<{ slug: string }> = ({ slug }) => {
+  const index = PROJECTS.findIndex((p) => p.slug === slug);
+  const next = PROJECTS[(index + 1) % PROJECTS.length];
+  const [nextHover, setNextHover] = useState(false);
+  useEffect(() => { setNextHover(false); }, [slug]);
+  return (
+    <section className="mt-24 md:mt-36 border-t border-zinc-200">
+      <Link
+        href={`/work/${next.slug}`}
+        onPointerEnter={() => setNextHover(true)}
+        onPointerLeave={() => setNextHover(false)}
+        className="group relative block w-full overflow-hidden px-5 md:px-12 py-16 md:py-24 text-left"
+      >
+        <motion.div aria-hidden className="absolute inset-0 bg-[#0A0A0A] origin-bottom" initial={false} animate={{ scaleY: nextHover ? 1 : 0 }} transition={{ duration: 0.6, ease }} />
+        <div className="relative max-w-7xl mx-auto flex items-end justify-between gap-6">
+          <div>
+            <p className={`text-[11px] font-bold uppercase tracking-[0.4em] transition-colors duration-500 ${nextHover ? 'text-white/50' : 'text-zinc-500'}`}>Next project</p>
+            <p className={`mt-4 text-[15vw] md:text-[9vw] font-bold leading-[0.85] tracking-[-0.06em] transition-colors duration-500 ${nextHover ? 'text-white' : 'text-black'}`}>{next.title}</p>
+          </div>
+          <motion.img
+            src={next.image}
+            alt=""
+            width={next.imageSize[0]}
+            height={next.imageSize[1]}
+            initial={false}
+            animate={{ opacity: nextHover ? 1 : 0, y: nextHover ? 0 : 30, rotate: nextHover ? -3 : 0 }}
+            transition={{ duration: 0.6, ease }}
+            className="hidden md:block w-[340px] aspect-[4/3] object-cover object-top rounded-2xl shadow-2xl"
+          />
+        </div>
+      </Link>
+    </section>
+  );
+};
+
 export const CaseStudyPage: React.FC<{ slug: string }> = ({ slug }) => {
   const project = projectBySlug(slug) ?? PROJECTS[0];
-  const index = PROJECTS.indexOf(project);
-  const next = PROJECTS[(index + 1) % PROJECTS.length];
-  // Two more after the next one, so every case study links to three others
-  const more = [2, 3].map((k) => PROJECTS[(index + k) % PROJECTS.length]);
   const service = serviceBySlug(SERVICE_FOR_CASE[project.slug] ?? 'web-design')!;
 
   const coverRef = useRef<HTMLDivElement>(null);
@@ -201,8 +264,6 @@ export const CaseStudyPage: React.FC<{ slug: string }> = ({ slug }) => {
   const coverScale = useTransform(scrollYProgress, [0, 0.45], [0.9, 1]);
   const coverY = useTransform(scrollYProgress, [0, 1], ['4%', '-4%']);
 
-  const [nextHover, setNextHover] = useState(false);
-  useEffect(() => { setNextHover(false); }, [slug]);
 
   const sections: { n: string; t: string; b: React.ReactNode }[] = [
     { n: '01', t: 'Overview', b: <>{project.summary}<span className="mt-4 block text-base md:text-lg text-zinc-500">{project.industry} · {project.services.join(', ')}</span></> },
@@ -321,59 +382,9 @@ export const CaseStudyPage: React.FC<{ slug: string }> = ({ slug }) => {
         </Link>
       </section>
 
-      {/* More work */}
-      <section className="px-5 md:px-12 max-w-7xl mx-auto mt-24 md:mt-36">
-        <div className="flex items-end justify-between gap-6">
-          <h2 className="text-4xl md:text-6xl font-bold tracking-[-0.045em] leading-[1.02]">More work</h2>
-          <Link href="/work" className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500 hover:text-black transition-colors">All projects →</Link>
-        </div>
-        <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {more.map((p, i) => (
-            <motion.div key={p.slug} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease, delay: i * 0.08 }}>
-              <Link href={`/work/${p.slug}`} className="group block">
-                <div className="overflow-hidden rounded-[2rem] bg-zinc-100">
-                  <img src={p.image} alt={p.imageAlt} width={p.imageSize[0]} height={p.imageSize[1]} loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
-                </div>
-                <div className="mt-5 flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em] group-hover:text-[#703FEC] transition-colors">{p.title}</p>
-                    <p className="mt-1 text-sm text-zinc-500">{p.category}</p>
-                  </div>
-                  <span className="w-11 h-11 shrink-0 rounded-full border border-zinc-200 grid place-items-center text-black transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      <MoreWork slug={project.slug} />
 
-      {/* Next project */}
-      <section className="mt-24 md:mt-36 border-t border-zinc-200">
-        <Link
-          href={`/work/${next.slug}`}
-          onPointerEnter={() => setNextHover(true)}
-          onPointerLeave={() => setNextHover(false)}
-          className="group relative block w-full overflow-hidden px-5 md:px-12 py-16 md:py-24 text-left"
-        >
-          <motion.div aria-hidden className="absolute inset-0 bg-[#0A0A0A] origin-bottom" initial={false} animate={{ scaleY: nextHover ? 1 : 0 }} transition={{ duration: 0.6, ease }} />
-          <div className="relative max-w-7xl mx-auto flex items-end justify-between gap-6">
-            <div>
-              <p className={`text-[11px] font-bold uppercase tracking-[0.4em] transition-colors duration-500 ${nextHover ? 'text-white/50' : 'text-zinc-500'}`}>Next project</p>
-              <p className={`mt-4 text-[15vw] md:text-[9vw] font-bold leading-[0.85] tracking-[-0.06em] transition-colors duration-500 ${nextHover ? 'text-white' : 'text-black'}`}>{next.title}</p>
-            </div>
-            <motion.img
-              src={next.image}
-              alt=""
-              width={next.imageSize[0]}
-              height={next.imageSize[1]}
-              initial={false}
-              animate={{ opacity: nextHover ? 1 : 0, y: nextHover ? 0 : 30, rotate: nextHover ? -3 : 0 }}
-              transition={{ duration: 0.6, ease }}
-              className="hidden md:block w-[340px] aspect-[4/3] object-cover object-top rounded-2xl shadow-2xl"
-            />
-          </div>
-        </Link>
-      </section>
+      <NextProject slug={project.slug} />
 
       <section className="px-5 md:px-12 max-w-7xl mx-auto py-16 md:py-20 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em]">Want something like this?</p>

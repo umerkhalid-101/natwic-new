@@ -49,6 +49,16 @@ export const POSTS: Post[] = Object.entries(files)
 
 export const postBySlug = (slug: string) => POSTS.find((p) => p.slug === slug);
 
+// Other posts to read next: the most shared tags first, then the newest
+export const relatedPosts = (post: Post, count: number) => {
+  const shared = (p: Post) => p.tags.filter((t) => post.tags.includes(t)).length;
+  return POSTS.filter((p) => p !== post)
+    .map((p, i) => ({ p, score: shared(p), i }))
+    .sort((a, b) => b.score - a.score || a.i - b.i)
+    .slice(0, count)
+    .map(({ p }) => p);
+};
+
 export const postMeta = (p: Post) => ({
   title: `${p.title} | Natwic Journal`,
   description: p.excerpt || p.body.replace(/[#>*_`\[\]()!-]/g, '').replace(/\s+/g, ' ').slice(0, 155).trim(),

@@ -1,4 +1,100 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "studio"
+        }
+      ],
+      "destination": "/studio",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "work"
+        }
+      ],
+      "destination": "/work",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "journal"
+        }
+      ],
+      "destination": "/journal",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "contact"
+        }
+      ],
+      "destination": "/contact",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "privacy"
+        }
+      ],
+      "destination": "/privacy",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "terms"
+        }
+      ],
+      "destination": "/terms",
+      "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "view",
+          "value": "services"
+        }
+      ],
+      "destination": "/services",
+      "statusCode": 301
+    },
+    {
+      "source": "/work/folionomics",
+      "destination": "/work",
+      "statusCode": 301
+    },
+    {
+      "source": "/journal/startup-website-cost-in-dubai-what-to-budget-in-2026",
+      "destination": "/journal/startup-website-cost-dubai",
+      "statusCode": 301
+    }
+  ]
 }

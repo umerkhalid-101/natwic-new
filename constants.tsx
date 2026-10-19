@@ -8,6 +8,12 @@ export const SERVICES: ServiceItem[] = [
     tags: ['Website', 'Wireframe', 'Landing page', 'Dashboard', 'Product'],
     description: 'Fast, conversion-focused websites and product UI. From a launch-ready landing page to a full SaaS dashboard.',
     idealFor: 'SaaS launches, product teams, service businesses',
+    links: [
+      { label: 'Web design for startups', href: '/services/web-design' },
+      { label: 'SaaS website design', href: '/services/saas-website-design' },
+      { label: 'Webflow & Next.js', href: '/services/webflow-nextjs-development' },
+      { label: 'Website redesign', href: '/services/website-redesign' },
+    ],
     imageUrl: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=1000'
   },
   {
@@ -16,7 +22,8 @@ export const SERVICES: ServiceItem[] = [
     title: 'Branding',
     tags: ['Logo', 'Packaging', 'Mockup', 'Deck', 'Visual identity'],
     description: 'Identities that make you look as good as the thing you sell: logo, type, colour and the system that ties it together.',
-    idealFor: 'New startups, rebrands, local shops and studios',
+    idealFor: 'New startups, rebrands, small shops and studios',
+    links: [{ label: 'Startup branding', href: '/services/branding' }],
     imageUrl: 'https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&fit=crop&q=80&w=1000'
   },
   {
@@ -26,6 +33,11 @@ export const SERVICES: ServiceItem[] = [
     tags: ['UX writing', 'Social content', 'Campaign', 'Deck', 'Advertising'],
     description: 'Clear words and visuals that explain what you do and why it matters, on your site, in decks and in campaigns.',
     idealFor: 'Pitch decks, product launches, websites',
+    links: [
+      { label: 'Website copy', href: '/services/web-design' },
+      { label: 'SaaS messaging', href: '/services/saas-website-design' },
+      { label: 'Our journal', href: '/journal' },
+    ],
     imageUrl: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=1000'
   },
   {
@@ -34,7 +46,11 @@ export const SERVICES: ServiceItem[] = [
     title: 'Social media',
     tags: ['Strategy', 'Growth', 'Campaign', 'Posts', 'Design'],
     description: 'A consistent social presence that brings people back: strategy, templates and posts designed to grow your audience.',
-    idealFor: 'Local businesses, consumer brands, founders',
+    idealFor: 'Small businesses, consumer brands, founders',
+    links: [
+      { label: 'Social templates', href: '/services/branding' },
+      { label: 'Follow on Instagram', href: 'https://www.instagram.com/natwicstudio', external: true },
+    ],
     imageUrl: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=1000'
   }
 ];

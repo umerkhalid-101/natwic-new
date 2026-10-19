@@ -21,12 +21,8 @@ export const Reveal: React.FC<{ children: React.ReactNode; delay?: number }> = (
   </span>
 );
 
-// Real links for crawlers; plain clicks stay in the app
-export const spaClick = (go: () => void) => (e: React.MouseEvent) => {
-  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-  e.preventDefault();
-  go();
-};
+import { spaClick } from '../nav';
+export { spaClick };
 
 export const Meta: React.FC<{ post: Post; className?: string }> = ({ post, className = '' }) => (
   <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 ${className}`}>
@@ -43,6 +39,8 @@ export const Cover: React.FC<{ post: Post; className?: string; eager?: boolean; 
     <img
       src={post.cover}
       alt={post.coverAlt}
+      width={1200}
+      height={630}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
       className={`block w-full ${framed ? 'aspect-[1200/630] object-contain bg-zinc-100' : 'h-auto'} transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.04] ${className}`}

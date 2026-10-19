@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
-import { PROJECTS, Project, pad, projectBySlug } from './projects';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { PROJECTS, pad } from './projects';
 import { Magnetic } from '../Magnetic';
-import { BASE_URL, caseUrl } from '../../seo';
+import { Link } from '../nav';
+import { SERVICE_FOR_CASE, serviceBySlug, servicePath } from '../services/services';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -21,21 +22,11 @@ const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: 
   </span>
 );
 
-const BrowserFrame: React.FC<{ project: Project; className?: string }> = ({ project, className = '' }) => (
-  <div className={`overflow-hidden rounded-xl md:rounded-2xl bg-white shadow-[0_30px_80px_rgba(0,0,0,0.18)] ${className}`}>
-    <div className="flex items-center gap-1.5 px-3 md:px-4 py-2 md:py-2.5 border-b border-black/[0.06] bg-zinc-50">
-      {['#FF5F57', '#FEBC2E', '#28C840'].map((c) => <span key={c} className="w-2 h-2 rounded-full" style={{ background: c }} />)}
-      <span className="ml-3 rounded-full bg-black/[0.05] px-3 py-1 text-[9px] md:text-[11px] text-black/50">{project.domain}</span>
-    </div>
-    <img src={project.image} alt={project.imageAlt} width={project.imageSize[0]} height={project.imageSize[1]} className="block w-full h-auto" />
-  </div>
-);
-
 /* ------------------------------------------------------------------ */
 /* /work: the index                                                     */
 /* ------------------------------------------------------------------ */
 
-export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: () => void }> = ({ onOpen, onContact }) => {
+export const WorkIndex: React.FC = () => {
   const [hovered, setHovered] = useState<number | null>(null);
   // Preview that trails the cursor, tilting with its speed
   const mx = useMotionValue(0);
@@ -70,6 +61,14 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
         >
           Websites and products we’ve designed and built for startups, SaaS teams and small businesses around the world.
         </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease, delay: 0.4 }}
+          className="mt-5 max-w-xl text-base md:text-lg text-zinc-500 leading-relaxed"
+        >
+          Each case study covers the problem, how we approached it and what we shipped, from an AI chief of staff for founders and a verified business directory to sites for a growth agency, a remote staffing company and a London lettings agency. Every project was run remotely, across time zones.
+        </motion.p>
       </section>
 
       {/* The list */}
@@ -84,25 +83,28 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
               transition={{ duration: 0.9, ease, delay: i * 0.06 }}
               className="border-t border-zinc-200 last:border-b"
             >
-              <button
-                onClick={() => onOpen(p.slug)}
+              <Link
+                href={`/work/${p.slug}`}
                 onPointerEnter={() => setHovered(i)}
                 className={`group w-full text-left py-6 md:py-9 grid grid-cols-[auto_1fr_auto] md:grid-cols-[4rem_1fr_14rem_10rem] items-center gap-4 md:gap-6 transition-opacity duration-500 ${hovered !== null && hovered !== i ? 'md:opacity-30' : ''}`}
               >
                 <span className="font-mono text-xs text-zinc-400">{pad(i + 1)}</span>
-                <span className="text-4xl md:text-7xl font-bold tracking-[-0.045em] leading-none text-black transition-[transform,color] duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:group-hover:translate-x-4 md:group-hover:text-[#703FEC]">
-                  {p.title}
+                <span className="min-w-0">
+                  <span className="block text-4xl md:text-7xl font-bold tracking-[-0.045em] leading-none text-black transition-[transform,color] duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:group-hover:translate-x-4 md:group-hover:text-[#703FEC]">
+                    {p.title}
+                  </span>
+                  <span className="mt-2 md:mt-3 block text-sm md:text-base text-zinc-500 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:group-hover:translate-x-4">{p.industry}: {p.services.join(', ')}</span>
                 </span>
                 <span className="hidden md:block text-sm text-zinc-500">{p.category}</span>
                 <span className="flex items-center justify-end gap-3 text-sm text-zinc-500">
                   <span className="hidden md:inline">{p.domain}</span>
                   <span className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-zinc-200 grid place-items-center text-black transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
                 </span>
-              </button>
+              </Link>
               {/* Phones get the cover inline */}
-              <button onClick={() => onOpen(p.slug)} className="md:hidden block w-full pb-6">
+              <Link href={`/work/${p.slug}`} tabIndex={-1} aria-hidden className="md:hidden block w-full pb-6">
                 <img src={p.image} alt={p.imageAlt} width={p.imageSize[0]} height={p.imageSize[1]} loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover object-top rounded-2xl" />
-              </button>
+              </Link>
             </motion.li>
           ))}
         </ul>
@@ -136,10 +138,10 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
           Your project could be <span className="italic text-[#703FEC]">next.</span>
         </h2>
         <Magnetic strength={0.3}>
-          <button onClick={onContact} className="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
+          <Link href="/contact" className="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
             Start a project
             <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-          </button>
+          </Link>
         </Magnetic>
       </section>
     </div>
@@ -150,168 +152,89 @@ export const WorkIndex: React.FC<{ onOpen: (slug: string) => void; onContact: ()
 /* /work/<slug>: a case study                                          */
 /* ------------------------------------------------------------------ */
 
-// Real links for crawlers; plain clicks stay in the app
-const spaClick = (go: () => void) => (e: React.MouseEvent) => {
-  if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-  e.preventDefault();
-  go();
-};
-
-const Breadcrumb: React.FC<{ project: Project; onHome: () => void; onAll: () => void }> = ({ project, onHome, onAll }) => {
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: `${BASE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: 'Work', item: `${BASE_URL}/work` },
-      { '@type': 'ListItem', position: 3, name: project.title, item: caseUrl(project.slug) },
-    ],
-  };
-  const link = 'text-zinc-500 hover:text-black transition-colors';
+/** Link from a case study to the service page behind it */
+export const ServiceLink: React.FC<{ slug: string }> = ({ slug }) => {
+  const service = serviceBySlug(SERVICE_FOR_CASE[slug] ?? 'web-design')!;
   return (
-    <nav aria-label="Breadcrumb">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      <ol className="flex flex-wrap items-center gap-2 text-sm font-semibold">
-        <li><a href="/" onClick={spaClick(onHome)} className={link}>Home</a></li>
-        <li aria-hidden className="text-zinc-300">/</li>
-        <li><a href="/work" onClick={spaClick(onAll)} className={link}>Work</a></li>
-        <li aria-hidden className="text-zinc-300">/</li>
-        <li aria-current="page" className="text-black">{project.title}</li>
-      </ol>
-    </nav>
+    <section className="px-5 md:px-12 max-w-7xl mx-auto mt-16 md:mt-24">
+      <Link href={servicePath(service.slug)} className="group flex flex-col md:flex-row md:items-center justify-between gap-4 rounded-[2rem] border border-zinc-200 px-7 md:px-10 py-7 md:py-8 hover:border-black transition-colors">
+        <span>
+          <span className="block text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500">Service</span>
+          <span className="mt-2 block text-2xl md:text-3xl font-bold tracking-[-0.03em]">{service.name}</span>
+        </span>
+        <span className="inline-flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.25em] text-black">
+          How we work on projects like this
+          <span className="w-10 h-10 rounded-full bg-black text-white grid place-items-center transition-[transform,background-color] duration-500 group-hover:-rotate-45 group-hover:bg-[#703FEC]">→</span>
+        </span>
+      </Link>
+    </section>
   );
 };
 
-export const CaseStudyPage: React.FC<{ slug: string; onOpen: (slug: string) => void; onAll: () => void; onHome: () => void; onContact: () => void }> = ({ slug, onOpen, onAll, onHome, onContact }) => {
-  const project = projectBySlug(slug) ?? PROJECTS[0];
-  const index = PROJECTS.indexOf(project);
+/** Two more case studies after the next one, so every case study links to three others */
+export const MoreWork: React.FC<{ slug: string }> = ({ slug }) => {
+  const index = PROJECTS.findIndex((p) => p.slug === slug);
+  const more = [2, 3].map((k) => PROJECTS[(index + k) % PROJECTS.length]);
+  return (
+    <section className="px-5 md:px-12 max-w-7xl mx-auto mt-24 md:mt-36">
+      <div className="flex items-end justify-between gap-6">
+        <h2 className="text-4xl md:text-6xl font-bold tracking-[-0.045em] leading-[1.02]">More work</h2>
+        <Link href="/work" className="text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-500 hover:text-black transition-colors">All projects →</Link>
+      </div>
+      <div className="mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        {more.map((p, i) => (
+          <motion.div key={p.slug} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease, delay: i * 0.08 }}>
+            <Link href={`/work/${p.slug}`} className="group block">
+              <div className="overflow-hidden rounded-[2rem] bg-zinc-100">
+                <img src={p.image} alt={p.imageAlt} width={p.imageSize[0]} height={p.imageSize[1]} loading="lazy" decoding="async" className="w-full aspect-[4/3] object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
+              </div>
+              <div className="mt-5 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em] group-hover:text-[#703FEC] transition-colors">{p.title}</p>
+                  <p className="mt-1 text-sm text-zinc-500">{p.category}</p>
+                </div>
+                <span className="w-11 h-11 shrink-0 rounded-full border border-zinc-200 grid place-items-center text-black transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export const NextProject: React.FC<{ slug: string }> = ({ slug }) => {
+  const index = PROJECTS.findIndex((p) => p.slug === slug);
   const next = PROJECTS[(index + 1) % PROJECTS.length];
-
-  const coverRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: coverRef, offset: ['start end', 'end start'] });
-  const coverScale = useTransform(scrollYProgress, [0, 0.45], [0.9, 1]);
-  const coverY = useTransform(scrollYProgress, [0, 1], ['4%', '-4%']);
-
   const [nextHover, setNextHover] = useState(false);
   useEffect(() => { setNextHover(false); }, [slug]);
-
-  const sections = [
-    { n: '01', t: 'The challenge', b: project.challenge },
-    { n: '02', t: 'What we did', b: project.approach },
-    { n: '03', t: 'The result', b: project.outcome },
-  ];
-
   return (
-    <article key={project.slug} className="bg-white min-h-screen pt-28 md:pt-36 pb-0">
-      <header className="px-5 md:px-12 max-w-7xl mx-auto">
-        <Breadcrumb project={project} onHome={onHome} onAll={onAll} />
-        <div className="mt-10 md:mt-14 flex items-center gap-4">
-          <Label>{project.category}</Label>
-        </div>
-        <h1 className="mt-5 text-[19vw] md:text-[11vw] font-bold leading-[0.85] tracking-[-0.06em]">
-          <Reveal>{project.title}</Reveal>
-        </h1>
-        <div className="mt-8 md:mt-12 grid md:grid-cols-[1.4fr_1fr] gap-8 md:gap-16 items-end">
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.25 }} className="text-2xl md:text-4xl font-medium tracking-[-0.03em] leading-[1.15] text-zinc-800">
-            {project.summary}
-          </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.35 }} className="flex flex-col gap-5 md:items-end">
-            <div className="flex flex-wrap gap-2 md:justify-end">
-              {project.services.map((s) => <span key={s} className="rounded-full bg-zinc-100 px-4 py-2 text-xs font-semibold">{s}</span>)}
-            </div>
-            <Magnetic strength={0.3}>
-              <a href={project.url} target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3 rounded-full bg-[#703FEC] text-white pl-6 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-black transition-colors">
-                Visit {project.domain}
-                <span className="w-10 h-10 rounded-full bg-white text-black grid place-items-center transition-transform duration-500 group-hover:-rotate-45">↗</span>
-              </a>
-            </Magnetic>
-          </motion.div>
-        </div>
-      </header>
-
-      {/* Cover, framed as the live site */}
-      <div ref={coverRef} className="mt-16 md:mt-24 px-3 md:px-6">
-        <motion.div style={{ scale: coverScale }} className="relative mx-auto max-w-[1400px] rounded-[2rem] md:rounded-[3rem] bg-[#0A0A0A] p-4 md:p-14 overflow-hidden">
-          <div aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(112,63,236,0.45),transparent_60%)]" />
-          <motion.div style={{ y: coverY }} className="relative">
-            <BrowserFrame project={project} />
-          </motion.div>
-        </motion.div>
-      </div>
-
-      {/* Story */}
-      <section className="px-5 md:px-12 max-w-7xl mx-auto mt-20 md:mt-32 grid gap-14 md:gap-0">
-        {sections.map((s, i) => (
-          <motion.div
-            key={s.n}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-10%' }}
-            transition={{ duration: 1, ease, delay: i * 0.05 }}
-            className="grid md:grid-cols-[14rem_1fr] gap-4 md:gap-16 md:py-12 md:border-t border-zinc-200"
-          >
-            <div className="flex items-baseline gap-3">
-              <span className="font-mono text-xs text-[#703FEC]">{s.n}</span>
-              <h2 className="text-sm font-bold uppercase tracking-[0.25em] text-zinc-500">{s.t}</h2>
-            </div>
-            <p className="text-xl md:text-3xl font-medium tracking-[-0.02em] leading-[1.35] text-zinc-900 max-w-3xl">{s.b}</p>
-          </motion.div>
-        ))}
-      </section>
-
-      {/* Highlights */}
-      <section className="px-5 md:px-12 max-w-7xl mx-auto mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {project.highlights.map((h, i) => (
-          <motion.div
-            key={h}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, ease, delay: i * 0.08 }}
-            whileHover={{ y: -6 }}
-            className={`rounded-[2rem] p-8 md:p-10 min-h-[180px] flex flex-col justify-between ${['bg-zinc-100 text-black', 'bg-[#0A0A0A] text-white', 'bg-[#703FEC] text-white'][i % 3]}`}
-          >
-            <span className="font-mono text-xs opacity-60">{pad(i + 1)}</span>
-            <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em] leading-tight">{h}</p>
-          </motion.div>
-        ))}
-      </section>
-
-      {/* Next project */}
-      <section className="mt-24 md:mt-36 border-t border-zinc-200">
-        <button
-          onClick={() => onOpen(next.slug)}
-          onPointerEnter={() => setNextHover(true)}
-          onPointerLeave={() => setNextHover(false)}
-          className="group relative w-full overflow-hidden px-5 md:px-12 py-16 md:py-24 text-left"
-        >
-          <motion.div aria-hidden className="absolute inset-0 bg-[#0A0A0A] origin-bottom" initial={false} animate={{ scaleY: nextHover ? 1 : 0 }} transition={{ duration: 0.6, ease }} />
-          <div className="relative max-w-7xl mx-auto flex items-end justify-between gap-6">
-            <div>
-              <p className={`text-[11px] font-bold uppercase tracking-[0.4em] transition-colors duration-500 ${nextHover ? 'text-white/50' : 'text-zinc-500'}`}>Next project</p>
-              <p className={`mt-4 text-[15vw] md:text-[9vw] font-bold leading-[0.85] tracking-[-0.06em] transition-colors duration-500 ${nextHover ? 'text-white' : 'text-black'}`}>{next.title}</p>
-            </div>
-            <motion.img
-              src={next.image}
-              alt=""
-              width={next.imageSize[0]}
-              height={next.imageSize[1]}
-              initial={false}
-              animate={{ opacity: nextHover ? 1 : 0, y: nextHover ? 0 : 30, rotate: nextHover ? -3 : 0 }}
-              transition={{ duration: 0.6, ease }}
-              className="hidden md:block w-[340px] aspect-[4/3] object-cover object-top rounded-2xl shadow-2xl"
-            />
+    <section className="mt-24 md:mt-36 border-t border-zinc-200">
+      <Link
+        href={`/work/${next.slug}`}
+        onPointerEnter={() => setNextHover(true)}
+        onPointerLeave={() => setNextHover(false)}
+        className="group relative block w-full overflow-hidden px-5 md:px-12 py-16 md:py-24 text-left"
+      >
+        <motion.div aria-hidden className="absolute inset-0 bg-[#0A0A0A] origin-bottom" initial={false} animate={{ scaleY: nextHover ? 1 : 0 }} transition={{ duration: 0.6, ease }} />
+        <div className="relative max-w-7xl mx-auto flex items-end justify-between gap-6">
+          <div>
+            <p className={`text-[11px] font-bold uppercase tracking-[0.4em] transition-colors duration-500 ${nextHover ? 'text-white/50' : 'text-zinc-500'}`}>Next project</p>
+            <p className={`mt-4 text-[15vw] md:text-[9vw] font-bold leading-[0.85] tracking-[-0.06em] transition-colors duration-500 ${nextHover ? 'text-white' : 'text-black'}`}>{next.title}</p>
           </div>
-        </button>
-      </section>
-
-      <section className="px-5 md:px-12 max-w-7xl mx-auto py-16 md:py-20 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em]">Want something like this?</p>
-        <button onClick={onContact} className="group inline-flex items-center gap-4 self-start rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
-          Start a project
-          <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-        </button>
-      </section>
-    </article>
+          <motion.img
+            src={next.image}
+            alt=""
+            loading="lazy"
+            width={next.imageSize[0]}
+            height={next.imageSize[1]}
+            initial={false}
+            animate={{ opacity: nextHover ? 1 : 0, y: nextHover ? 0 : 30, rotate: nextHover ? -3 : 0 }}
+            transition={{ duration: 0.6, ease }}
+            className="hidden md:block w-[340px] aspect-[4/3] object-cover object-top rounded-2xl shadow-2xl"
+          />
+        </div>
+      </Link>
+    </section>
   );
 };

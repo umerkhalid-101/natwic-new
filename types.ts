@@ -7,6 +7,8 @@ export interface ServiceItem {
   description: string;
   idealFor: string;
   imageUrl: string;
+  /** Service pages this capability links to */
+  links?: { label: string; href: string; external?: boolean }[];
 }
 
 export interface PricingPlan {

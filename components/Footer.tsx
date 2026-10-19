@@ -4,6 +4,10 @@ import { SOCIALS } from './socials';
 import { Magnetic } from './Magnetic';
 import { scrollToY } from './smoothScroll';
 import { FooterWordmark } from './FooterWordmark';
+import { Link } from './nav';
+import { PROJECTS } from './work/projects';
+import { SERVICE_PAGES, servicePath } from './services/services';
+import JOURNAL from 'virtual:journal-index';
 
 interface FooterProps {
   setView?: (view: 'home' | 'contact' | 'studio' | 'privacy' | 'terms') => void;
@@ -258,6 +262,38 @@ const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.3em] text-white/35">{children}</p>
 );
 
+/** Every page, one click from anywhere: also how crawlers find them */
+const SITE_LINKS = [
+  { title: 'Studio', links: [
+    { label: 'Home', href: '/' },
+    { label: 'Studio', href: '/studio' },
+    { label: 'Work', href: '/work' },
+    { label: 'Services', href: '/services' },
+    { label: 'Journal', href: '/journal' },
+    { label: 'Contact', href: '/contact' },
+  ] },
+  { title: 'Work', links: PROJECTS.map((p) => ({ label: p.title, href: `/work/${p.slug}` })) },
+  { title: 'Services', links: SERVICE_PAGES.map((s) => ({ label: s.name, href: servicePath(s.slug) })) },
+  { title: 'Journal', links: JOURNAL.slice(0, 3).map((p) => ({ label: p.title, href: `/journal/${p.slug}` })) },
+];
+
+const SiteLinks: React.FC = () => (
+  <nav aria-label="Footer" className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 py-12 md:py-16 border-b border-white/[0.08]">
+    {SITE_LINKS.filter((g) => g.links.length).map((g) => (
+      <div key={g.title}>
+        <Label>{g.title}</Label>
+        <ul className="space-y-2">
+          {g.links.map((l) => (
+            <li key={l.href}>
+              <Link href={l.href} className="text-sm md:text-[15px] font-medium leading-snug text-white/65 hover:text-white transition-colors">{l.label}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </nav>
+);
+
 export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
   const ref = React.useRef<HTMLElement>(null);
   const here = useHere();
@@ -296,6 +332,8 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
         </div>
       )}
 
+      <SiteLinks />
+
       {/* Details */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-10 py-12 md:py-16">
         {/* Email and phone stacked in one column */}
@@ -303,6 +341,7 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
           <Label>Contact</Label>
           <CopyEmail />
           <a href="tel:+971585203139" className="mt-2 block text-base md:text-lg font-semibold tracking-tight text-white/70 hover:text-[#b9a1ff] transition-colors">{PHONE}</a>
+          <p className="mt-3 text-xs text-white/50">Dubai, UAE · working with clients worldwide</p>
         </div>
         <div className="col-span-2 md:col-span-1">
           <Label>Right now</Label>
@@ -328,8 +367,8 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
     <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-6 md:py-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/35">
       <p>© 2026 Natwic Studio</p>
       <div className="flex items-center gap-6 md:gap-8">
-        <button onClick={() => setView?.('privacy')} className="uppercase tracking-[0.3em] hover:text-white transition-colors">Privacy</button>
-        <button onClick={() => setView?.('terms')} className="uppercase tracking-[0.3em] hover:text-white transition-colors">Terms</button>
+        <Link href="/privacy" className="uppercase tracking-[0.3em] hover:text-white transition-colors">Privacy</Link>
+        <Link href="/terms" className="uppercase tracking-[0.3em] hover:text-white transition-colors">Terms</Link>
         <button
           onClick={() => scrollToY(0)}
           aria-label="Back to top"

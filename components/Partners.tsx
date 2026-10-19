@@ -21,12 +21,6 @@ const PARTNERS_DATA = [
     size: [480, 125]
   },
   { 
-    name: 'Folionomics', 
-    description: 'Data-driven design for the financial elite.',
-    logo: '/partners/folionomics.webp',
-    size: [480, 128]
-  },
-  { 
     name: 'Mailmunch', 
     description: 'Scaling conversions with intuitive user experiences.',
     logo: '/partners/mailmunch.webp',

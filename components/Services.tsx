@@ -5,6 +5,7 @@ import { ServiceItem } from '../types';
 import { useTilt, Spotlight } from './interactions';
 import { Magnetic } from './Magnetic';
 import { ServiceVisual } from './ServiceVisuals';
+import { Link } from './nav';
 
 const THEMES = [
   { card: 'bg-zinc-100 text-black', muted: 'text-zinc-600', chip: 'bg-white text-black', line: 'border-zinc-300', button: 'bg-black text-white' },
@@ -18,8 +19,8 @@ const ServiceCard: React.FC<{
   index: number;
   total: number;
   progress: MotionValue<number>;
-  onStart?: () => void;
-}> = ({ service, index, total, progress, onStart }) => {
+  showStart?: boolean;
+}> = ({ service, index, total, progress, showStart }) => {
   const theme = THEMES[index % THEMES.length];
   // ...and dim a little, so the active card reads as "on top"
   const dim = useTransform(progress, [Math.min(1, (index + 0.85) / total), Math.min(1, (index + 1.3) / total)], [0, index === total - 1 ? 0 : 0.3]);
@@ -65,6 +66,27 @@ const ServiceCard: React.FC<{
               })}
             </h3>
             <p className={`text-base md:text-xl leading-relaxed max-w-lg ${theme.muted}`}>{service.description}</p>
+            {service.links && (
+              <div className="mt-6 md:mt-8">
+                <span className={`block mb-3 text-[10px] font-bold uppercase tracking-[0.2em] ${theme.muted}`}>Explore</span>
+                <div className="flex flex-wrap gap-2">
+                  {service.links.map((l) => {
+                    const cls = `group/link inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#703FEC] hover:border-[#703FEC] hover:text-white ${theme.line}`;
+                    return l.external ? (
+                      <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                        {l.label}
+                        <span className="transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">↗</span>
+                      </a>
+                    ) : (
+                      <Link key={l.href} href={l.href} className={cls}>
+                        {l.label}
+                        <span className="transition-transform duration-300 group-hover/link:-rotate-45">→</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           <div>
@@ -78,15 +100,15 @@ const ServiceCard: React.FC<{
                 <span className="font-bold uppercase tracking-[0.2em] text-[10px] mr-2">Ideal for</span>
                 {service.idealFor}
               </p>
-              {onStart && (
+              {showStart && (
                 <Magnetic strength={0.35}>
-                  <button
-                    onClick={onStart}
+                  <Link
+                    href="/contact"
                     className={`group shrink-0 self-start inline-flex items-center gap-3 rounded-full pl-6 pr-2 py-2 text-[12px] font-bold transition-transform hover:scale-[1.05] ${theme.button}`}
                   >
                     Start a project
                     <span className="w-8 h-8 rounded-full bg-[#703FEC] text-white flex items-center justify-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-                  </button>
+                  </Link>
                 </Magnetic>
               )}
             </div>
@@ -108,11 +130,7 @@ const ServiceCard: React.FC<{
   );
 };
 
-interface ServicesProps {
-  setView?: (view: 'home' | 'contact' | 'studio' | 'work') => void;
-}
-
-export const Services: React.FC<ServicesProps> = ({ setView }) => {
+export const Services: React.FC = () => {
   const stackRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: stackRef, offset: ['start start', 'end end'] });
 
@@ -131,9 +149,14 @@ export const Services: React.FC<ServicesProps> = ({ setView }) => {
           </div>
           <div className="flex items-end gap-6 max-w-md">
             <p className="text-zinc-600 text-base leading-relaxed">
-              Four ways we help startups and local businesses grow. Pick one, or combine them into a single project.
+              Four ways we help startups and small businesses grow, wherever they are. Pick one, or combine them into a single project.
             </p>
             <span className="text-[#703FEC] font-mono text-lg shrink-0">(04)</span>
+          </div>
+          <div className="md:self-end">
+            <Link href="/services" className="group inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-black hover:text-[#703FEC] transition-colors whitespace-nowrap">
+              All services <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+            </Link>
           </div>
         </div>
 
@@ -145,7 +168,7 @@ export const Services: React.FC<ServicesProps> = ({ setView }) => {
               index={i}
               total={SERVICES.length}
               progress={scrollYProgress}
-              onStart={setView ? () => setView('contact') : undefined}
+              showStart
             />
           ))}
         </div>

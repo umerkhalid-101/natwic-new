@@ -3,8 +3,7 @@ import { motion, AnimatePresence, MotionValue, useMotionValueEvent, useScroll, u
 import type { UniverseScene } from './universe/scene';
 import { PROJECTS as WORKS, Project as Work, pad } from './work/projects';
 import { Magnetic } from './Magnetic';
-
-type View = 'home' | 'contact' | 'studio' | 'work';
+import { Link } from './nav';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -62,16 +61,16 @@ const Rings: React.FC<{ tone?: 'dark' | 'light' }> = ({ tone = 'dark' }) => (
   </div>
 );
 
-const PillButton: React.FC<{ tone?: 'dark' | 'light'; onClick: () => void; children: React.ReactNode }> = ({ tone = 'dark', onClick, children }) => (
-  <button
-    onClick={onClick}
+const PillButton: React.FC<{ tone?: 'dark' | 'light'; href: string; children: React.ReactNode }> = ({ tone = 'dark', href, children }) => (
+  <Link
+    href={href}
     className={`group inline-flex items-center gap-2.5 rounded-full px-6 py-3.5 text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 hover:scale-[1.03] ${
       tone === 'dark' ? 'bg-white text-black hover:bg-[#703FEC] hover:text-white' : 'bg-black text-white hover:bg-[#703FEC]'
     }`}
   >
     {children}
     <span className="w-1.5 h-1.5 rounded-full bg-[#F3350C] animate-pulse" />
-  </button>
+  </Link>
 );
 
 /* ------------------------------------------------------------------ */
@@ -80,7 +79,7 @@ const PillButton: React.FC<{ tone?: 'dark' | 'light'; onClick: () => void; child
 
 // Words wrapped in * are highlighted.
 const MANIFESTO =
-  "We’re a hands-on digital studio for *startups,* *SaaS* *teams* and *local* *businesses.* We design brands, websites and products that look sharp, load fast and actually move the numbers.";
+  "We’re a hands-on digital studio for *startups,* *SaaS* *teams* and *small* *businesses,* wherever they are. We design brands, websites and products that look sharp, load fast and actually move the numbers.";
 
 const Word: React.FC<{ word: string; p: MotionValue<number>; range: [number, number] }> = ({ word, p, range }) => {
   const opacity = useTransform(p, range, [0.14, 1]);
@@ -175,15 +174,15 @@ const AUDIENCES = [
     tone: 'dark' as const,
   },
   {
-    kicker: 'For local businesses',
-    title: 'Local businesses',
-    text: 'People look you up every day. We make sure they pick you, online and on the street.',
+    kicker: 'For small businesses',
+    title: 'Small businesses',
+    text: 'People look you up every day. We make sure they pick you, online and in person.',
     gets: ['A site that brings in bookings', 'Signage, menus and print', 'Social templates that stay on-brand'],
     tone: 'light' as const,
   },
 ];
 
-const AudienceCard: React.FC<{ a: typeof AUDIENCES[number]; index: number; onEnter: () => void; onStart: () => void }> = ({ a, index, onEnter, onStart }) => {
+const AudienceCard: React.FC<{ a: typeof AUDIENCES[number]; index: number; onEnter: () => void }> = ({ a, index, onEnter }) => {
   const dark = a.tone === 'dark';
   return (
     <motion.article
@@ -214,13 +213,13 @@ const AudienceCard: React.FC<{ a: typeof AUDIENCES[number]; index: number; onEnt
       </ul>
 
       <div className="relative">
-        <PillButton tone={a.tone} onClick={onStart}>Start a project</PillButton>
+        <PillButton tone={a.tone} href="/contact">Start a project</PillButton>
       </div>
     </motion.article>
   );
 };
 
-const Audiences: React.FC<{ p: MotionValue<number>; onFocus: (s: -1 | 0 | 1) => void; onStart: () => void }> = ({ p, onFocus, onStart }) => {
+const Audiences: React.FC<{ p: MotionValue<number>; onFocus: (s: -1 | 0 | 1) => void }> = ({ p, onFocus }) => {
   // Enter normally; exit by rushing past the camera into the walk-through
   const opacity = useTransform(p, [0.24, 0.26, 0.415, 0.44], [0, 1, 1, 0]);
   const scale = useTransform(p, [0.24, 0.415, 0.44], [0.96, 1.02, 1.35]);
@@ -262,7 +261,7 @@ const Audiences: React.FC<{ p: MotionValue<number>; onFocus: (s: -1 | 0 | 1) => 
         <motion.div style={{ y: cardsY }} className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" onMouseLeave={() => onFocus(0)}>
           {AUDIENCES.map((a, i) => (
             <motion.div key={a.kicker} style={{ y: i === 0 ? leftY : rightY }} className={tab === i ? 'block' : 'hidden md:block'}>
-              <AudienceCard a={a} index={i} onEnter={() => onFocus(i === 0 ? -1 : 1)} onStart={onStart} />
+              <AudienceCard a={a} index={i} onEnter={() => onFocus(i === 0 ? -1 : 1)} />
             </motion.div>
           ))}
         </motion.div>
@@ -398,11 +397,9 @@ const FloatingProject: React.FC<{ p: MotionValue<number>; work: Work; index: num
       style={{ y, x: small ? l.mx : l.x, rotate: l.rotate }}
       className="absolute left-1/2 top-1/2 -ml-[41vw] md:-ml-[15vw] -mt-[30vw] md:-mt-[13vw] w-[82vw] md:w-[30vw] md:min-w-[380px] will-change-transform"
     >
-      <a
-        href={work.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Visit ${work.title} (opens in a new tab)`}
+      <Link
+        href={`/work/${work.slug}`}
+        aria-label={`${work.title} case study`}
         className="group block w-full text-left rounded-[2.5rem] bg-[#0F0F0F] border border-white/[0.07] p-3 shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04]"
       >
         <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-zinc-900">
@@ -412,16 +409,16 @@ const FloatingProject: React.FC<{ p: MotionValue<number>; work: Work; index: num
         <div className="flex items-center justify-between gap-4 px-4 pt-5 pb-3">
           <div>
             <p className="text-2xl font-bold tracking-[-0.03em] text-white">{work.title}</p>
-            <p className="text-xs text-white/45 mt-1">{work.domain} ↗</p>
+            <p className="text-xs text-white/45 mt-1">{work.domain}</p>
           </div>
           <span className="w-12 h-12 shrink-0 rounded-full bg-white text-black flex items-center justify-center transition-[background-color,color,transform] duration-300 group-hover:bg-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
         </div>
-      </a>
+      </Link>
     </motion.div>
   );
 };
 
-const WorkChapter: React.FC<{ p: MotionValue<number>; onAll: () => void }> = ({ p, onAll }) => {
+const WorkChapter: React.FC<{ p: MotionValue<number> }> = ({ p }) => {
   const w = useWindow(p, CH.work, 0.015);
   const titleOpacity = useTransform(p, [0.67, 0.68, 0.72, 0.74], [0, 1, 1, 0]);
   const titleScale = useTransform(p, [0.67, 0.68, 0.74], [0.94, 1, 1.04]);
@@ -448,7 +445,7 @@ const WorkChapter: React.FC<{ p: MotionValue<number>; onAll: () => void }> = ({ 
           <span className="font-mono tracking-normal text-white">{pad(active + 1)}</span>
           <span className="font-mono tracking-normal">/ {pad(WORKS.length)}</span>
         </p>
-        <PillButton onClick={onAll}>See all projects</PillButton>
+        <PillButton href="/work">See all projects</PillButton>
       </div>
     </motion.div>
   );
@@ -459,7 +456,7 @@ const WorkChapter: React.FC<{ p: MotionValue<number>; onAll: () => void }> = ({ 
 /* ------------------------------------------------------------------ */
 
 // Runs past 1: the section's last 40vh of scroll is held for the call to action
-const Close: React.FC<{ p: MotionValue<number>; onStart: () => void }> = ({ p, onStart }) => {
+const Close: React.FC<{ p: MotionValue<number> }> = ({ p }) => {
   // Both clear before the Services sheet climbs past the lower third
   const textOpacity = useTransform(p, [0.905, 0.915, 0.99, 1.005], [0, 1, 1, 0]);
   const textScale = useTransform(p, [0.905, 0.915, 1.005], [0.92, 1, 1.04]);
@@ -481,8 +478,8 @@ const Close: React.FC<{ p: MotionValue<number>; onStart: () => void }> = ({ p, o
       <div className="absolute inset-0 grid place-items-center pointer-events-none">
         <motion.div style={{ opacity: ctaOpacity, scale: ctaScale, pointerEvents: ctaEvents }}>
           <Magnetic strength={0.3}>
-            <button
-              onClick={onStart}
+            <Link
+              href="/contact"
               aria-label="Start a project"
               className="group relative grid place-items-center w-[8.5rem] h-[8.5rem] md:w-44 md:h-44 rounded-full text-white"
             >
@@ -501,7 +498,7 @@ const Close: React.FC<{ p: MotionValue<number>; onStart: () => void }> = ({ p, o
                   <path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-            </button>
+            </Link>
           </Magnetic>
         </motion.div>
       </div>
@@ -511,7 +508,7 @@ const Close: React.FC<{ p: MotionValue<number>; onStart: () => void }> = ({ p, o
 
 /* ------------------------------------------------------------------ */
 
-export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) => {
+export const Universe: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<UniverseScene | null>(null);
@@ -589,10 +586,10 @@ export const Universe: React.FC<{ setView: (v: View) => void }> = ({ setView }) 
 
         <Intro p={p} />
         <Manifesto p={p} />
-        <Audiences p={p} onFocus={focus} onStart={() => setView('contact')} />
+        <Audiences p={p} onFocus={focus} />
         <Process p={p} />
-        <WorkChapter p={p} onAll={() => setView('work')} />
-        <Close p={p} onStart={() => setView('contact')} />
+        <WorkChapter p={p} />
+        <Close p={p} />
       </div>
 
     </section>

@@ -9,6 +9,8 @@ export type Project = {
   slug: string;
   title: string;
   category: string;
+  /** Who the client is, in a few words, for one-line summaries */
+  industry: string;
   services: string[];
   domain: string;
   url: string;
@@ -22,14 +24,44 @@ export type Project = {
   approach: string;
   outcome: string;
   highlights: string[];
+  /** Overrides for the case study's <title>, meta description and share image */
+  seoTitle?: string;
+  seoDescription?: string;
+  ogImage?: string;
 };
 
 export const PROJECTS: Project[] = [
+  {
+    id: 6,
+    slug: 'juno',
+    title: 'Juno',
+    category: 'AI SaaS · Website',
+    industry: 'AI chief of staff for teams',
+    services: ['Brand direction', 'Web design', 'Design system', 'Development'],
+    // Preview domain until runjuno.ai goes live; then update domain and url
+    domain: 'juno-lovat.vercel.app',
+    url: 'https://juno-lovat.vercel.app/',
+    image: '/work/juno/juno-card.webp',
+    imageSize: [1200, 900],
+    imageAlt: 'Juno homepage: a glowing mascot surrounded by tasks, above the headline Knows your company. Gets things done.',
+    summary: 'An AI chief of staff, explained in 30 seconds.',
+    challenge:
+      'Juno had a powerful product and a website that didn’t explain it. “AI assistant” is a crowded, vague category, and B2B buyers need to understand a product like this and trust it before they hand it real work.',
+    approach:
+      'We started with tone and design guidelines, then designed the homepage, then rolled the system out across all nine pages.',
+    outcome:
+      'A nine-page marketing site that tells Juno’s story, shows the product working and builds trust before anyone signs up.',
+    highlights: ['A homepage told as a story', 'Trust shown, not claimed', 'Nine pages, one system'],
+    seoTitle: 'Juno Case Study: AI SaaS Website Design | Natwic',
+    seoDescription: 'How Natwic redesigned and rebuilt the marketing site for Juno, an AI chief of staff, turning an abstract AI product into a clear, trusted story.',
+    ogImage: '/work/juno/juno-og.png',
+  },
   {
     id: 1,
     slug: 'unita',
     title: 'Unita',
     category: 'Web platform',
+    industry: 'B2B business directory',
     services: ['Product design', 'Web development', 'Search UX'],
     domain: 'unitaw.com',
     url: 'https://unitaw.com/',
@@ -44,32 +76,14 @@ export const PROJECTS: Project[] = [
     outcome:
       'A credible, easy-to-use platform that is already live across eight countries and ready to grow one verified listing at a time.',
     highlights: ['AI-assisted search', 'Verification explained in one line', 'Directory built to scale'],
-  },
-  {
-    id: 2,
-    slug: 'folionomics',
-    title: 'Folionomics',
-    category: 'Fintech · Product UI',
-    services: ['Product design', 'UI system', 'Front-end'],
-    domain: 'folionomics.com',
-    url: 'https://www.folionomics.com/',
-    image: '/work/folionomics.webp',
-    imageSize: [1200, 900],
-    imageAlt: 'Folionomics homepage in a dark theme with an interactive demo charting portfolio net worth',
-    summary: 'Wallets and DeFi positions in one clear view.',
-    challenge:
-      'Crypto investors juggle wallets and DeFi positions across different apps. Folionomics needed a privacy-first product that shows everything in one place, without asking anyone to sign in first.',
-    approach:
-      'We designed a focused dark interface around a live demo: paste any wallet address and see net worth, history and positions straight away. Restrained colour and clear type keep dense financial data readable.',
-    outcome:
-      'A product people can explore in seconds, read-only and private, with portfolio-aware swaps planned next.',
-    highlights: ['Read-only, no sign-in demo', 'Dense data made readable', 'Dark UI system'],
+    tools: ['[TOOLS USED]'],
   },
   {
     id: 3,
     slug: 'breakthirty',
     title: 'Breakthirty',
     category: 'Marketing agency · Website',
+    industry: 'E-commerce growth agency',
     services: ['Web design', 'Development', 'Conversion'],
     domain: 'breakthirty.com',
     url: 'https://www.breakthirty.com/',
@@ -84,12 +98,14 @@ export const PROJECTS: Project[] = [
     outcome:
       'A bright, confident site that explains a broad offer simply and gives every visitor an easy first step.',
     highlights: ['One clear promise up top', 'Services you can browse', 'Free audits as a way in'],
+    tools: ['[TOOLS USED]'],
   },
   {
     id: 4,
     slug: 'beyond-hut',
     title: 'Beyond Hut',
     category: 'Remote staffing · Website',
+    industry: 'Remote property staffing',
     services: ['Web design', 'Development', 'Messaging'],
     domain: 'beyondhut.com',
     url: 'https://beyondhut.com/',
@@ -104,12 +120,14 @@ export const PROJECTS: Project[] = [
     outcome:
       'A calm, trustworthy site that answers "is this worth it?" before anyone has to ask.',
     highlights: ['Value up front', 'Cost comparison', 'Four-step onboarding'],
+    tools: ['[TOOLS USED]'],
   },
   {
     id: 5,
     slug: 'cayano',
     title: 'Cayano',
     category: 'Property · Website',
+    industry: 'London lettings agency',
     services: ['Web design', 'Development', 'Property search'],
     domain: 'cayano.co.uk',
     url: 'https://cayano.co.uk/',
@@ -124,9 +142,26 @@ export const PROJECTS: Project[] = [
     outcome:
       'A clear, modern agency site where every visitor finds their next step quickly.',
     highlights: ['Separate landlord and tenant paths', 'Valuation booking up front', 'Property search'],
+    tools: ['[TOOLS USED]'],
   },
 ];
 
 export const pad = (n: number) => String(n).padStart(2, '0');
 
 export const projectBySlug = (slug: string) => PROJECTS.find((p) => p.slug === slug);
+
+/** schema.org CreativeWork for a case study page */
+export const creativeWorkSchema = (p: Project, baseUrl: string) => ({
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: `${p.title} case study`,
+  headline: p.seoTitle ?? `${p.title}: ${p.summary}`,
+  description: p.seoDescription ?? p.summary,
+  url: `${baseUrl}/work/${p.slug}`,
+  image: `${baseUrl}${p.ogImage ?? p.image}`,
+  inLanguage: 'en',
+  genre: p.category,
+  keywords: p.services.join(', '),
+  creator: { '@id': `${baseUrl}/#organization` },
+  about: { '@type': 'Organization', name: p.title, url: p.url },
+});

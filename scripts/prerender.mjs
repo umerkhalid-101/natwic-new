@@ -7,19 +7,40 @@ import path from 'node:path';
 const dist = path.resolve('dist');
 const serverEntry = pathToFileURL(path.resolve('dist-server/entry-server.js')).href;
 
-const { render, ROUTE_META, VIEWS, urlFor, CASE_SLUGS, caseMeta, caseUrl, postUrl, POSTS, postMeta, BASE_URL } = await import(serverEntry);
+const { render, ROUTE_META, VIEWS, urlFor, CASE_SLUGS, caseMeta, caseUrl, SERVICE_SLUGS, serviceMeta, serviceUrl, postUrl, POSTS, postMeta, BASE_URL } = await import(serverEntry);
 
-const template = await readFile(path.join(dist, 'index.html'), 'utf8');
+// One clock for every page, shared with the browser so time-based UI hydrates cleanly
+globalThis.__NOW__ = Date.now();
+const template = (await readFile(path.join(dist, 'index.html'), 'utf8'))
+  .replace('</head>', `<script>window.__NOW__=${globalThis.__NOW__}</script>\n</head>`);
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
-const page = (title, description, url, body, image) =>
+// Entrance animations render their start state (faded out, slid down) into the HTML, which hides
+// headlines from anyone without JavaScript and delays the largest paint. Drop those start states
+// here; the app still plays the animations once it loads. Deliberately hidden UI is left alone.
+const showEntrances = (html) =>
+  html.replace(/<[a-z][^>]* style="([^"]*)"[^>]*>/g, (tag, css) => {
+    // Deliberately hidden UI (menus, overlays, hover previews) keeps its styles
+    if (/visibility:\s*hidden|pointer-events:\s*none/.test(css) || /aria-hidden="true"/.test(tag)) return tag;
+    const decl = css.split(';').filter(Boolean);
+    const isFaded = (d) => /^opacity:\s*0$/.test(d.trim());
+    const slide = decl.find((d) => /^transform:\s*(translate[XY]?\([^)]*\)|scale\([^)]*\))$/.test(d.trim()));
+    const masked = decl.find((d) => /^transform:\s*translateY\((4[5-9]|[5-9]\d|1\d\d)%\)$/.test(d.trim()));
+    const keep = decl.filter((d) => !isFaded(d) && d !== masked && !(d === slide && decl.some(isFaded)));
+    if (keep.length === decl.length) return tag;
+    return tag.replace(` style="${css}"`, keep.length ? ` style="${keep.join(';')}"` : '');
+  });
+
+// `preload`: the page's own above-the-fold image. Only the home page keeps the hero texture preload.
+const page = (title, description, url, body, image, preload) =>
   (image ? template.replace(/(<meta (?:name|property)="(?:og:image|twitter:image)" content=")[^"]*"/g, `$1${image}"`) : template)
+    .replace(/<link rel="preload" as="image"[^>]*>/, (tag) => (url === `${BASE_URL}/` ? tag : preload ? `<link rel="preload" as="image" href="${preload}" imagesrcset="${preload} 1600w, ${preload.replace('.webp', '@2x.webp')} 3200w" imagesizes="(min-width: 1024px) 64rem, 100vw" type="image/webp" fetchpriority="high" />` : ''))
     .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
     .replace(/(<meta (?:name|property)="(?:title|og:title|twitter:title)" content=")[^"]*"/g, `$1${esc(title)}"`)
     .replace(/(<meta (?:name|property)="(?:description|og:description|twitter:description)" content=")[^"]*"/g, `$1${esc(description)}"`)
     .replace(/(<meta (?:name|property)="(?:og:url|twitter:url)" content=")[^"]*"/g, `$1${url}"`)
     .replace(/<link rel="canonical" href="[^"]*"/, `<link rel="canonical" href="${url}"`)
-    .replace('<div id="root"></div>', `<div id="root">${body}</div>`);
+    .replace('<div id="root"></div>', `<div id="root">${showEntrances(body)}</div>`);
 
 for (const view of VIEWS) {
   const { title, description } = ROUTE_META[view];
@@ -32,10 +53,19 @@ for (const view of VIEWS) {
 // One page per case study, at /work/<slug>
 await mkdir(path.join(dist, 'work'), { recursive: true });
 for (const slug of CASE_SLUGS) {
-  const { title, description } = caseMeta(slug);
+  const { title, description, image, preload } = caseMeta(slug);
   const body = await render('work', slug);
-  await writeFile(path.join(dist, 'work', `${slug}.html`), page(title, description, caseUrl(slug), body));
+  await writeFile(path.join(dist, 'work', `${slug}.html`), page(title, description, caseUrl(slug), body, image, preload));
   console.log(`prerendered /work/${slug} → dist/work/${slug}.html (${(body.length / 1024).toFixed(0)} KB)`);
+}
+
+// One page per service, at /services/<slug>
+await mkdir(path.join(dist, 'services'), { recursive: true });
+for (const slug of SERVICE_SLUGS) {
+  const { title, description } = serviceMeta(slug);
+  const body = await render('services', slug);
+  await writeFile(path.join(dist, 'services', `${slug}.html`), page(title, description, serviceUrl(slug), body));
+  console.log(`prerendered /services/${slug} → dist/services/${slug}.html (${(body.length / 1024).toFixed(0)} KB)`);
 }
 
 // One page per published journal post, at /journal/<slug>
@@ -61,6 +91,7 @@ const notFound = page(
     <div class="mt-10 flex flex-wrap justify-center gap-3">
       <a href="/" class="rounded-full bg-black text-white px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">Home</a>
       <a href="/work" class="rounded-full border border-zinc-200 px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-black hover:border-black transition-colors">See our work</a>
+      <a href="/services" class="rounded-full border border-zinc-200 px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-black hover:border-black transition-colors">Services</a>
       <a href="/contact" class="rounded-full border border-zinc-200 px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-black hover:border-black transition-colors">Contact</a>
     </div>
   </main>`,
@@ -75,10 +106,11 @@ console.log('prerendered 404 → dist/404.html (noindex)');
 
 // Sitemap, built from the same routes we just rendered
 const today = new Date().toISOString().slice(0, 10);
-const PRIORITY = { home: ['weekly', '1.0'], studio: ['monthly', '0.8'], work: ['monthly', '0.8'], journal: ['weekly', '0.8'], contact: ['monthly', '0.7'], privacy: ['yearly', '0.3'], terms: ['yearly', '0.3'] };
+const PRIORITY = { home: ['weekly', '1.0'], studio: ['monthly', '0.8'], work: ['monthly', '0.8'], services: ['monthly', '0.9'], journal: ['weekly', '0.8'], contact: ['monthly', '0.7'], privacy: ['yearly', '0.3'], terms: ['yearly', '0.3'] };
 const entries = [
   ...VIEWS.map((v) => [urlFor(v), ...(PRIORITY[v] ?? ['monthly', '0.5'])]),
   ...CASE_SLUGS.map((slug) => [caseUrl(slug), 'monthly', '0.7']),
+  ...SERVICE_SLUGS.map((slug) => [serviceUrl(slug), 'monthly', '0.8']),
   ...POSTS.map((p) => [postUrl(p.slug), 'monthly', '0.6', p.date]),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

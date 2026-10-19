@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const FAQS = [
   { q: "What type of clients do you usually work with?", a: "We design websites and brands for startups, SaaS teams and small businesses. We're based in Dubai and work with clients around the world." },
-  { q: "Do you work with clients outside the UAE?", a: "Yes. Most of our work is remote, and we schedule calls around your time zone." },
+  { q: "Do you work with clients in other countries?", a: "Yes. Most of our work is remote. We schedule calls around your time zone and share progress in writing between calls, so you're never waiting on a meeting to see where things stand." },
   { q: "How long does a typical project take?", a: "Most projects run in 2–4 week sprints. Larger brand and product work can take 3–6 months, depending on scope." },
   { q: "How do I get started?", a: "Click 'Start a project' anywhere on the site, or tell us what's not working in the chat above. We'll get back to you with next steps." }
 ];
@@ -31,7 +31,7 @@ export const FAQ: React.FC = () => {
           <h2 className="text-6xl md:text-[80px] font-semibold tracking-tighter mb-8 leading-[0.9] text-black">
             Answered<br />questions.
           </h2>
-          <p className="text-zinc-900 font-semibold text-lg mb-16 tracking-tight">Everything you might want to know—up front.</p>
+          <p className="text-zinc-900 font-semibold text-lg mb-16 tracking-tight">Everything you might want to know, up front.</p>
 
           <div className="space-y-4">
             {FAQS.map((faq, i) => (

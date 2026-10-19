@@ -43,25 +43,90 @@
       "@context": "https://schema.org",
       "@graph": [
         {
-          "@type": "Organization",
+          "@type": "ProfessionalService",
           "@id": "https://www.natwic.com/#organization",
           "name": "Natwic Studio",
           "url": "https://www.natwic.com/",
           "logo": "https://www.natwic.com/brand/icon-512.png",
-          "description": "Design studio building websites, brands and content for startups, SaaS teams and small businesses worldwide.",
-          "address": { "@type": "PostalAddress", "addressLocality": "Dubai", "addressCountry": "AE" },
+          "image": "https://www.natwic.com/brand/og-image.jpg",
+          "description": "Web design and branding studio building websites, brands and content for startups, SaaS teams and small businesses worldwide.",
           "email": "hello@natwic.com",
           "telephone": "+971585203139",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Dubai",
+            "addressCountry": "AE"
+          },
           "areaServed": "Worldwide",
-          "knowsAbout": ["Web design", "Website development", "Branding", "UI/UX design", "Content", "SEO", "Social media"],
-          "sameAs": ["https://www.linkedin.com/company/natwic", "https://www.instagram.com/natwicstudio"]
+          "knowsAbout": [
+            "Web design",
+            "Website development",
+            "Branding",
+            "UI/UX design",
+            "Content",
+            "SEO",
+            "Social media"
+          ],
+          "sameAs": [
+            "https://www.linkedin.com/company/natwic",
+            "https://www.instagram.com/natwicstudio"
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Web design and branding services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Web design for startups",
+                  "url": "https://www.natwic.com/services/web-design"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Startup branding",
+                  "url": "https://www.natwic.com/services/branding"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "SaaS website design",
+                  "url": "https://www.natwic.com/services/saas-website-design"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Webflow & Next.js development",
+                  "url": "https://www.natwic.com/services/webflow-nextjs-development"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Website redesign",
+                  "url": "https://www.natwic.com/services/website-redesign"
+                }
+              }
+            ]
+          }
         },
         {
           "@type": "WebSite",
           "@id": "https://www.natwic.com/#website",
           "url": "https://www.natwic.com/",
           "name": "Natwic Studio",
-          "publisher": { "@id": "https://www.natwic.com/#organization" }
+          "inLanguage": "en",
+          "publisher": {
+            "@id": "https://www.natwic.com/#organization"
+          }
         }
       ]
     }
@@ -70,6 +135,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@800;900&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@800;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -140,19 +206,6 @@
             color: white;
         }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "framer-motion": "https://esm.sh/framer-motion@^12.34.0",
-    "@google/genai": "https://esm.sh/@google/genai@^1.41.0",
-    "vite": "https://esm.sh/vite@^7.3.1",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4"
-  }
-}
-</script>
 <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

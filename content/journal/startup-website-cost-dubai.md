@@ -37,7 +37,7 @@ Almost every Dubai agency has a "how much does a website cost" page. I read six 
 | Husbar | October 2026 | 8,000 to 25,000 |
 | Digital Nexa | July 2026 | 15,000 to 25,000 |
 
-![Range chart comparing basic website prices in six 2026 Dubai agency guides, from AED 1,200 to AED 30,000](/journal/dubai-website-price-guides-compared.webp "dubai-website-price-guides-compared.webp")
+![Range chart comparing basic website prices in six 2026 Dubai agency guides, from AED 1,200 to AED 30,000](/journal/dubai-website-price-guides-compared.webp "dubai-website-price-guides-compared")
 
 Four things jumped out:
 
@@ -72,7 +72,7 @@ Revision rounds, mobile testing, basic on-page SEO, analytics setup, a handover 
 
 The smartest way to set a website budget is to tie it to your stage, not your ambition. Your positioning will change a lot between your first 10 customers and your first 100, and your website should be able to change with it.
 
-![Three-stage website budget for startups in Dubai: validate, launch, and scale, with AED ranges and timelines](/journal/startup-website-budget-by-stage.webp "startup-website-budget-by-stage.webp")
+![Three-stage website budget for startups in Dubai: validate, launch, and scale, with AED ranges and timelines](/journal/startup-website-budget-by-stage.webp "startup-website-budget-by-stage")
 
 ### Stage 1: Validating (AED 3,000 to 8,000)
 
@@ -129,8 +129,7 @@ Either way, design for RTL from the start. Then adding Arabic later is a transla
 
 Before you sign anything, run every quote through these 10 questions. Save the checklist and send it to every studio you're talking to. The good ones answer all ten without blinking.
 
-
-![](/journal/website-quote-checklist-uae.webp)
+![Checklist of 10 questions to ask before signing a website design quote in the UAE](/journal/website-quote-checklist-uae.webp "website-quote-checklist-uae")
 
 1. Is the design custom, or built on a template?
 2. Who writes the copy, and is Arabic included?

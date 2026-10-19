@@ -128,7 +128,7 @@ export const Services: React.FC = () => {
           </div>
           <div className="flex items-end gap-6 max-w-md">
             <p className="text-zinc-600 text-base leading-relaxed">
-              Four ways we help startups and local businesses grow. Pick one, or combine them into a single project.
+              Four ways we help startups and small businesses grow, wherever they are. Pick one, or combine them into a single project.
             </p>
             <span className="text-[#703FEC] font-mono text-lg shrink-0">(04)</span>
           </div>

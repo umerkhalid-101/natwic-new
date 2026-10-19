@@ -79,7 +79,7 @@ const PillButton: React.FC<{ tone?: 'dark' | 'light'; href: string; children: Re
 
 // Words wrapped in * are highlighted.
 const MANIFESTO =
-  "We’re a hands-on digital studio for *startups,* *SaaS* *teams* and *local* *businesses.* We design brands, websites and products that look sharp, load fast and actually move the numbers.";
+  "We’re a hands-on digital studio for *startups,* *SaaS* *teams* and *small* *businesses,* wherever they are. We design brands, websites and products that look sharp, load fast and actually move the numbers.";
 
 const Word: React.FC<{ word: string; p: MotionValue<number>; range: [number, number] }> = ({ word, p, range }) => {
   const opacity = useTransform(p, range, [0.14, 1]);
@@ -174,9 +174,9 @@ const AUDIENCES = [
     tone: 'dark' as const,
   },
   {
-    kicker: 'For local businesses',
-    title: 'Local businesses',
-    text: 'People look you up every day. We make sure they pick you, online and on the street.',
+    kicker: 'For small businesses',
+    title: 'Small businesses',
+    text: 'People look you up every day. We make sure they pick you, online and in person.',
     gets: ['A site that brings in bookings', 'Signage, menus and print', 'Social templates that stay on-brand'],
     tone: 'light' as const,
   },

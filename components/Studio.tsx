@@ -256,7 +256,7 @@ export const Studio: React.FC = () => {
                 transition={{ duration: 1, delay: 0.35 }}
                 className="text-zinc-500 text-lg leading-relaxed mb-10 font-medium"
               >
-                Natwic is a web design and branding studio based in Dubai. We work with startups, SaaS teams and small businesses around the world, and we design and build everything ourselves.
+                Natwic is a web design and branding studio based in Dubai, partnering with startups, SaaS teams and small businesses around the world. We work remotely across time zones, and we design and build everything ourselves.
               </motion.p>
               <div className="grid grid-cols-3 gap-6 border-t border-zinc-100 pt-8">
                 <div>

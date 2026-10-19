@@ -87,7 +87,7 @@ export const Contact: React.FC<ContactProps> = ({ isStandalone = true }) => {
           </div>
 
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-zinc-500">
-            <span>Dubai, UAE · working worldwide</span>
+            <span>Based in Dubai, working with clients worldwide</span>
             {SOCIALS.map((s) => (
               <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="font-semibold text-black hover:text-[#703FEC] transition-colors">{s.name} ↗</a>
             ))}

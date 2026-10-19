@@ -34,7 +34,7 @@ const PROBLEMS: Problem[] = [
   {
     q: 'Nobody finds us on Google.',
     a: 'We build for search from day one, so the right people can actually find you.',
-    fix: { title: 'Search & local SEO', points: ['Fast, clean pages', 'Proper structure and metadata', 'Google Business profile set up'] },
+    fix: { title: 'Search & SEO', points: ['Fast, clean pages', 'Proper structure and metadata'] },
     by: 2,
   },
   {

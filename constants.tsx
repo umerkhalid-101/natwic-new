@@ -16,7 +16,7 @@ export const SERVICES: ServiceItem[] = [
     title: 'Branding',
     tags: ['Logo', 'Packaging', 'Mockup', 'Deck', 'Visual identity'],
     description: 'Identities that make you look as good as the thing you sell: logo, type, colour and the system that ties it together.',
-    idealFor: 'New startups, rebrands, local shops and studios',
+    idealFor: 'New startups, rebrands, small shops and studios',
     imageUrl: 'https://images.unsplash.com/photo-1634942537034-2531766767d1?auto=format&fit=crop&q=80&w=1000'
   },
   {
@@ -34,7 +34,7 @@ export const SERVICES: ServiceItem[] = [
     title: 'Social media',
     tags: ['Strategy', 'Growth', 'Campaign', 'Posts', 'Design'],
     description: 'A consistent social presence that brings people back: strategy, templates and posts designed to grow your audience.',
-    idealFor: 'Local businesses, consumer brands, founders',
+    idealFor: 'Small businesses, consumer brands, founders',
     imageUrl: 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&q=80&w=1000'
   }
 ];

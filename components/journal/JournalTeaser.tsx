@@ -1,116 +1,157 @@
 import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { POSTS } from './posts';
+import { motion, AnimatePresence, PanInfo } from 'framer-motion';
+import { Post, frontPagePosts } from './posts';
 import { ease, Label, Meta, Cover, spaClick } from './parts';
 import { Magnetic } from '../Magnetic';
 
-/** "From the journal": the latest posts, shown on the home, studio and work pages. */
+// Where each card sits in the pile, front to back
+const SPOTS = [
+  { rotate: -3, x: 0, y: 0, scale: 1 },
+  { rotate: 4, x: 18, y: 10, scale: 0.96 },
+  { rotate: 9, x: 34, y: 20, scale: 0.92 },
+  { rotate: -7, x: -14, y: 26, scale: 0.88 },
+];
+
+// Plain backing cards so a journal with one or two posts still reads as a deck
+const BLANKS = ['bg-[#703FEC]', 'bg-zinc-900'];
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
+/** "From the journal": the latest posts as a deck of cards you drag through, on the home, studio and work pages. */
 export const JournalTeaser: React.FC<{ onOpen: (slug: string) => void; onAll: () => void }> = ({ onOpen, onAll }) => {
-  const posts = POSTS.slice(0, 3);
-  const [hovered, setHovered] = useState<number | null>(null);
-
-  // Cover that trails the cursor, tilting with its speed (same feel as the work list)
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const x = useSpring(mx, { stiffness: 220, damping: 26, mass: 0.6 });
-  const y = useSpring(my, { stiffness: 220, damping: 26, mass: 0.6 });
-  const vel = useMotionValue(0);
-  const rotate = useSpring(useTransform(vel, [-1500, 1500], [-10, 10]), { stiffness: 180, damping: 20 });
-  const last = useRef({ x: 0, t: 0 });
-
-  const onMove = (e: React.PointerEvent) => {
-    mx.set(e.clientX);
-    my.set(e.clientY);
-    const now = performance.now();
-    const dt = Math.max(16, now - last.current.t);
-    vel.set(((e.clientX - last.current.x) / dt) * 1000);
-    last.current = { x: e.clientX, t: now };
-  };
+  const posts = frontPagePosts(4);
+  const [order, setOrder] = useState(() => posts.map((_, i) => i));
+  const [dir, setDir] = useState(1);
+  const dragged = useRef(false);
 
   if (!posts.length) return null;
 
+  const active: Post = posts[order[0]];
+  const canShuffle = posts.length > 1;
+  const next = () => { setDir(1); setOrder((o) => [...o.slice(1), o[0]]); };
+  const prev = () => { setDir(-1); setOrder((o) => [o[o.length - 1], ...o.slice(0, -1)]); };
+  const bringToFront = (i: number) => { setDir(1); setOrder((o) => [i, ...o.filter((x) => x !== i)]); };
+
+  const onDragEnd = (_: unknown, info: PanInfo) => {
+    if (Math.abs(info.offset.x) > 90 || Math.abs(info.velocity.x) > 500) next();
+    // Let the click that ends a drag pass without opening the post
+    setTimeout(() => { dragged.current = false; }, 0);
+  };
+
+  const blanks = BLANKS.slice(0, Math.max(0, 3 - posts.length));
+
   return (
-    <section aria-labelledby="journal-teaser" className="bg-white py-24 md:py-36">
-      <div className="px-5 md:px-12 max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-          <div>
-            <Label>From the journal</Label>
-            <h2 id="journal-teaser" className="mt-6 text-5xl md:text-7xl lg:text-8xl font-bold tracking-[-0.055em] leading-[0.9] text-black">
-              <span className="block overflow-hidden pb-[0.08em]">
-                <motion.span className="block" initial={{ y: '105%' }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 1.1, ease }}>
-                  Notes from
-                </motion.span>
-              </span>
-              <span className="block overflow-hidden pb-[0.08em]">
-                <motion.span className="block italic text-[#703FEC]" initial={{ y: '105%' }} whileInView={{ y: 0 }} viewport={{ once: true }} transition={{ duration: 1.1, ease, delay: 0.08 }}>
-                  the studio.
-                </motion.span>
-              </span>
-            </h2>
+    <section aria-labelledby="journal-teaser" className="bg-white py-24 md:py-36 overflow-hidden">
+      <div className="px-5 md:px-12 max-w-7xl mx-auto grid lg:grid-cols-[1.15fr_1fr] gap-16 lg:gap-24 items-center">
+        {/* The deck */}
+        <div className="relative mx-auto w-full max-w-xl lg:max-w-none pr-10 pb-10">
+          <div className="relative aspect-[1200/630]">
+            {blanks.map((bg, b) => (
+              <motion.div
+                key={bg}
+                aria-hidden
+                className={`absolute inset-0 rounded-3xl ${bg} shadow-[0_30px_60px_-25px_rgba(0,0,0,0.45)]`}
+                initial={false}
+                animate={SPOTS[posts.length + b]}
+                style={{ zIndex: 0 }}
+              />
+            ))}
+
+            {posts.map((p, i) => {
+              const pos = order.indexOf(i);
+              const top = pos === 0;
+              return (
+                <motion.div
+                  key={p.slug}
+                  className="absolute inset-0"
+                  initial={false}
+                  animate={SPOTS[pos]}
+                  transition={{ duration: 0.7, ease }}
+                  style={{ zIndex: posts.length - pos + 1 }}
+                >
+                  <motion.a
+                    href={`/journal/${p.slug}`}
+                    aria-label={top ? `Read: ${p.title}` : `Show: ${p.title}`}
+                    tabIndex={top ? 0 : -1}
+                    drag={top && canShuffle ? 'x' : false}
+                    dragSnapToOrigin
+                    dragElastic={0.6}
+                    onDragStart={() => { dragged.current = true; }}
+                    onDragEnd={onDragEnd}
+                    onClick={(e) => {
+                      if (dragged.current) { e.preventDefault(); return; }
+                      if (!top) { e.preventDefault(); bringToFront(i); return; }
+                      spaClick(() => onOpen(p.slug))(e);
+                    }}
+                    whileHover={top ? { y: -6, rotate: 1 } : undefined}
+                    whileDrag={{ scale: 1.03, rotate: 0, cursor: 'grabbing' }}
+                    style={{ touchAction: 'pan-y' }}
+                    className={`group block overflow-hidden rounded-3xl bg-white shadow-[0_30px_60px_-25px_rgba(0,0,0,0.45)] ${top && canShuffle ? 'cursor-grab' : 'cursor-pointer'}`}
+                  >
+                    <Cover post={p} framed eager={top} className="pointer-events-none select-none" />
+                  </motion.a>
+                </motion.div>
+              );
+            })}
           </div>
-          <div className="flex flex-col gap-6 max-w-md lg:items-end lg:max-w-xs">
-            <p className="text-zinc-600 leading-relaxed lg:text-right">Straight answers on design, brands and building websites, written by the people who do the work.</p>
+        </div>
+
+        {/* What's on top */}
+        <div>
+          <Label>From the journal</Label>
+          <h2 id="journal-teaser" className="mt-6 text-5xl md:text-7xl font-bold tracking-[-0.055em] leading-[0.92] text-black">
+            Notes from <span className="italic text-[#703FEC]">the studio.</span>
+          </h2>
+
+          <div className="mt-10 md:mt-12 border-t border-zinc-200 pt-8 min-h-[13rem]">
+            <AnimatePresence mode="wait" initial={false} custom={dir}>
+              <motion.a
+                key={active.slug}
+                href={`/journal/${active.slug}`}
+                onClick={spaClick(() => onOpen(active.slug))}
+                custom={dir}
+                variants={{
+                  enter: (d: number) => ({ opacity: 0, y: 24 * d }),
+                  center: { opacity: 1, y: 0 },
+                  exit: (d: number) => ({ opacity: 0, y: -24 * d }),
+                }}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.45, ease }}
+                className="group block"
+              >
+                <div className="flex items-baseline gap-4">
+                  {canShuffle && (
+                    <span className="shrink-0 whitespace-nowrap font-mono text-xs text-[#703FEC]">{pad(order[0] + 1)} / {pad(posts.length)}</span>
+                  )}
+                  <Meta post={active} />
+                </div>
+                <p className="mt-4 text-2xl md:text-4xl font-bold tracking-[-0.04em] leading-[1.08] text-black transition-colors duration-500 group-hover:text-[#703FEC]">{active.title}</p>
+                {active.excerpt && <p className="mt-4 text-zinc-600 leading-relaxed line-clamp-3">{active.excerpt}</p>}
+              </motion.a>
+            </AnimatePresence>
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-5">
             <Magnetic strength={0.3}>
-              <a href="/journal" onClick={spaClick(onAll)} className="group inline-flex items-center gap-4 self-start lg:self-end rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
+              <a href="/journal" onClick={spaClick(onAll)} className="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
                 Read the journal
                 <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
               </a>
             </Magnetic>
+            {canShuffle && (
+              <div className="flex items-center gap-3">
+                <button onClick={prev} aria-label="Previous post" className="w-12 h-12 rounded-full border border-zinc-200 grid place-items-center text-black hover:border-black transition-colors">←</button>
+                <button onClick={next} aria-label="Next post" className="w-12 h-12 rounded-full border border-zinc-200 grid place-items-center text-black hover:border-black transition-colors">→</button>
+                <span className="ml-1 text-[11px] font-bold uppercase tracking-[0.25em] text-zinc-400">
+                  <span className="hidden md:inline">Drag</span><span className="md:hidden">Swipe</span> the cards
+                </span>
+              </div>
+            )}
           </div>
         </div>
-
-        <ul className="mt-16 md:mt-24" onPointerMove={onMove} onPointerLeave={() => setHovered(null)}>
-          {posts.map((p, i) => (
-            <motion.li
-              key={p.slug}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-5%' }}
-              transition={{ duration: 0.9, ease, delay: i * 0.08 }}
-              className="border-t border-zinc-200 last:border-b"
-            >
-              <a
-                href={`/journal/${p.slug}`}
-                onClick={spaClick(() => onOpen(p.slug))}
-                onPointerEnter={() => setHovered(i)}
-                className={`group block py-8 md:py-10 transition-opacity duration-500 ${hovered !== null && hovered !== i ? 'md:opacity-30' : ''}`}
-              >
-                {/* Phones get the cover inline */}
-                <div className="md:hidden mb-6 overflow-hidden rounded-2xl"><Cover post={p} /></div>
-                <div className="grid grid-cols-[1fr_auto] md:grid-cols-[4rem_1fr_auto] items-center gap-4 md:gap-8">
-                  <span className="hidden md:block font-mono text-xs text-zinc-400">{String(i + 1).padStart(2, '0')}</span>
-                  <div className="min-w-0">
-                    <Meta post={p} />
-                    <p className="mt-3 text-2xl md:text-5xl font-bold tracking-[-0.045em] leading-[1.05] text-black transition-[transform,color] duration-500 ease-[cubic-bezier(.16,1,.3,1)] md:group-hover:translate-x-4 md:group-hover:text-[#703FEC]">
-                      {p.title}
-                    </p>
-                  </div>
-                  <span className="w-11 h-11 md:w-14 md:h-14 shrink-0 rounded-full border border-zinc-200 grid place-items-center text-black transition-all duration-500 group-hover:bg-[#703FEC] group-hover:border-[#703FEC] group-hover:text-white group-hover:-rotate-45">→</span>
-                </div>
-              </a>
-            </motion.li>
-          ))}
-        </ul>
       </div>
-
-      {/* Cursor preview */}
-      <motion.div aria-hidden className="pointer-events-none fixed left-0 top-0 z-50 hidden md:block" style={{ x, y, rotate }}>
-        <AnimatePresence>
-          {hovered !== null && (
-            <motion.div
-              key={hovered}
-              initial={{ opacity: 0, scale: 0.8, clipPath: 'inset(50% 50% 50% 50% round 1.5rem)' }}
-              animate={{ opacity: 1, scale: 1, clipPath: 'inset(0% 0% 0% 0% round 1.5rem)' }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.45, ease }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 w-[400px] overflow-hidden rounded-3xl shadow-[0_30px_80px_rgba(0,0,0,0.25)]"
-            >
-              <Cover post={posts[hovered]} eager />
-              <span className="absolute left-3 top-3 rounded-full bg-black/75 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white">{posts[hovered].readingMinutes} min read</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
     </section>
   );
 };

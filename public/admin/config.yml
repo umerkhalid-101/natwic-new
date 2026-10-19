@@ -44,7 +44,7 @@ collections:
     slug: '{{slug}}'
     preview_path: journal/{{slug}}
     sortable_fields: [date, title]
-    summary: '{{title}} · {{date}}{{draft | ternary(" · DRAFT", "")}}'
+    summary: '{{title}} · {{date}}{{draft | ternary(" · DRAFT", "")}}{{featured | ternary(" · PINNED", "")}}'
     fields:
       - { name: title, label: Title, widget: string }
       - name: date
@@ -62,4 +62,10 @@ collections:
       - { name: author, label: Author, widget: string, required: false }
       - { name: tags, label: Tags, widget: list, required: false, default: [] }
       - { name: draft, label: Draft, widget: boolean, default: true, hint: Drafts are saved but not shown on the live site. }
+      - name: featured
+        label: Pin to front pages
+        widget: boolean
+        default: false
+        required: false
+        hint: Pinned posts lead the journal deck on the home, studio and work pages. Newest posts fill the rest.
       - { name: body, label: Body, widget: markdown }

@@ -246,7 +246,7 @@ const SaasScene: React.FC<{ i: number }> = ({ i }) => {
       <svg viewBox="0 0 400 220" className="absolute inset-0 w-full h-full" aria-hidden>
         {nodes.map((_, k) => {
           const a = (k / nodes.length) * Math.PI * 2 - Math.PI / 2;
-          const x = 200 + Math.cos(a) * 140, y = 110 + Math.sin(a) * 80;
+          const x = 200 + Math.cos(a) * 124, y = 110 + Math.sin(a) * 80;
           return <motion.line key={k} x1="200" y1="110" x2={x} y2={y} stroke={V} strokeWidth="1.5" strokeDasharray="4 4" initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 0.8 }} transition={{ delay: k * 0.12, duration: 0.6 }} />;
         })}
       </svg>
@@ -254,7 +254,7 @@ const SaasScene: React.FC<{ i: number }> = ({ i }) => {
       {nodes.map((n, k) => {
         const a = (k / nodes.length) * Math.PI * 2 - Math.PI / 2;
         return (
-          <motion.span key={n} initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 + k * 0.12 }} className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15 bg-[#12121a] px-2.5 py-1 text-[10px] text-white/80" style={{ left: `${50 + Math.cos(a) * 35}%`, top: `${50 + Math.sin(a) * 36}%` }}>{n}</motion.span>
+          <motion.span key={n} initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 + k * 0.12 }} className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/15 bg-[#12121a] px-2.5 py-1 text-[10px] text-white/80" style={{ left: `${50 + Math.cos(a) * 31}%`, top: `${50 + Math.sin(a) * 36}%` }}>{n}</motion.span>
         );
       })}
     </div>

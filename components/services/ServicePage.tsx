@@ -1,6 +1,6 @@
 /** /services/<slug>: one service, dressed in its own theme (see themes.tsx). */
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Magnetic } from '../Magnetic';
 import { Link } from '../nav';
@@ -12,12 +12,13 @@ import { SERVICE_PAGES, serviceBySlug, servicePath } from './services';
 import { contentFor } from './content';
 import { DEMOS, RemoteFeed } from './demos';
 import { JsonLd, Breadcrumb, GRID_CSS, TOGETHER } from './ui';
+import { MICRO_CSS, ScrollProgress, RevealWords, ScrambleText, CardHoverFx, CursorCoords, BrandShapes } from './micro';
 import { Theme, themeFor, ThemeStyles, Stage, SectionLabel, CardTop, ProcessView, ThemeTitle, HeroBackdrop, ProductWidgets, StruckHeadline } from './themes';
 
 /** Main call to action in the theme's colors */
 const ThemeButton: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <Magnetic strength={0.3}>
-    <Link href="/contact" className="group inline-flex items-center gap-4 rounded-full pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] transition-opacity hover:opacity-90" style={{ background: 'var(--ink)', color: 'var(--page)' }}>
+    <Link href="/contact" className="group inline-flex items-center gap-4 rounded-full pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] transition-[opacity,transform] duration-200 hover:opacity-90 active:scale-95" style={{ background: 'var(--ink)', color: 'var(--page)' }}>
       {children}
       <span className="w-11 h-11 rounded-full grid place-items-center transition-transform duration-500 group-hover:-rotate-45" style={{ background: 'var(--accent)', color: 'var(--on-accent)' }}>→</span>
     </Link>
@@ -25,7 +26,9 @@ const ThemeButton: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 );
 
 const H2: React.FC<{ theme: Theme; children: React.ReactNode; onStage?: boolean }> = ({ theme, children, onStage }) => (
-  <h2 className={`mt-5 text-[11vw] md:text-6xl lg:text-7xl leading-[0.98] ${theme.display}`} style={{ color: onStage ? 'var(--stage-ink)' : 'var(--ink)' }}>{children}</h2>
+  <h2 className={`mt-5 text-[11vw] md:text-6xl lg:text-7xl leading-[0.98] ${theme.display}`} style={{ color: onStage ? 'var(--stage-ink)' : 'var(--ink)' }}>
+    {typeof children === 'string' ? <RevealWords text={children} /> : children}
+  </h2>
 );
 
 /* ------------------------------------------------------------------ */
@@ -37,6 +40,7 @@ const Hero: React.FC<{ theme: Theme; slug: string }> = ({ theme, slug }) => {
   const c = contentFor(slug)!;
   const index = SERVICE_PAGES.findIndex((s) => s.slug === slug);
   const { Demo, label } = DEMOS[slug];
+  const heroRef = useRef<HTMLElement>(null);
   const crumbs = [{ name: 'Home', href: '/' }, { name: 'Services', href: '/services' }, { name: meta.name, href: servicePath(slug) }];
   const eyebrow = <SectionLabel theme={theme} n={index + 1} text={`${theme.name} · Service`} />;
   const titleSize = 'text-[12vw] md:text-[6vw] lg:text-[4.8vw]';
@@ -61,8 +65,10 @@ const Hero: React.FC<{ theme: Theme; slug: string }> = ({ theme, slug }) => {
   );
 
   const shell = (children: React.ReactNode) => (
-    <section className="relative mx-2 md:mx-6 overflow-clip rounded-[2rem] md:rounded-[3rem] border border-[color:var(--border)] pt-12 md:pt-16 pb-16 md:pb-24" style={{ background: theme.key === 'editorial' || theme.key === 'transform' || theme.key === 'blueprint' ? 'var(--page)' : 'var(--stage)' }}>
+    <section ref={heroRef} className="relative mx-2 md:mx-6 overflow-clip rounded-[2rem] md:rounded-[3rem] border border-[color:var(--border)] pt-12 md:pt-16 pb-16 md:pb-24" style={{ background: theme.key === 'editorial' || theme.key === 'transform' || theme.key === 'blueprint' ? 'var(--page)' : 'var(--stage)' }}>
       <HeroBackdrop theme={theme} />
+      {theme.key === 'blueprint' && <CursorCoords container={heroRef} />}
+      {theme.key === 'editorial' && <BrandShapes />}
       <div className="relative z-[1] px-5 md:px-12 max-w-7xl mx-auto">
         <Breadcrumb items={crumbs} tone="theme" />
         {children}
@@ -152,6 +158,23 @@ const WorkingTogether: React.FC<{ theme: Theme }> = ({ theme }) => {
   );
 };
 
+/** A who-it's-for card with the theme's hover effect; terminal titles decode on hover */
+const ForWhoCard: React.FC<{ theme: Theme; i: number; title: string; text: string }> = ({ theme, i, title, text }) => {
+  const [hover, setHover] = useState(false);
+  return (
+    <div onPointerEnter={() => setHover(true)} onPointerLeave={() => setHover(false)} className="group svc-glow-border relative h-full overflow-hidden rounded-[1.75rem] border border-[color:var(--border)] bg-[var(--card)] p-7 md:p-9 transition-transform duration-500 hover:-translate-y-1">
+      <CardHoverFx theme={theme} />
+      <div className="relative">
+        <CardTop theme={theme} i={i} title={title} />
+        <h3 className={`mt-6 text-2xl md:text-3xl tracking-[-0.03em] ${theme.key === 'editorial' ? '[font-family:Georgia,serif]' : 'font-bold'}`}>
+          {theme.key === 'terminal' ? <ScrambleText text={title} play={hover} /> : title}
+        </h3>
+        <p className="mt-3 text-base md:text-lg leading-relaxed" style={{ color: 'var(--muted)' }}>{text}</p>
+      </div>
+    </div>
+  );
+};
+
 const ThemedCases: React.FC<{ slugs: string[] }> = ({ slugs }) => {
   const cases = slugs.map(projectBySlug).filter(Boolean) as typeof PROJECTS;
   return (
@@ -200,8 +223,9 @@ export const ServicePage: React.FC<{ slug: string }> = ({ slug }) => {
   return (
     <article key={meta.slug} data-theme={theme.key} className="min-h-screen pt-24 md:pt-28 pb-10 overflow-x-clip" style={{ ...theme.vars, background: 'var(--page)', color: 'var(--ink)' } as React.CSSProperties}>
       <JsonLd data={schema} />
-      <style>{GRID_CSS}</style>
+      <style>{GRID_CSS + MICRO_CSS}</style>
       <ThemeStyles />
+      <ScrollProgress />
 
       <Hero theme={theme} slug={meta.slug} />
 
@@ -213,11 +237,7 @@ export const ServicePage: React.FC<{ slug: string }> = ({ slug }) => {
         <div className="mt-12 md:mt-16 grid sm:grid-cols-2 gap-4">
           {c.forWho.map((b, i) => (
             <FadeUp key={b.title} delay={(i % 2) * 0.08}>
-              <div className="svc-glow-border h-full rounded-[1.75rem] border border-[color:var(--border)] bg-[var(--card)] p-7 md:p-9 transition-transform duration-500 hover:-translate-y-1">
-                <CardTop theme={theme} i={i} title={b.title} />
-                <h3 className={`mt-6 text-2xl md:text-3xl tracking-[-0.03em] ${theme.key === 'editorial' ? '[font-family:Georgia,serif]' : 'font-bold'}`}>{b.title}</h3>
-                <p className="mt-3 text-base md:text-lg leading-relaxed" style={{ color: 'var(--muted)' }}>{b.text}</p>
-              </div>
+              <ForWhoCard theme={theme} i={i} title={b.title} text={b.text} />
             </FadeUp>
           ))}
         </div>

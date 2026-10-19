@@ -8,6 +8,7 @@
 import React, { useRef } from 'react';
 import { motion, MotionValue, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { pad2, ease } from '../work/rich/blocks';
+import { Typewriter } from './micro';
 
 export type ThemeKey = 'blueprint' | 'editorial' | 'product' | 'terminal' | 'transform';
 
@@ -152,14 +153,19 @@ export const Stage: React.FC<{ theme: Theme; children: React.ReactNode; classNam
 export const SectionLabel: React.FC<{ theme: Theme; n: number; text: string; onStage?: boolean }> = ({ theme, n, text, onStage }) => (
   <p className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 ${mono} text-[10px] uppercase tracking-[0.25em] ${onStage ? 'border-white/15 bg-white/[0.05] text-white/60' : 'border-[color:var(--border)] bg-[var(--card)] text-[color:var(--muted)]'}`}>
     <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]" />
-    {theme.label(n, text)}
+    {theme.key === 'terminal' ? <Typewriter text={theme.label(n, text)} /> : theme.label(n, text)}
   </p>
 );
 
 const Spark: React.FC = () => (
-  <svg viewBox="0 0 80 24" className="w-20 h-6" aria-hidden>
-    <polyline points="0,20 12,16 24,18 36,10 48,12 60,5 80,3" fill="none" stroke="var(--accent-2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
+  <span className="flex items-center gap-2">
+    <span className="flex items-center gap-1 rounded-full bg-emerald-400/10 px-2 py-0.5 font-mono text-[9px] text-emerald-300 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <span className="w-1 h-1 rounded-full bg-emerald-300 animate-pulse" />live
+    </span>
+    <svg viewBox="0 0 80 24" className="w-20 h-6" aria-hidden>
+      <polyline className="mi-spark" points="0,20 12,16 24,18 36,10 48,12 60,5 80,3" fill="none" stroke="var(--accent-2)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="140" strokeDashoffset="0" />
+    </svg>
+  </span>
 );
 
 /** Small theme-specific detail at the top of a card */
@@ -174,7 +180,14 @@ export const CardTop: React.FC<{ theme: Theme; i: number; title: string }> = ({ 
     case 'terminal':
       return <span className="block font-mono text-xs text-[color:var(--accent)]">{'>'} {title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}</span>;
     case 'transform':
-      return <span className="flex items-center gap-2 font-mono text-[10px]"><span className="rounded bg-zinc-200 px-1.5 py-0.5 text-zinc-500 line-through">old</span><span className="text-[color:var(--accent-2)]">→</span><span className="rounded bg-[var(--accent)] px-1.5 py-0.5 text-white">new</span><span className="ml-auto text-[color:var(--muted)]">{pad2(i + 1)}</span></span>;
+      return (
+        <span className="flex items-center gap-2 font-mono text-[10px]">
+          <span className="relative rounded bg-zinc-200 px-1.5 py-0.5 text-zinc-500">old<span className="absolute left-1 right-1 top-1/2 h-px origin-left scale-x-0 bg-zinc-600 transition-transform duration-500 group-hover:scale-x-100" /></span>
+          <span className="text-[color:var(--accent-2)] transition-transform duration-500 group-hover:translate-x-1">→</span>
+          <span className="rounded bg-[var(--accent)] px-1.5 py-0.5 text-white transition-shadow duration-500 group-hover:shadow-[0_0_16px_var(--accent)]">new</span>
+          <span className="ml-auto text-[color:var(--muted)]">{pad2(i + 1)}</span>
+        </span>
+      );
   }
 };
 
@@ -343,9 +356,6 @@ export const HeroBackdrop: React.FC<{ theme: Theme }> = ({ theme }) => {
     case 'editorial':
       return (
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-          <span className="th-float hidden xl:block absolute right-[5%] top-[7%] w-20 h-20 rounded-full bg-[#F3350C]" />
-          <span className="th-float hidden xl:block absolute right-[14%] top-[5%] w-12 h-12 rounded-[30%] bg-[#703FEC] [animation-delay:-2s]" />
-          <span className="th-float hidden xl:block absolute right-[11%] top-[15%] w-9 h-9 bg-[#E8B04B] [animation-delay:-4s]" />
           <span className="absolute -left-6 bottom-[-4rem] text-[16rem] leading-none text-black/[0.04] [font-family:Georgia,serif] italic">Aa</span>
         </div>
       );

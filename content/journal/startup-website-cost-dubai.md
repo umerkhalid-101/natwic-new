@@ -131,17 +131,6 @@ Before you sign anything, run every quote through these 10 questions. Save the c
 
 ![Checklist of 10 questions to ask before signing a website design quote in the UAE](/journal/website-quote-checklist-uae.webp "website-quote-checklist-uae")
 
-1. Is the design custom, or built on a template?
-2. Who writes the copy, and is Arabic included?
-3. How many pages, and how many revision rounds?
-4. Which platform, and what are the monthly fees after launch?
-5. Is the price plus 5% VAT?
-6. What's the payment schedule: deposit and milestones?
-7. Is mobile and cross-browser testing included?
-8. Which SEO basics are included: titles, meta descriptions, redirects, sitemap?
-9. Who owns the domain, the design files, and the site after launch?
-10. What does support cost after handover?
-
 Already have a quote on your desk? Email it to hello@natwic.com and I'll tell you, for free, what's missing from it. No pitch attached.
 
 ## FAQ

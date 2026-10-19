@@ -24,13 +24,14 @@ import { QuickBrief, Brief } from './QuickBrief';
 const YOUR_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwqQ2130Za78V8VFQ2p-1Le5mvGsly5B6wwfJjPLM1n8KPboQBU02a3fHCeGYaCOQIs/exec';
 
 // The home page sheet's columns: name, email, service, message (plus where it came from)
-const sendToSheet = (b: Brief) =>
+export const sendBrief = (source: string) => (b: Brief) =>
   fetch(YOUR_SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: b.name, email: b.email, service: b.services.join(', ') || 'Not specified', message: b.message, source: 'Quote Section' }),
+    body: JSON.stringify({ name: b.name, email: b.email, service: b.services.join(', ') || 'Not specified', message: b.message, source }),
   });
+const sendToSheet = sendBrief('Quote Section');
 
 interface PricingProps {
   setView?: (view: 'home' | 'contact' | 'studio') => void;

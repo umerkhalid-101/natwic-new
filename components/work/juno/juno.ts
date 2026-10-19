@@ -112,10 +112,10 @@ export const PAGES = [
 ];
 
 export const DETAILS: { title: string; text: string; media: Media }[] = [
-  { title: 'Needs your yes', text: 'An approval card repeats on every page, so trust is shown, not just claimed.', media: { image: null, video: null, file: 'juno-detail-approval-card.webp', alt: 'Juno’s Needs your yes approval card' } },
-  { title: 'One fictional company', text: 'The same people (Maya, Sam, Leo, Priya), customer (Northwind), and launch (Scheduled Reports) run through all nine pages.', media: { image: null, video: null, file: 'juno-detail-shared-cast.webp', alt: 'The shared cast and company used across the Juno site' } },
-  { title: 'Live UI instead of screenshots', text: 'Animation explains; it never just decorates.', media: { image: null, video: null, file: 'juno-detail-live-ui.mp4', alt: 'Live, animated product UI on the Juno site' } },
-  { title: 'Copy voice', text: 'Short, human lines over feature lists.', media: { image: null, video: null, file: 'juno-detail-copy-samples.webp', alt: 'Examples of short headlines from the Juno site' } },
+  { title: 'Needs your yes', text: 'An approval card repeats on every page, so trust is shown, not just claimed.', media: { image: `${DIR}/juno-detail-approval-card.webp`, video: null, file: 'juno-detail-approval-card.webp', alt: 'Juno’s run log for an app store submission, ending in a Needs your yes card asking: Submit Orbit 2.4.0 for app review? with Approve and Review buttons.' } },
+  { title: 'One fictional company', text: 'The same people (Maya, Sam, Leo, Priya), customer (Northwind), and launch (Scheduled Reports) run through all nine pages.', media: { image: `${DIR}/juno-detail-shared-cast.webp`, video: null, file: 'juno-detail-shared-cast.webp', alt: 'The recurring cast of the Juno site: Maya Chen, Sam Rivera, Leo Park, Priya Shah and the customer Northwind, shown in Slack, HubSpot, Linear and customer update cards.' } },
+  { title: 'Live UI instead of screenshots', text: 'Animation explains; it never just decorates.', media: { image: `${DIR}/juno-detail-live-ui.webp`, video: null, file: 'juno-detail-live-ui.mp4', alt: 'Juno’s live command palette, typing Ask Juno to build a launch page, with 16 features grouped by what they do.' } },
+  { title: 'Copy voice', text: 'Short, human lines over feature lists.', media: { image: `${DIR}/juno-detail-copy-samples.webp`, video: null, file: 'juno-detail-copy-samples.webp', alt: 'Short headlines from the Juno site: Knows your company. Gets things done. Off your plate. On Juno’s. Keep Juno close. Put Juno to work.' } },
 ];
 
 /** Taken from the Juno codebase (app/globals.css) */
@@ -162,3 +162,23 @@ export const CLOSING = {
   headline: 'Have a product that’s hard to explain? Let’s make it obvious.',
   line: 'We design and build websites for startups and SaaS teams worldwide.',
 };
+
+/** Real headlines from the Juno site, for the marquee */
+export const HEADLINES = [
+  'Knows your company.', 'Gets things done.', 'You started a company. Now it runs you.', 'That’s Juno.',
+  'Imagine it. Make it an app.', 'Set it once. Leave it to Juno.', 'Your whole stack. One Juno.', 'Off your plate. On Juno’s.',
+  'So much built in.', 'Keep Juno close.', 'Questions, answered.', 'Put Juno to work.',
+];
+
+/** Tasks that orbit Juno in its own hero */
+export const TASKS = ['Investor update', 'Triage 6 bugs', 'Release notes to #launch', 'Follow up with Northwind', 'Weekly metrics report', 'Answer 4 setup questions'];
+
+/** Side images for the hero stage */
+export const HERO_SIDES = {
+  left: { image: `${DIR}/juno-detail-live-ui.webp`, alt: 'Juno’s command palette with 16 features.' },
+  right: { image: `${DIR}/juno-detail-approval-card.webp`, alt: 'Juno asking for approval before submitting an app.' },
+};
+
+/** Stills that also exist at 2x, as name@2x.webp */
+export const has2x = (src: string | null) => !!src && /juno-(page|beat|homepage)-/.test(src);
+export const srcSet = (src: string) => (has2x(src) ? `${src} 1600w, ${src.replace('.webp', '@2x.webp')} 3200w` : undefined);

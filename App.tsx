@@ -24,6 +24,8 @@ const Privacy = lazy(() => import('./components/Privacy').then(m => ({ default: 
 const Terms = lazy(() => import('./components/Terms').then(m => ({ default: m.Terms })));
 const WorkIndex = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.WorkIndex })));
 const CaseStudyPage = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.CaseStudyPage })));
+const JournalIndex = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalIndex })));
+const JournalPost = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalPost })));
 
 // `initialView` lets the build-time pre-renderer render each page
 const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ initialView = 'home', initialSlug = null }) => {
@@ -68,6 +70,14 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
     scrollToTop();
   };
 
+  // Journal posts live at /journal/<slug>
+  const openPost = (next: string) => {
+    setView('journal');
+    setSlug(next);
+    window.history.pushState({}, '', `/journal/${next}`);
+    scrollToTop();
+  };
+
   return (
     <div className="relative min-h-screen bg-white text-black selection:bg-[#703FEC] selection:text-white">
       
@@ -77,7 +87,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
       </AnimatePresence>
 
 
-      <Navbar setView={changeView as any} currentView={view as 'home' | 'contact' | 'studio'} />
+      <Navbar setView={changeView as any} currentView={view as 'home' | 'contact' | 'studio' | 'work' | 'journal'} />
       
       <main>
         {view === 'home' && (
@@ -116,6 +126,17 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
               <Seo {...caseMeta(slug)} view={`work/${slug}`} />
               <CaseStudyPage slug={slug} onOpen={openCase} onAll={() => changeView('work')} onHome={() => changeView('home')} onContact={() => changeView('contact')} />
             </>
+          )}
+
+          {view === 'journal' && !slug && (
+            <>
+              <Seo {...ROUTE_META.journal} view="journal" />
+              <JournalIndex onOpen={openPost} onContact={() => changeView('contact')} />
+            </>
+          )}
+
+          {view === 'journal' && slug && (
+            <JournalPost slug={slug} onOpen={openPost} onAll={() => changeView('journal')} onHome={() => changeView('home')} onContact={() => changeView('contact')} />
           )}
 
           {view === 'contact' && (

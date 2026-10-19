@@ -7,13 +7,13 @@ import path from 'node:path';
 const dist = path.resolve('dist');
 const serverEntry = pathToFileURL(path.resolve('dist-server/entry-server.js')).href;
 
-const { render, ROUTE_META, VIEWS, urlFor, CASE_SLUGS, caseMeta, caseUrl, BASE_URL } = await import(serverEntry);
+const { render, ROUTE_META, VIEWS, urlFor, CASE_SLUGS, caseMeta, caseUrl, postUrl, POSTS, postMeta, BASE_URL } = await import(serverEntry);
 
 const template = await readFile(path.join(dist, 'index.html'), 'utf8');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
-const page = (title, description, url, body) =>
-  template
+const page = (title, description, url, body, image) =>
+  (image ? template.replace(/(<meta (?:name|property)="(?:og:image|twitter:image)" content=")[^"]*"/g, `$1${image}"`) : template)
     .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
     .replace(/(<meta (?:name|property)="(?:title|og:title|twitter:title)" content=")[^"]*"/g, `$1${esc(title)}"`)
     .replace(/(<meta (?:name|property)="(?:description|og:description|twitter:description)" content=")[^"]*"/g, `$1${esc(description)}"`)
@@ -36,6 +36,16 @@ for (const slug of CASE_SLUGS) {
   const body = await render('work', slug);
   await writeFile(path.join(dist, 'work', `${slug}.html`), page(title, description, caseUrl(slug), body));
   console.log(`prerendered /work/${slug} → dist/work/${slug}.html (${(body.length / 1024).toFixed(0)} KB)`);
+}
+
+// One page per published journal post, at /journal/<slug>
+await mkdir(path.join(dist, 'journal'), { recursive: true });
+for (const post of POSTS) {
+  const { title, description } = postMeta(post);
+  const image = post.cover?.startsWith('/') ? `${BASE_URL}${post.cover}` : post.cover;
+  const body = await render('journal', post.slug);
+  await writeFile(path.join(dist, 'journal', `${post.slug}.html`), page(title, description, postUrl(post.slug), body, image));
+  console.log(`prerendered /journal/${post.slug} → dist/journal/${post.slug}.html (${(body.length / 1024).toFixed(0)} KB)`);
 }
 
 // A real 404 for unknown URLs: static, not indexed, and without the app script
@@ -65,16 +75,17 @@ console.log('prerendered 404 → dist/404.html (noindex)');
 
 // Sitemap, built from the same routes we just rendered
 const today = new Date().toISOString().slice(0, 10);
-const PRIORITY = { home: ['weekly', '1.0'], studio: ['monthly', '0.8'], work: ['monthly', '0.8'], contact: ['monthly', '0.7'], privacy: ['yearly', '0.3'], terms: ['yearly', '0.3'] };
+const PRIORITY = { home: ['weekly', '1.0'], studio: ['monthly', '0.8'], work: ['monthly', '0.8'], journal: ['weekly', '0.8'], contact: ['monthly', '0.7'], privacy: ['yearly', '0.3'], terms: ['yearly', '0.3'] };
 const entries = [
   ...VIEWS.map((v) => [urlFor(v), ...(PRIORITY[v] ?? ['monthly', '0.5'])]),
   ...CASE_SLUGS.map((slug) => [caseUrl(slug), 'monthly', '0.7']),
+  ...POSTS.map((p) => [postUrl(p.slug), 'monthly', '0.6', p.date]),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${entries.map(([loc, freq, pri]) => `  <url>
+${entries.map(([loc, freq, pri, lastmod]) => `  <url>
     <loc>${loc}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${lastmod ?? today}</lastmod>
     <changefreq>${freq}</changefreq>
     <priority>${pri}</priority>
   </url>`).join('\n')}

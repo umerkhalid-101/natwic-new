@@ -1,0 +1,65 @@
+# Natwic Journal CMS (Sveltia CMS, Decap-compatible).
+# Posts are saved as Markdown in content/journal and committed to GitHub;
+# Vercel rebuilds the site on every commit.
+
+backend:
+  name: github
+  repo: umerkhalid-101/natwic-new
+  branch: main
+  commit_messages:
+    create: 'journal: publish "{{slug}}"'
+    update: 'journal: update "{{slug}}"'
+    delete: 'journal: delete "{{slug}}"'
+    uploadMedia: 'journal: upload {{path}}'
+    deleteMedia: 'journal: delete {{path}}'
+
+site_url: https://www.natwic.com
+display_url: https://www.natwic.com/journal
+logo_url: /brand/mark-128.png
+
+media_folder: public/journal
+public_folder: /journal
+
+# Uploaded photos are resized and converted to WebP before they're committed
+media_libraries:
+  default:
+    config:
+      max_file_size: 15000000
+      transformations:
+        raster_image:
+          format: webp
+          quality: 82
+          width: 2400
+          height: 2400
+
+collections:
+  - name: journal
+    label: Journal
+    label_singular: Journal post
+    description: Posts for natwic.com/journal. Untick “Draft” to publish.
+    folder: content/journal
+    create: true
+    extension: md
+    format: frontmatter
+    slug: '{{slug}}'
+    preview_path: journal/{{slug}}
+    sortable_fields: [date, title]
+    summary: '{{title}} · {{date}}{{draft | ternary(" · DRAFT", "")}}'
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: date
+        label: Publish date
+        widget: datetime
+        format: YYYY-MM-DD
+        time_format: false
+        default: '{{now}}'
+      - name: excerpt
+        label: Excerpt
+        widget: text
+        hint: One or two sentences. Shown on the journal page and in Google and link previews.
+      - { name: cover, label: Cover image, widget: image, required: false }
+      - { name: coverAlt, label: Cover description (alt text), widget: string, required: false, hint: Describe the image for screen readers and search. }
+      - { name: author, label: Author, widget: string, required: false }
+      - { name: tags, label: Tags, widget: list, required: false, default: [] }
+      - { name: draft, label: Draft, widget: boolean, default: true, hint: Drafts are saved but not shown on the live site. }
+      - { name: body, label: Body, widget: markdown }

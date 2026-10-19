@@ -28,7 +28,7 @@ Not always on day one. The real answer depends on who's buying from you.
 
 Arabic is the UAE's official language, but in my experience a lot of tech and B2B buying in Dubai happens in English. So instead of a blanket rule, look at your customer:
 
-- \*\*Go bilingual at launch\*\* if you sell to consumers, work with government entities, or target Emirati and wider GCC families. Healthcare, education, real estate, F&B, and consumer fintech usually fall here.
+- **Go bilingual at launch if you sell to consumers, work with government entities, or target Emirati and wider GCC families. Healthcare, education, real estate, F&B, and consumer fintech usually fall here.
 - \*\*Launch English-first\*\* if you're a B2B SaaS or services startup selling to international or expat-led teams. Plan Arabic as phase two.
 - \*\*Check your inbox.\*\* If leads are already messaging you in Arabic on WhatsApp or Instagram, that's your signal.
 

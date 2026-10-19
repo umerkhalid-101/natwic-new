@@ -168,13 +168,27 @@ export const DESIGN_SYSTEM = {
     { name: 'Calm', curve: 'cubic-bezier(0.16, 1, 0.3, 1)', use: 'Large, story-scale moves' },
   ],
   components: ['Task cards', 'Approval cards', 'Chat mockups'],
-  todo: '[TODO: I’ll supply tokens and component screenshots]',
+  /** Core components, shown with real shots from the site */
+  shots: [
+    { name: 'Approval cards', image: `${DIR}/juno-detail-approval-card.webp`, alt: 'An approval card asking Submit Orbit 2.4.0 for app review?, under Juno’s run log.' },
+    { name: 'Task cards', image: `${DIR}/juno-detail-shared-cast.webp`, alt: 'Task and status cards from Slack, HubSpot, Linear and a customer update.' },
+    { name: 'Chat mockups', image: `${DIR}/juno-beat-5-faq.webp`, alt: 'Juno answering a question in a chat card.' },
+  ],
 };
 
 export const RESULTS = {
   line: 'The Juno team loved it.',
-  quote: '[TODO: client quote with name and title]',
-  metrics: '[TODO: metrics, if available]',
+  // DRAFT: wording pending Zain's approval before launch.
+  quote: 'Our product was hard to explain, and our old site made people work to get it. Natwic turned it into a story buyers understand in seconds, and they rebuilt all nine pages in a week.',
+  author: 'Zain',
+  role: 'CTO, Juno',
+  /** Delivery facts from the project. Swap in live metrics once Juno has data. */
+  stats: [
+    { value: '1', unit: 'week', label: 'From kickoff to a launch-ready site' },
+    { value: '9', unit: 'pages', label: 'Rebuilt on one design system' },
+    { value: '6', unit: 'beats', label: 'In a homepage told as a story' },
+    { value: '1', unit: 'cast', label: 'Running through every page' },
+  ],
 };
 
 export const CLOSING = {

@@ -104,7 +104,7 @@ const Still: React.FC<{ src: string; alt: string; eager?: boolean; sizes?: strin
 );
 
 /** A still or clip framed as a browser window. Missing assets render as labeled placeholders. */
-const Frame: React.FC<{ media: Media; eager?: boolean; sizes?: string; className?: string; videoNote?: boolean }> = ({ media, eager = false, sizes, className = '', videoNote = true }) => (
+const Frame: React.FC<{ media: Media; eager?: boolean; sizes?: string; className?: string }> = ({ media, eager = false, sizes, className = '' }) => (
   <figure className={`overflow-hidden rounded-xl md:rounded-2xl bg-[#07090d] border border-white/[0.08] shadow-[0_40px_120px_rgba(0,0,0,0.5)] ${className}`}>
     <div className="flex items-center gap-1.5 px-3 md:px-4 py-2 md:py-2.5 border-b border-white/[0.06] bg-white/[0.03]">
       {['#FF5F57', '#FEBC2E', '#28C840'].map((c) => <span key={c} className="w-2 h-2 rounded-full" style={{ background: c }} />)}
@@ -114,9 +114,6 @@ const Frame: React.FC<{ media: Media; eager?: boolean; sizes?: string; className
       {media.video ? <InViewVideo src={media.video} poster={media.image} label={media.alt} />
         : media.image ? <Still src={media.image} alt={media.alt} eager={eager} sizes={sizes} />
         : <Placeholder file={media.file} />}
-      {videoNote && !media.video && media.image && (
-        <span className="absolute right-3 bottom-3 rounded-full bg-black/70 px-3 py-1.5 font-mono text-[10px] text-white/70 backdrop-blur">Video to come: {media.file}</span>
-      )}
     </div>
   </figure>
 );
@@ -132,10 +129,6 @@ const Counter: React.FC<{ n: number; total: number; tone?: 'dark' | 'light' }> =
   <span className={`font-mono text-xs ${tone === 'light' ? 'text-white/45' : 'text-zinc-400'}`}>
     <span className="text-[#703FEC]">{pad2(n)}</span> / {pad2(total)}
   </span>
-);
-
-const Todo: React.FC<{ children: React.ReactNode; tone?: 'dark' | 'light' }> = ({ children, tone = 'dark' }) => (
-  <span className={`inline-block rounded-lg border border-dashed px-3 py-2 font-mono text-sm ${tone === 'light' ? 'border-white/20 text-white/55' : 'border-zinc-300 text-zinc-500'}`}>{children}</span>
 );
 
 /** Card that tilts toward the cursor with a soft light under it */
@@ -709,7 +702,19 @@ export const JunoCaseStudy: React.FC = () => {
               </ul>
             </FadeUp>
           </div>
-          <div className="mt-12"><Todo tone="light">{DESIGN_SYSTEM.todo}</Todo></div>
+          <div className="mt-14 md:mt-20">
+            <h3 className="text-sm font-bold uppercase tracking-[0.25em] text-white/45">Core components</h3>
+            <ul className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {DESIGN_SYSTEM.shots.map((c) => (
+                <li key={c.name}>
+                  <TiltCard className="rounded-xl border border-white/[0.08] bg-[#07090d]">
+                    <Still src={c.image} alt={c.alt} sizes="(min-width: 640px) 33vw, 100vw" />
+                    <p className="px-4 py-3 text-sm text-white/60">{c.name}</p>
+                  </TiltCard>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </DarkBand>
 
@@ -719,13 +724,32 @@ export const JunoCaseStudy: React.FC = () => {
           <p>{RESULTS.line}</p>
         </SectionHead>
         <FadeUp className="mt-10 grid md:grid-cols-[1.4fr_1fr] gap-4">
-          <blockquote className="rounded-[2rem] bg-zinc-100 p-8 md:p-12">
-            <span aria-hidden className="block text-7xl leading-none font-bold text-[#703FEC]">“</span>
-            <p className="mt-2"><Todo>{RESULTS.quote}</Todo></p>
-          </blockquote>
-          <div className="rounded-[2rem] bg-[#703FEC] text-white p-8 md:p-12 flex flex-col justify-between gap-10 min-h-[220px]">
+          <figure className="rounded-[2rem] bg-zinc-100 p-8 md:p-12 flex flex-col justify-between gap-10">
+            <blockquote>
+              <span aria-hidden className="block text-7xl leading-none font-bold text-[#703FEC]">“</span>
+              <p className="mt-2 text-2xl md:text-4xl font-medium tracking-[-0.03em] leading-[1.25] text-zinc-900">{RESULTS.quote}</p>
+            </blockquote>
+            <figcaption className="flex items-center gap-4">
+              <span aria-hidden className="w-12 h-12 rounded-full bg-[#0A0A0A] grid place-items-center text-white font-bold">Z</span>
+              <span>
+                <span className="block font-semibold text-black">{RESULTS.author}</span>
+                <span className="block text-sm text-zinc-500">{RESULTS.role}</span>
+              </span>
+            </figcaption>
+          </figure>
+          <div className="rounded-[2rem] bg-[#703FEC] text-white p-8 md:p-10">
             <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/70">Impact</span>
-            <Todo tone="light">{RESULTS.metrics}</Todo>
+            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-8">
+              {RESULTS.stats.map((st) => (
+                <div key={st.label}>
+                  <dt className="sr-only">{st.label}</dt>
+                  <dd>
+                    <span className="block text-5xl md:text-6xl font-bold tracking-[-0.05em] leading-none">{st.value}<span className="ml-1.5 text-lg md:text-xl font-semibold tracking-normal text-white/70">{st.unit}</span></span>
+                    <span className="mt-2 block text-sm text-white/75 leading-snug" aria-hidden>{st.label}</span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </FadeUp>
       </section>

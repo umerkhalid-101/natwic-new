@@ -389,9 +389,13 @@ export const Studio: React.FC = () => {
       {/* Hero */}
       <section className="px-5 md:px-12 mb-20 md:mb-32">
         <div className="max-w-7xl mx-auto">
-          <RevealText className="mb-12 md:mb-20">
-            <h1 className="text-[22vw] md:text-[14vw] font-bold leading-[0.8] tracking-[-0.06em] text-black">Studio</h1>
-          </RevealText>
+          <h1 className="mb-12 md:mb-20">
+            <span className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500 mb-6"><span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />Remote web design &amp; branding team</span>
+            <span className="sr-only">: </span>
+            <span className="block overflow-hidden">
+              <motion.span initial={{ y: '100%' }} whileInView={{ y: 0 }} viewport={{ once: true, margin: '-10%' }} transition={{ duration: 1.2, ease }} className="block text-[22vw] md:text-[14vw] font-bold leading-[0.8] tracking-[-0.06em] text-black">Studio</motion.span>
+            </span>
+          </h1>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             <div>
               <RevealText delay={0.15}><Label>Who we are</Label></RevealText>

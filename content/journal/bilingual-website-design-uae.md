@@ -28,9 +28,9 @@ Not always on day one. The real answer depends on who's buying from you.
 
 Arabic is the UAE's official language, but in my experience a lot of tech and B2B buying in Dubai happens in English. So instead of a blanket rule, look at your customer:
 
-- **Go bilingual at launch if you sell to consumers, work with government entities, or target Emirati and wider GCC families. Healthcare, education, real estate, F&B, and consumer fintech usually fall here.
-- \*\*Launch English-first\*\* if you're a B2B SaaS or services startup selling to international or expat-led teams. Plan Arabic as phase two.
-- \*\*Check your inbox.\*\* If leads are already messaging you in Arabic on WhatsApp or Instagram, that's your signal.
+- **Go bilingual at launch** if you sell to consumers, work with government entities, or target Emirati and wider GCC families. Healthcare, education, real estate, F&B, and consumer fintech usually fall here.
+- **Launch English-first** if you're a B2B SaaS or services startup selling to international or expat-led teams. Plan Arabic as phase two.
+- **Check your inbox.** If leads are already messaging you in Arabic on WhatsApp or Instagram, that's your signal.
 
 There's a legal angle too. Under the UAE's consumer protection law, most information given to consumers, like product details, bills, and warranty terms, has to be in Arabic, with other languages allowed alongside it, according to this [summary from law firm CMS](https://cms.law/en/are/legal-updates/the-uae-s-new-consumer-protection-landscape-implications-and-key-provisions). If you sell to consumers, check with your legal advisor before launching an English-only store.
 
@@ -89,19 +89,19 @@ Google also warns against pages where only the menus are translated while the ma
 
 ### Sweat the small details
 
-- \*\*Phone and email fields\*\* stay left to right, even inside an Arabic form. A +971 number should never render backwards.
-- \*\*Digits:\*\* choose Western digits (0 to 9) or Eastern Arabic digits and stay consistent across the site.
-- \*\*Mixed text:\*\* English brand names inside Arabic sentences can scramble punctuation. Test with real copy, never lorem ipsum.
-- \*\*Language switcher:\*\* one click, visible on every page, labeled in the target language ("العربية", not "Arabic"), and it should open the same page in the other language, not dump people on the homepage.
+- **Phone and email fields** stay left to right, even inside an Arabic form. A +971 number should never render backwards.
+- **Digits:** choose Western digits (0 to 9) or Eastern Arabic digits and stay consistent across the site.
+- **Mixed text:** English brand names inside Arabic sentences can scramble punctuation. Test with real copy, never lorem ipsum.
+- **Language switcher:** one click, visible on every page, labeled in the target language ("العربية", not "Arabic"), and it should open the same page in the other language, not dump people on the homepage.
 
 ## Bilingual SEO basics most founders skip
 
 A bilingual site only helps you rank in both languages if Google can tell the versions apart. Four basics cover most of it:
 
-1. \*\*Give each language its own URL.\*\* Google recommends different URLs for each language version instead of swapping content with cookies or browser settings. Subfolders like /ar/ are the simplest setup for a startup.
-2. \*\*Add hreflang tags with return links.\*\* Each page should list itself and its translation. If your Arabic page points to the English one but the English page doesn't point back, Google may ignore the tags.
-3. \*\*Don't auto-redirect by location or browser language.\*\* Google advises against it because it can block users and crawlers from reaching every version. Let people choose.
-4. \*\*Research Arabic keywords separately.\*\* People don't search in Arabic using word-for-word translations of English phrases, so a translated keyword list misses real demand.
+1. **Give each language its own URL.** Google recommends different URLs for each language version instead of swapping content with cookies or browser settings. Subfolders like /ar/ are the simplest setup for a startup.
+2. **Add hreflang tags with return links.** Each page should list itself and its translation. If your Arabic page points to the English one but the English page doesn't point back, Google may ignore the tags.
+3. **Don't auto-redirect by location or browser language.** Google advises against it because it can block users and crawlers from reaching every version. Let people choose.
+4. **Research Arabic keywords separately.** People don't search in Arabic using word-for-word translations of English phrases, so a translated keyword list misses real demand.
 
 ## Choosing a platform for an Arabic English website
 

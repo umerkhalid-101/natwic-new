@@ -4,7 +4,7 @@ import { Writable } from 'node:stream';
 import App from './App';
 import type { View } from './seo';
 
-export { ROUTE_META, VIEWS, urlFor, CASE_SLUGS, caseMeta, caseUrl, postUrl, BASE_URL } from './seo';
+export { ROUTE_META, VIEWS, urlFor, CASE_SLUGS, caseMeta, caseUrl, SERVICE_SLUGS, serviceMeta, serviceUrl, postUrl, BASE_URL } from './seo';
 export { POSTS, postMeta } from './components/journal/posts';
 
 /** Renders one page to HTML at build time, waiting for lazy-loaded pages to resolve. */

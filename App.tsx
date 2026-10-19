@@ -13,7 +13,7 @@ import { Seo } from './components/Seo';
 import { Loader } from './components/Loader';
 import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './components/smoothScroll';
 import { NavContext } from './components/nav';
-import { ROUTE_META, View, viewFromPath, slugFromPath, caseMeta } from './seo';
+import { ROUTE_META, View, viewFromPath, slugFromPath, caseMeta, serviceMeta } from './seo';
 
 // The scroll universe (and three.js inside it) loads as its own chunk
 const Universe = lazy(() => import('./components/Universe').then(m => ({ default: m.Universe })));
@@ -25,6 +25,8 @@ const Privacy = lazy(() => import('./components/Privacy').then(m => ({ default: 
 const Terms = lazy(() => import('./components/Terms').then(m => ({ default: m.Terms })));
 const WorkIndex = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.WorkIndex })));
 const CaseStudyPage = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.CaseStudyPage })));
+const ServicesIndex = lazy(() => import('./components/services/ServicePages').then(m => ({ default: m.ServicesIndex })));
+const ServicePage = lazy(() => import('./components/services/ServicePages').then(m => ({ default: m.ServicePage })));
 const JournalIndex = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalIndex })));
 const JournalTeaser = lazy(() => import('./components/journal/JournalTeaser').then(m => ({ default: m.JournalTeaser })));
 const JournalPost = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalPost })));
@@ -121,6 +123,20 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
             <>
               <Seo {...caseMeta(slug)} view={`work/${slug}`} />
               <CaseStudyPage slug={slug} />
+            </>
+          )}
+
+          {view === 'services' && !slug && (
+            <>
+              <Seo {...ROUTE_META.services} view="services" />
+              <ServicesIndex />
+            </>
+          )}
+
+          {view === 'services' && slug && (
+            <>
+              <Seo {...serviceMeta(slug)} view={`services/${slug}`} />
+              <ServicePage slug={slug} />
             </>
           )}
 

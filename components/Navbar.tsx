@@ -10,6 +10,7 @@ export const NAV_ITEMS = [
   { label: 'Home', view: 'home', href: '/' },
   { label: 'Studio', view: 'studio', href: '/studio' },
   { label: 'Work', view: 'work', href: '/work' },
+  { label: 'Services', view: 'services', href: '/services' },
   { label: 'Journal', view: 'journal', href: '/journal' },
   { label: 'Contact', view: 'contact', href: '/contact' },
 ] as const;

@@ -7,7 +7,7 @@ import path from 'node:path';
 const dist = path.resolve('dist');
 const serverEntry = pathToFileURL(path.resolve('dist-server/entry-server.js')).href;
 
-const { render, ROUTE_META, VIEWS, urlFor, CASE_SLUGS, caseMeta, caseUrl, postUrl, POSTS, postMeta, BASE_URL } = await import(serverEntry);
+const { render, ROUTE_META, VIEWS, urlFor, CASE_SLUGS, caseMeta, caseUrl, SERVICE_SLUGS, serviceMeta, serviceUrl, postUrl, POSTS, postMeta, BASE_URL } = await import(serverEntry);
 
 const template = await readFile(path.join(dist, 'index.html'), 'utf8');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -36,6 +36,15 @@ for (const slug of CASE_SLUGS) {
   const body = await render('work', slug);
   await writeFile(path.join(dist, 'work', `${slug}.html`), page(title, description, caseUrl(slug), body));
   console.log(`prerendered /work/${slug} → dist/work/${slug}.html (${(body.length / 1024).toFixed(0)} KB)`);
+}
+
+// One page per service, at /services/<slug>
+await mkdir(path.join(dist, 'services'), { recursive: true });
+for (const slug of SERVICE_SLUGS) {
+  const { title, description } = serviceMeta(slug);
+  const body = await render('services', slug);
+  await writeFile(path.join(dist, 'services', `${slug}.html`), page(title, description, serviceUrl(slug), body));
+  console.log(`prerendered /services/${slug} → dist/services/${slug}.html (${(body.length / 1024).toFixed(0)} KB)`);
 }
 
 // One page per published journal post, at /journal/<slug>
@@ -75,10 +84,11 @@ console.log('prerendered 404 → dist/404.html (noindex)');
 
 // Sitemap, built from the same routes we just rendered
 const today = new Date().toISOString().slice(0, 10);
-const PRIORITY = { home: ['weekly', '1.0'], studio: ['monthly', '0.8'], work: ['monthly', '0.8'], journal: ['weekly', '0.8'], contact: ['monthly', '0.7'], privacy: ['yearly', '0.3'], terms: ['yearly', '0.3'] };
+const PRIORITY = { home: ['weekly', '1.0'], studio: ['monthly', '0.8'], work: ['monthly', '0.8'], services: ['monthly', '0.9'], journal: ['weekly', '0.8'], contact: ['monthly', '0.7'], privacy: ['yearly', '0.3'], terms: ['yearly', '0.3'] };
 const entries = [
   ...VIEWS.map((v) => [urlFor(v), ...(PRIORITY[v] ?? ['monthly', '0.5'])]),
   ...CASE_SLUGS.map((slug) => [caseUrl(slug), 'monthly', '0.7']),
+  ...SERVICE_SLUGS.map((slug) => [serviceUrl(slug), 'monthly', '0.8']),
   ...POSTS.map((p) => [postUrl(p.slug), 'monthly', '0.6', p.date]),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

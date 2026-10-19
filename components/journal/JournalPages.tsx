@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Marked } from 'marked';
 import { POSTS, Post, postBySlug, postMeta, formatDate } from './posts';
 import { Seo } from '../Seo';
 import { Magnetic } from '../Magnetic';
+import { scrollToY } from '../smoothScroll';
 import { BASE_URL, postUrl } from '../../seo';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -11,10 +12,30 @@ const ease = [0.16, 1, 0.3, 1] as const;
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const absolute = (src?: string) => (src && src.startsWith('/') ? `${BASE_URL}${src}` : src);
 
-// Body images load lazily; links that leave the site open in a new tab
+interface TocItem { id: string; text: string; depth: 2 | 3 }
+
+// Filled while a post renders: the anchors given to its h2/h3 headings
+let toc: TocItem[] = [];
+let usedIds = new Map<string, number>();
+
+const slugify = (s: string) =>
+  s.toLowerCase().replace(/&[a-z]+;|&#\d+;/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/[\s-]+/g, '-') || 'section';
+const plain = (html: string) =>
+  html.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+
+// Body images load lazily; links that leave the site open in a new tab; headings get anchors
 const md = new Marked({
   gfm: true,
   renderer: {
+    heading({ tokens, depth }) {
+      const inner = this.parser.parseInline(tokens);
+      const base = slugify(plain(inner));
+      const n = usedIds.get(base) ?? 0;
+      usedIds.set(base, n + 1);
+      const id = n ? `${base}-${n}` : base;
+      if (depth === 2 || depth === 3) toc.push({ id, text: plain(inner), depth });
+      return `<h${depth} id="${id}">${inner}</h${depth}>`;
+    },
     image({ href, title, text }) {
       const caption = title ? `<figcaption>${esc(title)}</figcaption>` : '';
       return `<figure><img src="${esc(href)}" alt="${esc(text)}" loading="lazy" decoding="async" />${caption}</figure>`;
@@ -49,6 +70,82 @@ const spaClick = (go: () => void) => (e: React.MouseEvent) => {
   go();
 };
 
+const renderPost = (body: string) => {
+  toc = [];
+  usedIds = new Map();
+  const html = md.parse(body) as string;
+  return { html, toc };
+};
+
+const NAV_OFFSET = 110;
+
+const goTo = (id: string) => (e: React.MouseEvent) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  e.preventDefault();
+  scrollToY(el.getBoundingClientRect().top + window.scrollY - NAV_OFFSET, 1.1);
+  history.replaceState(history.state, '', `#${id}`);
+};
+
+// The heading most recently scrolled past
+const useActiveHeading = (items: TocItem[]) => {
+  const [active, setActive] = useState<string | null>(null);
+  useEffect(() => {
+    if (!items.length) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      let current: string | null = null;
+      for (const { id } of items) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top - NAV_OFFSET - 40 <= 0) current = id;
+      }
+      setActive(current);
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [items]);
+  return active;
+};
+
+// Sections, with the subsections of the one being read folded open
+const TocList: React.FC<{ items: TocItem[]; active: string | null; onPick?: () => void }> = ({ items, active, onPick }) => {
+  // Index of the h2 that a heading sits under
+  const owner = (i: number) => items.slice(0, i + 1).map((t) => t.depth).lastIndexOf(2);
+  const activeIndex = items.findIndex((t) => t.id === active);
+  const activeSection = activeIndex < 0 ? -1 : owner(activeIndex);
+
+  return (
+    <ol className="space-y-1">
+      {items.map((t, i) => {
+        if (t.depth === 3 && owner(i) !== activeSection) return null;
+        const on = t.id === active || (t.depth === 2 && i === activeSection);
+        return (
+          <li key={t.id}>
+            <a
+              href={`#${t.id}`}
+              onClick={(e) => { goTo(t.id)(e); onPick?.(); }}
+              className={`group flex gap-3 py-1.5 leading-snug transition-colors duration-300 ${t.depth === 3 ? 'pl-5 text-[13px]' : 'text-sm font-semibold'} ${on ? 'text-black' : 'text-zinc-400 hover:text-black'}`}
+            >
+              {t.depth === 2 && (
+                <span aria-hidden className={`mt-[0.45em] h-1.5 w-1.5 shrink-0 rounded-full transition-colors duration-300 ${on ? 'bg-[#703FEC]' : 'bg-zinc-200 group-hover:bg-zinc-400'}`} />
+              )}
+              <span className={t.id === active && t.depth === 3 ? 'text-[#703FEC]' : ''}>{t.text}</span>
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  );
+};
+
 const Meta: React.FC<{ post: Post; className?: string }> = ({ post, className = '' }) => (
   <p className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 ${className}`}>
     <time dateTime={post.date}>{formatDate(post.date)}</time>
@@ -65,10 +162,10 @@ const Cover: React.FC<{ post: Post; className?: string; eager?: boolean }> = ({ 
       alt={post.coverAlt}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
-      className={`w-full h-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.04] ${className}`}
+      className={`block w-full h-auto transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.04] ${className}`}
     />
   ) : (
-    <div aria-hidden className={`w-full h-full bg-[#0A0A0A] bg-[radial-gradient(circle_at_30%_20%,rgba(112,63,236,0.55),transparent_60%)] ${className}`} />
+    <div aria-hidden className={`w-full aspect-[1200/630] bg-[#0A0A0A] bg-[radial-gradient(circle_at_30%_20%,rgba(112,63,236,0.55),transparent_60%)] ${className}`} />
   );
 
 /* ------------------------------------------------------------------ */
@@ -111,7 +208,7 @@ export const JournalIndex: React.FC<{ onOpen: (slug: string) => void; onContact:
             transition={{ duration: 1, ease, delay: 0.4 }}
             className="group grid md:grid-cols-[1.3fr_1fr] gap-6 md:gap-12 items-end"
           >
-            <div className="aspect-[16/10] overflow-hidden rounded-[2rem]">
+            <div className="overflow-hidden rounded-[2rem]">
               <Cover post={lead} eager />
             </div>
             <div className="md:pb-4">
@@ -142,7 +239,7 @@ export const JournalIndex: React.FC<{ onOpen: (slug: string) => void; onContact:
               transition={{ duration: 0.9, ease, delay: (i % 3) * 0.08 }}
               className="group block"
             >
-              <div className="aspect-[4/3] overflow-hidden rounded-3xl">
+              <div className="overflow-hidden rounded-3xl">
                 <Cover post={p} />
               </div>
               <Meta post={p} className="mt-6" />
@@ -174,7 +271,18 @@ export const JournalIndex: React.FC<{ onOpen: (slug: string) => void; onContact:
 
 export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => void; onAll: () => void; onHome: () => void; onContact: () => void }> = ({ slug, onOpen, onAll, onHome, onContact }) => {
   const post = postBySlug(slug);
-  const html = useMemo(() => (post ? (md.parse(post.body) as string) : ''), [post]);
+  const { html, toc: headings } = useMemo(() => (post ? renderPost(post.body) : { html: '', toc: [] as TocItem[] }), [post]);
+  const active = useActiveHeading(headings);
+  const [tocOpen, setTocOpen] = useState(false);
+
+  // Arriving on /journal/<slug>#section lands on that section
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    const el = id && document.getElementById(id);
+    if (!el) return;
+    const t = setTimeout(() => scrollToY(el.getBoundingClientRect().top + window.scrollY - NAV_OFFSET, 0.01), 300);
+    return () => clearTimeout(t);
+  }, [html]);
 
   if (!post) {
     return (
@@ -250,21 +358,49 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
 
       {post.cover && (
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease, delay: 0.35 }} className="mt-12 md:mt-16 px-3 md:px-6">
-          <div className="mx-auto max-w-6xl aspect-[16/9] overflow-hidden rounded-[2rem] md:rounded-[2.5rem]">
-            <img src={post.cover} alt={post.coverAlt} className="w-full h-full object-cover" />
+          <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] md:rounded-[2.5rem]">
+            <img src={post.cover} alt={post.coverAlt} className="block w-full h-auto" />
           </div>
         </motion.div>
       )}
 
-      <div className="journal-prose px-5 md:px-12 max-w-3xl mx-auto mt-14 md:mt-20" dangerouslySetInnerHTML={{ __html: html }} />
+      {headings.length >= 3 ? (
+        <div className="px-5 md:px-12 max-w-6xl mx-auto mt-14 md:mt-20 lg:grid lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-16 xl:gap-24">
+          <aside className="hidden lg:block">
+            <nav aria-label="Table of contents" className="sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto pb-8">
+              <p className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500">On this page</p>
+              <TocList items={headings} active={active} />
+            </nav>
+          </aside>
+
+          <div className="min-w-0 max-w-3xl">
+            {/* Phones and tablets: a fold-out list above the article */}
+            <nav aria-label="Table of contents" className="lg:hidden mb-12 rounded-3xl border border-zinc-200">
+              <button onClick={() => setTocOpen((o) => !o)} aria-expanded={tocOpen} className="w-full flex items-center justify-between px-6 py-5 text-left">
+                <span className="text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500">On this page</span>
+                <span className={`w-8 h-8 rounded-full border border-zinc-200 grid place-items-center text-black transition-transform duration-500 ${tocOpen ? 'rotate-45' : ''}`}>+</span>
+              </button>
+              <motion.div initial={false} animate={{ height: tocOpen ? 'auto' : 0, opacity: tocOpen ? 1 : 0 }} transition={{ duration: 0.5, ease }} className="overflow-hidden">
+                <div className="px-6 pb-6">
+                  <TocList items={headings.filter((t) => t.depth === 2)} active={null} onPick={() => setTocOpen(false)} />
+                </div>
+              </motion.div>
+            </nav>
+
+            <div className="journal-prose" dangerouslySetInnerHTML={{ __html: html }} />
+          </div>
+        </div>
+      ) : (
+        <div className="journal-prose px-5 md:px-12 max-w-3xl mx-auto mt-14 md:mt-20" dangerouslySetInnerHTML={{ __html: html }} />
+      )}
 
       {more.length > 0 && (
         <section className="mt-24 md:mt-32 px-5 md:px-12 max-w-7xl mx-auto border-t border-zinc-200 pt-14">
           <Label>{index === 0 ? 'Earlier posts' : 'More from the journal'}</Label>
           <div className="mt-10 grid md:grid-cols-2 gap-10">
             {more.map((p) => (
-              <a key={p.slug} href={`/journal/${p.slug}`} onClick={spaClick(() => onOpen(p.slug))} className="group grid grid-cols-[7rem_1fr] md:grid-cols-[10rem_1fr] gap-5 items-center">
-                <div className="aspect-square overflow-hidden rounded-2xl"><Cover post={p} /></div>
+              <a key={p.slug} href={`/journal/${p.slug}`} onClick={spaClick(() => onOpen(p.slug))} className="group grid grid-cols-[8rem_1fr] md:grid-cols-[12rem_1fr] gap-5 items-center">
+                <div className="overflow-hidden rounded-xl md:rounded-2xl"><Cover post={p} /></div>
                 <div>
                   <Meta post={p} />
                   <p className="mt-2 text-xl md:text-2xl font-bold tracking-[-0.03em] leading-tight text-black transition-colors duration-500 group-hover:text-[#703FEC]">{p.title}</p>

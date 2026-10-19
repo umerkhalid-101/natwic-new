@@ -20,17 +20,6 @@ If you've asked three studios in Dubai to quote the same five-page website, you 
 
 So I did the boring part for you. I pulled six Dubai website pricing guides published or updated in 2026, lined up their numbers side by side, and mapped what an early-stage startup should actually spend at each stage. Here's the honest version.
 
-**In this guide:**
-
-- [Startup website cost in Dubai: the short answer](https://claude.ai/chat/74113d9b-ec78-4325-9727-d30cf47a93c1#startup-website-cost-in-dubai-the-short-answer)
-- [We compared six Dubai website price guides](https://claude.ai/chat/74113d9b-ec78-4325-9727-d30cf47a93c1#we-compared-six-dubai-website-price-guides)
-- [Why the same website gets wildly different quotes](https://claude.ai/chat/74113d9b-ec78-4325-9727-d30cf47a93c1#why-the-same-website-gets-wildly-different-quotes)
-- [What to spend at each startup stage](https://claude.ai/chat/74113d9b-ec78-4325-9727-d30cf47a93c1#what-to-spend-at-each-startup-stage)
-- [The costs that never make it into the quote](https://claude.ai/chat/74113d9b-ec78-4325-9727-d30cf47a93c1#the-costs-that-never-make-it-into-the-quote)
-- [What adding Arabic really costs](https://claude.ai/chat/74113d9b-ec78-4325-9727-d30cf47a93c1#what-adding-arabic-really-costs)
-- [How to compare website quotes (free checklist)](https://claude.ai/chat/74113d9b-ec78-4325-9727-d30cf47a93c1#how-to-compare-website-quotes-free-checklist)
-- [FAQ](https://claude.ai/chat/74113d9b-ec78-4325-9727-d30cf47a93c1#faq)
-
 ## Startup website cost in Dubai: the short answer
 
 Most early-stage startups in Dubai should budget AED 3,000 to 8,000 for a single landing page and AED 8,000 to 25,000 for a 5 to 15 page marketing site from a small studio, based on 2026 agency price guides. Running costs add roughly AED 800 or more a year. Arabic, VAT, and maintenance come on top.

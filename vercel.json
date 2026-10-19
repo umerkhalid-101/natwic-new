@@ -90,6 +90,11 @@
       "source": "/work/folionomics",
       "destination": "/work",
       "statusCode": 301
+    },
+    {
+      "source": "/journal/startup-website-cost-in-dubai-what-to-budget-in-2026",
+      "destination": "/journal/startup-website-cost-dubai",
+      "statusCode": 301
     }
   ]
 }

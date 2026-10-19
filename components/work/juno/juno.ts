@@ -179,6 +179,10 @@ export const HERO_SIDES = {
   right: { image: `${DIR}/juno-detail-approval-card.webp`, alt: 'Juno asking for approval before submitting an app.' },
 };
 
+/** Intrinsic size for stills that are not 1600 x 1000 (16:10) */
+const SIZES: Record<string, [number, number]> = { [`${DIR}/juno-detail-live-ui.webp`]: [1968, 1176] };
+export const sizeOf = (src: string): [number, number] => SIZES[src] ?? [1600, 1000];
+
 /** Stills that also exist at 2x, as name@2x.webp */
 export const has2x = (src: string | null) => !!src && /juno-(page|beat|homepage)-/.test(src);
 export const srcSet = (src: string) => (has2x(src) ? `${src} 1600w, ${src.replace('.webp', '@2x.webp')} 3200w` : undefined);

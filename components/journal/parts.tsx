@@ -39,6 +39,8 @@ export const Cover: React.FC<{ post: Post; className?: string; eager?: boolean; 
     <img
       src={post.cover}
       alt={post.coverAlt}
+      width={1200}
+      height={630}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
       className={`block w-full ${framed ? 'aspect-[1200/630] object-contain bg-zinc-100' : 'h-auto'} transition-transform duration-[1.2s] ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-[1.04] ${className}`}

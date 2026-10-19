@@ -12,8 +12,10 @@ const { render, ROUTE_META, VIEWS, urlFor, CASE_SLUGS, caseMeta, caseUrl, SERVIC
 const template = await readFile(path.join(dist, 'index.html'), 'utf8');
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
-const page = (title, description, url, body, image) =>
+// `preload`: the page's own above-the-fold image. Only the home page keeps the hero texture preload.
+const page = (title, description, url, body, image, preload) =>
   (image ? template.replace(/(<meta (?:name|property)="(?:og:image|twitter:image)" content=")[^"]*"/g, `$1${image}"`) : template)
+    .replace(/<link rel="preload" as="image"[^>]*>/, (tag) => (url === `${BASE_URL}/` ? tag : preload ? `<link rel="preload" as="image" href="${preload}" imagesrcset="${preload} 1600w, ${preload.replace('.webp', '@2x.webp')} 3200w" imagesizes="(min-width: 1024px) 64rem, 100vw" type="image/webp" fetchpriority="high" />` : ''))
     .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
     .replace(/(<meta (?:name|property)="(?:title|og:title|twitter:title)" content=")[^"]*"/g, `$1${esc(title)}"`)
     .replace(/(<meta (?:name|property)="(?:description|og:description|twitter:description)" content=")[^"]*"/g, `$1${esc(description)}"`)
@@ -32,9 +34,9 @@ for (const view of VIEWS) {
 // One page per case study, at /work/<slug>
 await mkdir(path.join(dist, 'work'), { recursive: true });
 for (const slug of CASE_SLUGS) {
-  const { title, description, image } = caseMeta(slug);
+  const { title, description, image, preload } = caseMeta(slug);
   const body = await render('work', slug);
-  await writeFile(path.join(dist, 'work', `${slug}.html`), page(title, description, caseUrl(slug), body, image));
+  await writeFile(path.join(dist, 'work', `${slug}.html`), page(title, description, caseUrl(slug), body, image, preload));
   console.log(`prerendered /work/${slug} → dist/work/${slug}.html (${(body.length / 1024).toFixed(0)} KB)`);
 }
 
@@ -70,6 +72,7 @@ const notFound = page(
     <div class="mt-10 flex flex-wrap justify-center gap-3">
       <a href="/" class="rounded-full bg-black text-white px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">Home</a>
       <a href="/work" class="rounded-full border border-zinc-200 px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-black hover:border-black transition-colors">See our work</a>
+      <a href="/services" class="rounded-full border border-zinc-200 px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-black hover:border-black transition-colors">Services</a>
       <a href="/contact" class="rounded-full border border-zinc-200 px-7 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-black hover:border-black transition-colors">Contact</a>
     </div>
   </main>`,

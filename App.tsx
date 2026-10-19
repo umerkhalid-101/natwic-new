@@ -11,6 +11,7 @@ import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
 import { Seo } from './components/Seo';
 import { Loader } from './components/Loader';
+import { lazyPage } from './components/lazyPage';
 import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './components/smoothScroll';
 import { NavContext } from './components/nav';
 import { ROUTE_META, View, viewFromPath, slugFromPath, caseMeta, serviceMeta } from './seo';
@@ -19,18 +20,35 @@ import { ROUTE_META, View, viewFromPath, slugFromPath, caseMeta, serviceMeta } f
 const Universe = lazy(() => import('./components/Universe').then(m => ({ default: m.Universe })));
 // Same footprint as the real section, so nothing jumps while it loads
 const UniverseFallback = () => <section id="work" aria-hidden className="relative h-[1090vh] bg-[#050505]" style={{ marginBottom: '-70vh' }} />;
-const Contact = lazy(() => import('./components/Contact').then(m => ({ default: m.Contact })));
-const Studio = lazy(() => import('./components/Studio').then(m => ({ default: m.Studio })));
-const Privacy = lazy(() => import('./components/Privacy').then(m => ({ default: m.Privacy })));
-const Terms = lazy(() => import('./components/Terms').then(m => ({ default: m.Terms })));
-const WorkIndex = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.WorkIndex })));
-const CaseStudyPage = lazy(() => import('./components/work/WorkPages').then(m => ({ default: m.CaseStudyPage })));
-const ServicesIndex = lazy(() => import('./components/services/ServicePages').then(m => ({ default: m.ServicesIndex })));
-const ServicePage = lazy(() => import('./components/services/ServicePages').then(m => ({ default: m.ServicePage })));
-const JunoCaseStudy = lazy(() => import('./components/work/juno/JunoCaseStudy').then(m => ({ default: m.JunoCaseStudy })));
-const JournalIndex = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalIndex })));
-const JournalTeaser = lazy(() => import('./components/journal/JournalTeaser').then(m => ({ default: m.JournalTeaser })));
-const JournalPost = lazy(() => import('./components/journal/JournalPages').then(m => ({ default: m.JournalPost })));
+const Contact = lazyPage(() => import('./components/Contact'), (m) => m.Contact);
+const Studio = lazyPage(() => import('./components/Studio'), (m) => m.Studio);
+const Privacy = lazyPage(() => import('./components/Privacy'), (m) => m.Privacy);
+const Terms = lazyPage(() => import('./components/Terms'), (m) => m.Terms);
+const WorkIndex = lazyPage(() => import('./components/work/WorkPages'), (m) => m.WorkIndex);
+const CaseStudyPage = lazyPage(() => import('./components/work/WorkPages'), (m) => m.CaseStudyPage);
+const ServicesIndex = lazyPage(() => import('./components/services/ServicePages'), (m) => m.ServicesIndex);
+const ServicePage = lazyPage(() => import('./components/services/ServicePages'), (m) => m.ServicePage);
+const JunoCaseStudy = lazyPage(() => import('./components/work/juno/JunoCaseStudy'), (m) => m.JunoCaseStudy);
+const JournalIndex = lazyPage(() => import('./components/journal/JournalPages'), (m) => m.JournalIndex);
+const JournalTeaser = lazyPage(() => import('./components/journal/JournalTeaser'), (m) => m.JournalTeaser);
+const JournalPost = lazyPage(() => import('./components/journal/JournalPages'), (m) => m.JournalPost);
+
+/** Loads the code for the page at `pathname`, so the first render matches the pre-rendered HTML */
+export const preloadRoute = (pathname: string) => {
+  const view = viewFromPath(pathname);
+  const slug = slugFromPath(pathname);
+  const pages: { preload: () => Promise<void> }[] = {
+    home: [JournalTeaser],
+    studio: [Studio, JournalTeaser],
+    work: slug ? [slug === 'juno' ? JunoCaseStudy : CaseStudyPage] : [WorkIndex, JournalTeaser],
+    services: [slug ? ServicePage : ServicesIndex],
+    journal: [slug ? JournalPost : JournalIndex],
+    contact: [Contact],
+    privacy: [Privacy],
+    terms: [Terms],
+  }[view];
+  return Promise.all(pages.map((p) => p.preload())).catch(() => {});
+};
 
 // `initialView` lets the build-time pre-renderer render each page
 const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ initialView = 'home', initialSlug = null }) => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion';
-import { PROJECTS, Project, pad, projectBySlug } from './projects';
+import { PROJECTS, Project, pad, projectBySlug, creativeWorkSchema } from './projects';
 import { Magnetic } from '../Magnetic';
 import { BASE_URL, caseUrl } from '../../seo';
 import { Link } from '../nav';
@@ -242,6 +242,7 @@ export const NextProject: React.FC<{ slug: string }> = ({ slug }) => {
           <motion.img
             src={next.image}
             alt=""
+            loading="lazy"
             width={next.imageSize[0]}
             height={next.imageSize[1]}
             initial={false}
@@ -276,6 +277,7 @@ export const CaseStudyPage: React.FC<{ slug: string }> = ({ slug }) => {
 
   return (
     <article key={project.slug} className="bg-white min-h-screen pt-28 md:pt-36 pb-0">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(creativeWorkSchema(project, BASE_URL)) }} />
       <header className="px-5 md:px-12 max-w-7xl mx-auto">
         <Breadcrumb project={project} />
         <div className="mt-10 md:mt-14 flex items-center gap-4">

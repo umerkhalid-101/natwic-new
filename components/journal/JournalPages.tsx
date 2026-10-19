@@ -256,15 +256,16 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
   const schema = [
     {
       '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
+      '@type': 'Article',
       headline: post.title,
+      inLanguage: 'en',
       description,
       datePublished: post.date,
       url,
       mainEntityOfPage: url,
       ...(post.cover ? { image: absolute(post.cover) } : {}),
       author: post.author ? { '@type': 'Person', name: post.author } : { '@type': 'Organization', name: 'Natwic' },
-      publisher: { '@type': 'Organization', name: 'Natwic', logo: { '@type': 'ImageObject', url: `${BASE_URL}/brand/icon-512.png` } },
+      publisher: { '@id': `${BASE_URL}/#organization`, '@type': 'Organization', name: 'Natwic Studio', logo: { '@type': 'ImageObject', url: `${BASE_URL}/brand/icon-512.png` } },
       ...(post.tags.length ? { keywords: post.tags.join(', ') } : {}),
     },
     {
@@ -312,7 +313,7 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
       {post.cover && (
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.1, ease, delay: 0.35 }} className="mt-12 md:mt-16 px-3 md:px-6">
           <div className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] md:rounded-[2.5rem]">
-            <img src={post.cover} alt={post.coverAlt} className="block w-full h-auto" />
+            <img src={post.cover} alt={post.coverAlt} width={1200} height={630} fetchpriority="high" className="block w-full h-auto" />
           </div>
         </motion.div>
       )}

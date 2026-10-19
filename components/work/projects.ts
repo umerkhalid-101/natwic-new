@@ -166,3 +166,19 @@ export const PROJECTS: Project[] = [
 export const pad = (n: number) => String(n).padStart(2, '0');
 
 export const projectBySlug = (slug: string) => PROJECTS.find((p) => p.slug === slug);
+
+/** schema.org CreativeWork for a case study page */
+export const creativeWorkSchema = (p: Project, baseUrl: string) => ({
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWork',
+  name: `${p.title} case study`,
+  headline: p.seoTitle ?? `${p.title}: ${p.summary}`,
+  description: p.seoDescription ?? p.summary,
+  url: `${baseUrl}/work/${p.slug}`,
+  image: `${baseUrl}${p.ogImage ?? p.image}`,
+  inLanguage: 'en',
+  genre: p.category,
+  keywords: p.services.join(', '),
+  creator: { '@id': `${baseUrl}/#organization` },
+  about: { '@type': 'Organization', name: p.title, url: p.url },
+});

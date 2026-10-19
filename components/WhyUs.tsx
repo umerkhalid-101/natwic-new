@@ -442,6 +442,8 @@ const ExpertOrbital: React.FC<{ speaker: number | null }> = ({ speaker }) => {
             alt={`${e.name}, ${e.role} at Natwic`}
             width={56}
             height={56}
+            loading="lazy"
+            decoding="async"
             draggable={false}
             className={`w-full h-full object-cover object-top transition-[filter] duration-500 ${focus === e.id ? 'grayscale-0' : 'grayscale'}`}
           />

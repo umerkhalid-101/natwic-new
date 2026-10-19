@@ -70,6 +70,8 @@ export const caseMeta = (slug: string) => {
     title: p.seoTitle ?? `${p.title} Case Study: ${p.industry} | Natwic`,
     description: p.seoDescription ?? `${p.summary} How Natwic handled ${p.services.join(', ').toLowerCase()} for ${p.domain}, working remotely.`,
     image: p.ogImage ? `${BASE_URL}${p.ogImage}` : undefined,
+    /** Above-the-fold image worth preloading (Juno's hero shot) */
+    preload: p.slug === 'juno' ? '/work/juno/juno-homepage-hero.webp' : undefined,
   };
 };
 export const caseUrl = (slug: string) => `${BASE_URL}/work/${slug}`;

@@ -7,11 +7,11 @@ import { useTilt, Spotlight } from '../../interactions';
 import { QuickBrief } from '../../QuickBrief';
 import { sendBrief } from '../../Pricing';
 import { BASE_URL, caseUrl } from '../../../seo';
-import { projectBySlug } from '../projects';
+import { projectBySlug, creativeWorkSchema } from '../projects';
 import { MoreWork, NextProject } from '../WorkPages';
 import {
   HERO, HERO_SIDES, TASKS, HEADLINES, CHALLENGE, GOALS, APPROACH, STORY_INTRO, BEATS, CAPABILITY_STILLS, PAGES, DETAILS,
-  DESIGN_SYSTEM, RESULTS, CLOSING, Media, srcSet,
+  DESIGN_SYSTEM, RESULTS, CLOSING, Media, srcSet, sizeOf,
 } from './juno';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -94,8 +94,8 @@ const Still: React.FC<{ src: string; alt: string; eager?: boolean; sizes?: strin
     srcSet={srcSet(src)}
     sizes={srcSet(src) ? sizes : undefined}
     alt={alt}
-    width={1600}
-    height={1000}
+    width={sizeOf(src)[0]}
+    height={sizeOf(src)[1]}
     loading={eager ? 'eager' : 'lazy'}
     {...(eager ? { fetchpriority: 'high' } : {})}
     decoding="async"
@@ -432,7 +432,7 @@ export const JunoCaseStudy: React.FC = () => {
 
   return (
     <article className="bg-white min-h-screen pt-28 md:pt-36 overflow-x-clip">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([schema, creativeWorkSchema(project, BASE_URL)]) }} />
 
       {/* 1. Hero */}
       <header className="px-5 md:px-12 max-w-7xl mx-auto">

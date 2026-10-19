@@ -54,7 +54,17 @@ export const preloadRoute = (pathname: string) => {
 const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ initialView = 'home', initialSlug = null }) => {
   const [view, setView] = useState<View>(initialView);
   const [slug, setSlug] = useState<string | null>(initialSlug);
-  const [isLoading, setIsLoading] = useState(true);
+  // The intro plays once per visit, on the home page only. It opens after hydration,
+  // so the pre-rendered page and the first client render stay identical.
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    if (initialView !== 'home') return;
+    try { if (!sessionStorage.getItem('natwic:intro')) setIsLoading(true); } catch { setIsLoading(true); }
+  }, []);
+  const finishIntro = () => {
+    setIsLoading(false);
+    try { sessionStorage.setItem('natwic:intro', '1'); } catch { /* storage blocked: it plays again next time */ }
+  };
 
   useEffect(() => {
     initSmoothScroll();
@@ -95,7 +105,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
       
       {/* Loading Screen Overlay */}
       <AnimatePresence>
-        {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
+        {isLoading && <Loader onComplete={finishIntro} />}
       </AnimatePresence>
 
 

@@ -153,7 +153,9 @@ export const DaylightMap: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const inView = useInView(sectionRef, { amount: 0.25 });
-  const [now, setNow] = useState(() => Date.now());
+  // Starts from the pre-render's clock so hydration matches, then jumps to the real time
+  const [now, setNow] = useState(() => (globalThis as { __NOW__?: number }).__NOW__ ?? Date.now());
+  useEffect(() => { setNow(Date.now()); }, []);
   const [offset, setOffset] = useState(0); // hours ahead of now, 0 to 24
   const [hover, setHover] = useState<string | null>(null);
   const [size, setSize] = useState({ w: 0, h: 0 });

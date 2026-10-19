@@ -68,7 +68,7 @@ In Arabic, the whole reading path runs right to left. The logo and menu start on
 
 ![Guide showing which website elements to mirror in an Arabic RTL layout and which to keep unchanged](/journal/rtl-mirroring-guide-arabic-website.webp "rtl-mirroring-guide-arabic-website")
 
-\*\*Mirror these:\*\* navigation order, text alignment, back and next arrows, progress bars and steppers, sidebars, breadcrumbs, carousel direction, and chat bubbles.
+\*\*Mirror these:\*\* navigation order, text alignment, back and next arrows, progress bars and steppers, sidebars, breadcrumbs, carousel direction, and chat bubbles. 
 
 \*\*Keep these as they are:\*\* logos and wordmarks, phone numbers, prices and other numbers, media play buttons, clock icons, and product photos with text in them.
 

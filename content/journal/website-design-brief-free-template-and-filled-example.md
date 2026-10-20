@@ -28,11 +28,9 @@ Every studio prices risk. When a brief is vague, we have to assume the bigger ve
 
 In our experience at Natwic, three things move a website quote more than anything else:
 
-1. \*\*Scope:\*\* how many unique page layouts you need, not just how many pages. Ten blog posts share one template. Ten landing pages with different structures don't.
-
-2. \*\*Content readiness:\*\* whether your copy, images, and logos exist yet, or someone has to create them.
-
-3. \*\*Integrations:\*\* CRM, booking tools, payments, product sign-up, or anything that connects your site to another system.
+1. **Scope:** how many unique page layouts you need, not just how many pages. Ten blog posts share one template. Ten landing pages with different structures don't.
+2. **Content readiness:** whether your copy, images, and logos exist yet, or someone has to create them.
+3. **Integrations:** CRM, booking tools, payments, product sign-up, or anything that connects your site to another system.
 
 Nail those three in your brief and your quotes will land much closer together. Leave them out and you get the $6K to $40K spread.
 
@@ -118,15 +116,11 @@ Will your marketing lead edit pages weekly, or will a developer handle changes? 
 
 ## Website brief mistakes that make studios guess
 
-- \*\*Adjectives instead of examples.\*\* "Modern, bold, premium" describes almost every website. Show references instead.
-
-- \*\*"Make it like Apple."\*\* Apple's site works because of Apple's products and photography budget. Tell us what specifically you admire.
-
-- \*\*Hiding the budget.\*\* It doesn't get you a better deal. It gets you proposals for three different projects.
-
-- \*\*A feature list with no goal.\*\* Features without a goal turn into a long build that doesn't convert.
-
-- \*\*Briefing by committee.\*\* One owner writes it, others review it, one person approves.
+- **Adjectives instead of examples.** "Modern, bold, premium" describes almost every website. Show references instead.
+- **"Make it like Apple."** Apple's site works because of Apple's products and photography budget. Tell us what specifically you admire.
+- **Hiding the budget.** It doesn't get you a better deal. It gets you proposals for three different projects.
+- **A feature list with no goal.** Features without a goal turn into a long build that doesn't convert.
+- **Briefing by committee.** One owner writes it, others review it, one person approves.
 
 ## Free website brief template
 

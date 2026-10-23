@@ -155,12 +155,15 @@ export const Contact: React.FC<ContactProps> = ({ isStandalone = true }) => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-20 items-start">
         {/* Left: the invitation and the direct lines */}
         <div>
-          <div className="flex items-center gap-3 mb-6 md:mb-8">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
-            <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500">Start a project</p>
-          </div>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-[-0.055em] leading-[0.92]">
-            Let’s build something <span className="italic text-[#703FEC]">legendary.</span>
+          <h1>
+            <span className="flex items-center gap-3 mb-6 md:mb-8 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500">
+              <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
+              Start a web design or branding project
+            </span>
+            <span className="sr-only">: </span>
+            <span className="block text-5xl md:text-7xl lg:text-8xl font-bold tracking-[-0.055em] leading-[0.92]">
+              Let’s build something <span className="italic text-[#703FEC]">legendary.</span>
+            </span>
           </h1>
           <p className="mt-6 md:mt-8 max-w-md text-lg text-zinc-600 leading-relaxed">
             A few lines is all we need. We’ll reply within 24 hours.

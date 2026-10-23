@@ -317,7 +317,8 @@ export const ThemeTitle: React.FC<{ theme: Theme; text: string; className?: stri
     : theme.key === 'editorial' ? { fontStyle: 'italic' as const, color: 'var(--accent)' } : undefined;
   const h1 = (
     <h1 className={`${theme.display} leading-[0.95] ${className}`}>
-      {theme.key === 'terminal' && <span aria-hidden className="mr-3 font-mono text-[color:var(--accent)]">{'>'}</span>}
+      {/* The prompt is drawn by CSS so it stays out of the heading's text */}
+      {theme.key === 'terminal' && <span aria-hidden className="mr-3 font-mono text-[color:var(--accent)] before:content-['>']" />}
       {words.map((w, i) => (
         <span key={i} className="inline-block overflow-hidden pb-[0.1em] align-bottom">
           <motion.span className="inline-block" style={i >= words.length - 2 ? lastStyle : undefined} initial={{ y: '105%' }} animate={{ y: 0 }} transition={{ duration: 1, ease, delay: 0.05 * i }}>{w}&nbsp;</motion.span>

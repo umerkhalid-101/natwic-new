@@ -223,7 +223,7 @@ export const ServicePage: React.FC<{ slug: string }> = ({ slug }) => {
   return (
     <article key={meta.slug} data-theme={theme.key} className="min-h-screen pt-24 md:pt-28 pb-10 overflow-x-clip" style={{ ...theme.vars, background: 'var(--page)', color: 'var(--ink)' } as React.CSSProperties}>
       <JsonLd data={schema} />
-      <style>{GRID_CSS + MICRO_CSS}</style>
+      <style dangerouslySetInnerHTML={{ __html: GRID_CSS + MICRO_CSS }} />
       <ThemeStyles />
       <ScrollProgress />
 

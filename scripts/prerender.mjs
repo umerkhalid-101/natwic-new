@@ -2,6 +2,8 @@
 // get real content and the right title/description without running JavaScript.
 import { readFile, writeFile, rm, mkdir } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 const dist = path.resolve('dist');
@@ -104,21 +106,52 @@ const notFound = page(
 await writeFile(path.join(dist, '404.html'), notFound);
 console.log('prerendered 404 → dist/404.html (noindex)');
 
-// Sitemap, built from the same routes we just rendered
-const today = new Date().toISOString().slice(0, 10);
+// Sitemap, built from the same routes we just rendered.
+// lastmod is the last commit that touched a page's own source, so it only moves
+// when that page changes. Unknown dates are left out rather than guessed.
+const git = (...args) => {
+  try { return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return ''; }
+};
+// In a shallow clone the oldest commit claims every file, so its date means nothing
+const shallowFile = git('rev-parse', '--git-path', 'shallow');
+const shallow = new Set(shallowFile && existsSync(shallowFile) ? readFileSync(shallowFile, 'utf8').split('\n').filter(Boolean) : []);
+const lastChanged = (...paths) => {
+  const [hash, date] = git('log', '-1', '--format=%H %cs', '--', ...paths).split(' ');
+  return hash && !shallow.has(hash) ? date : null;
+};
+const newest = (...dates) => dates.filter(Boolean).sort().pop() ?? null;
+
+const SOURCES = {
+  home: ['components/Hero.tsx', 'components/Services.tsx', 'components/WhyUs.tsx', 'components/Stats.tsx', 'components/Partners.tsx', 'components/FAQ.tsx', 'components/Pricing.tsx', 'constants.tsx', 'index.html'],
+  studio: ['components/Studio.tsx', 'components/studio'],
+  work: ['components/work/WorkPages.tsx', 'components/work/projects.ts'],
+  services: ['components/services/ServicePages.tsx', 'components/services/services.ts', 'components/services/content.ts', 'components/services/demos.tsx'],
+  journal: ['components/journal/JournalPages.tsx'],
+  contact: ['components/Contact.tsx'],
+  privacy: ['components/Privacy.tsx'],
+  terms: ['components/Terms.tsx'],
+};
+const latestPost = POSTS.map((p) => p.date).sort().pop();
+const viewDate = (v) => (v === 'journal' ? newest(lastChanged(...SOURCES.journal), latestPost) : lastChanged(...(SOURCES[v] ?? [])));
+const caseDate = (slug) =>
+  slug === 'juno'
+    ? lastChanged('components/work/juno', 'public/work/juno')
+    : lastChanged('components/work/built', `public/work/${slug}`);
+const serviceDate = () => lastChanged('components/services');
+const postDate = (p) => newest(p.date, lastChanged(`content/journal/${p.slug}.md`));
+
 const PRIORITY = { home: ['weekly', '1.0'], studio: ['monthly', '0.8'], work: ['monthly', '0.8'], services: ['monthly', '0.9'], journal: ['weekly', '0.8'], contact: ['monthly', '0.7'], privacy: ['yearly', '0.3'], terms: ['yearly', '0.3'] };
 const entries = [
-  ...VIEWS.map((v) => [urlFor(v), ...(PRIORITY[v] ?? ['monthly', '0.5'])]),
-  ...CASE_SLUGS.map((slug) => [caseUrl(slug), 'monthly', '0.7']),
-  ...SERVICE_SLUGS.map((slug) => [serviceUrl(slug), 'monthly', '0.8']),
-  ...POSTS.map((p) => [postUrl(p.slug), 'monthly', '0.6', p.date]),
+  ...VIEWS.map((v) => [urlFor(v), ...(PRIORITY[v] ?? ['monthly', '0.5']), viewDate(v)]),
+  ...CASE_SLUGS.map((slug) => [caseUrl(slug), 'monthly', '0.7', caseDate(slug)]),
+  ...SERVICE_SLUGS.map((slug) => [serviceUrl(slug), 'monthly', '0.8', serviceDate()]),
+  ...POSTS.map((p) => [postUrl(p.slug), 'monthly', '0.6', postDate(p)]),
 ];
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${entries.map(([loc, freq, pri, lastmod]) => `  <url>
     <loc>${loc}</loc>
-    <lastmod>${lastmod ?? today}</lastmod>
-    <changefreq>${freq}</changefreq>
+${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ''}    <changefreq>${freq}</changefreq>
     <priority>${pri}</priority>
   </url>`).join('\n')}
 </urlset>

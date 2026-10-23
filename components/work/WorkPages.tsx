@@ -7,13 +7,6 @@ import { SERVICE_FOR_CASE, serviceBySlug, servicePath } from '../services/servic
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-const Label: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <p className={`flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500 ${className}`}>
-    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
-    {children}
-  </p>
-);
-
 const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: string }> = ({ children, delay = 0, className = '' }) => (
   <span className={`block overflow-hidden pb-[0.08em] ${className}`}>
     <motion.span className="block" initial={{ y: '105%' }} animate={{ y: 0 }} transition={{ duration: 1.1, ease, delay }}>
@@ -49,9 +42,12 @@ export const WorkIndex: React.FC = () => {
   return (
     <div className="bg-white min-h-screen pt-28 md:pt-36 pb-24 md:pb-32">
       <section className="px-5 md:px-12 max-w-7xl mx-auto">
-        <Label>Selected work</Label>
-        <h1 className="mt-6 flex items-start gap-3 md:gap-5 text-[22vw] md:text-[13vw] font-bold leading-[0.82] tracking-[-0.06em] text-black">
-          <Reveal>Work</Reveal>
+        <h1>
+          <span className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500"><span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />Web design &amp; branding case studies</span>
+          <span className="sr-only">: </span>
+          <span className="mt-6 flex items-start gap-3 md:gap-5 text-[22vw] md:text-[13vw] font-bold leading-[0.82] tracking-[-0.06em] text-black">
+            <Reveal>Work</Reveal>
+          </span>
         </h1>
         <motion.p
           initial={{ opacity: 0, y: 20 }}

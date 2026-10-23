@@ -11,31 +11,39 @@ export const VIEWS: View[] = ['home', 'studio', 'work', 'services', 'journal', '
 
 export const ROUTE_META: Record<View, { title: string; description: string }> = {
   home: {
-    title: 'Natwic | Web Design & Branding Studio for Startups and Small Businesses',
+    title: 'Web Design & Branding Studio for Startups | Natwic',
     description:
-      'Natwic is a web design and branding studio for startups, SaaS teams and small businesses worldwide. Based in Dubai, working remotely with clients everywhere.',
+      'Natwic is a web design and branding studio for startups, SaaS teams and small businesses worldwide. Based in Dubai, working with clients everywhere.',
   },
   studio: {
-    title: 'Our Studio | Natwic',
+    title: 'About Natwic: A Remote Web Design & Branding Team',
     description:
-      'Meet the team behind Natwic: designers, developers and strategists working with startups and small businesses around the world.',
+      'Meet the team behind Natwic: designers, developers and strategists working remotely with startups, SaaS teams and small businesses around the world.',
   },
   work: {
-    title: 'Selected Work | Natwic',
-    description: 'Websites, brands and products Natwic has designed for startups, SaaS teams and small businesses.',
+    title: 'Web Design & Branding Case Studies | Natwic',
+    description:
+      'Case studies of websites, brands and products Natwic designed and built for startups, SaaS teams and small businesses: the brief, the approach, the result.',
   },
   services: { title: SERVICES_HUB.title, description: SERVICES_HUB.description },
   journal: {
-    title: 'Journal | Natwic',
-    description: 'Notes from the Natwic studio on web design, branding and building products for startups and small businesses.',
+    title: 'Web Design & Branding Guides for Startups | Natwic',
+    description:
+      'Practical guides from the Natwic studio on web design, branding, website costs and launching products for startups, SaaS teams and small businesses.',
   },
   contact: {
-    title: 'Start a Project | Natwic',
+    title: 'Start a Web Design or Branding Project | Natwic',
     description:
-      'Tell us what you’re building. Natwic designs websites, brands and content for startups and small businesses, wherever you are.',
+      'Tell us what you’re building. Natwic designs websites, brands and content for startups and small businesses worldwide, and replies within 24 hours.',
   },
-  privacy: { title: 'Privacy Policy | Natwic', description: 'Natwic Studio privacy policy.' },
-  terms: { title: 'Terms of Service | Natwic', description: 'Natwic Studio terms of service.' },
+  privacy: {
+    title: 'Privacy Policy | Natwic',
+    description: 'What personal information Natwic collects through this website and its forms, how we use it, and how to contact us about your data.',
+  },
+  terms: {
+    title: 'Terms of Service | Natwic',
+    description: 'The terms for using the Natwic website, including intellectual property rights, user representations and the governing law.',
+  },
 };
 
 export const urlFor = (view: View) => (view === 'home' ? `${BASE_URL}/` : `${BASE_URL}/${view}`);

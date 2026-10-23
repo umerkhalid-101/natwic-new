@@ -23,6 +23,8 @@ export const JsonLd: React.FC<{ data: object }> = ({ data }) => (
 /* Futuristic building blocks                                           */
 /* ------------------------------------------------------------------ */
 
+// Inject with dangerouslySetInnerHTML: as a text child, React's server render escapes the quotes
+// and brackets, the browser keeps them literal inside <style>, and hydration fails on the mismatch.
 export const GRID_CSS = `
 @keyframes svc-scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
 .svc-scan { animation: svc-scan 7s linear infinite; }
@@ -42,7 +44,7 @@ export const GridStage: React.FC<{ children: React.ReactNode; className?: string
   const t = useTilt(0);
   return (
     <section {...t.handlers} className={`relative mx-2 md:mx-6 overflow-clip rounded-[2rem] md:rounded-[3rem] bg-[#06060b] text-white ${className}`}>
-      <style>{GRID_CSS}</style>
+      <style dangerouslySetInnerHTML={{ __html: GRID_CSS }} />
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_75%_65%_at_50%_35%,#000_40%,transparent_100%)]" />
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[700px] bg-[radial-gradient(ellipse_at_50%_-10%,rgba(112,63,236,0.55),transparent_60%)]" />
       <div aria-hidden className="svc-scan pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-transparent via-[#703FEC]/10 to-transparent" />

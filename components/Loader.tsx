@@ -7,6 +7,8 @@ export const Loader: React.FC<{ onComplete: () => void }> = ({ onComplete }) => 
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
+    // The loader now covers the page, so drop the placeholder index.html showed before hydration
+    document.documentElement.classList.remove('intro-pending');
     lockScroll();
 
     // Slightly shorter duration for snappier feel

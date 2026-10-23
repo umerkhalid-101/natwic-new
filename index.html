@@ -204,7 +204,27 @@
             background: #703FEC;
             color: white;
         }
+        /* First home visit: cover the pre-rendered page until the intro loader mounts */
+        html.intro-pending, html.intro-pending body { background: #050505; overflow: hidden; }
+        html.intro-pending body::before { content: ''; position: fixed; inset: 0; z-index: 9998; background: #050505; }
+        html.intro-pending body::after {
+            content: ''; position: fixed; left: 50%; top: 50%; z-index: 9998;
+            width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 50%; background: #fff;
+        }
     </style>
+    <script>
+        // Same rule as App: the intro plays once per visit, on the home page only
+        (function () {
+            if (location.pathname !== '/' && location.pathname !== '/index.html') return;
+            var seen = false;
+            try { seen = !!sessionStorage.getItem('natwic:intro'); } catch (e) {}
+            if (seen) return;
+            var html = document.documentElement;
+            html.classList.add('intro-pending');
+            // Never leave the page covered if the app fails to start
+            setTimeout(function () { html.classList.remove('intro-pending'); }, 8000);
+        })();
+    </script>
 <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

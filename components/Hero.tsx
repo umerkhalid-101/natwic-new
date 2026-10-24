@@ -74,9 +74,9 @@ export const Hero: React.FC = () => {
                 <p className="text-[9px] md:text-xs font-bold uppercase tracking-[0.7em] mb-4 md:mb-8 text-white/50">ESTABLISHED TWENTY TWENTY FIVE</p>
               </MaskedText>
               <MaskedText delay={0.55}>
-                <h2 className="text-3xl md:text-[4.5rem] font-bold text-white leading-[1.1] tracking-[-0.04em]">
+                <p className="text-3xl md:text-[4.5rem] font-bold text-white leading-[1.1] tracking-[-0.04em]">
                   Not just a studio,<br/><span className="italic text-white/40 font-medium">we are Natwic.</span>
-                </h2>
+                </p>
               </MaskedText>
               <MaskedText delay={0.7}>
                 <h1 className="mt-6 md:mt-10 flex items-start gap-3 md:gap-4 max-w-2xl text-base md:text-[1.6rem] font-medium leading-[1.3] tracking-[-0.02em] text-white/50">

@@ -65,8 +65,12 @@ export const relatedPosts = (post: Post, count: number) => {
     .map(({ p }) => p);
 };
 
+// Google cuts titles at ~60 characters, so the brand suffix only goes on when it fits
+const titleWithBrand = (title: string) =>
+  [`${title} | Natwic Journal`, `${title} | Natwic`].find((t) => t.length <= 60) ?? title;
+
 export const postMeta = (p: Post) => ({
-  title: `${p.title} | Natwic Journal`,
+  title: titleWithBrand(p.title),
   description: p.excerpt || p.body.replace(/[#>*_`\[\]()!-]/g, '').replace(/\s+/g, ' ').slice(0, 155).trim(),
 });
 

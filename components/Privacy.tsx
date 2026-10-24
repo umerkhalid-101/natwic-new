@@ -25,12 +25,12 @@ export const Privacy: React.FC = () => {
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="prose prose-lg prose-zinc max-w-none"
                 >
-                    <h3 className="text-2xl font-bold mb-4 mt-12">1. Introduction</h3>
+                    <h2 className="text-2xl font-bold mb-4 mt-12">1. Introduction</h2>
                     <p className="text-zinc-600 mb-6 leading-relaxed">
                         Natwic Studio ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website natwic.com, use our services, or engage with us.
                     </p>
 
-                    <h3 className="text-2xl font-bold mb-4 mt-12">2. Information We Collect</h3>
+                    <h2 className="text-2xl font-bold mb-4 mt-12">2. Information We Collect</h2>
                     <p className="text-zinc-600 mb-6 leading-relaxed">
                         We may collect information about you in a variety of ways. The information we may collect on the Site includes:
                     </p>
@@ -39,7 +39,7 @@ export const Privacy: React.FC = () => {
                         <li><strong>Derivative Data:</strong> Information our servers automatically collect when you access the Site, such as your IP address, your browser type, your operating system, your access times, and the pages you have viewed directly before and after accessing the Site.</li>
                     </ul>
 
-                    <h3 className="text-2xl font-bold mb-4 mt-12">3. Use of Your Information</h3>
+                    <h2 className="text-2xl font-bold mb-4 mt-12">3. Use of Your Information</h2>
                     <p className="text-zinc-600 mb-6 leading-relaxed">
                         Having accurate information about you permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use information collected about you via the Site to:
                     </p>
@@ -50,7 +50,7 @@ export const Privacy: React.FC = () => {
                         <li>Generate a personal profile about you to make future visits to the Site more personalized.</li>
                     </ul>
 
-                     <h3 className="text-2xl font-bold mb-4 mt-12">4. Contact Us</h3>
+                     <h2 className="text-2xl font-bold mb-4 mt-12">4. Contact Us</h2>
                     <p className="text-zinc-600 mb-6 leading-relaxed">
                         If you have questions or comments about this Privacy Policy, please contact us at: <br/><br/>
                         <strong>Natwic Studio</strong><br/>

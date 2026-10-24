@@ -129,7 +129,7 @@ You don't need a mascot or a one-week sprint to use what worked here. In our exp
 
 - **Keep lines that already work.** Redesign the structure, not the parts people remember.
 
-If you're planning a rebuild, start with a clear [website design brief](https://www.natwic.com/journal/website-design-brief) so every studio quotes the same project. And if you want a team that's done this for an AI product, our [SaaS website design](https://www.natwic.com/services/saas-website-design) service is built around exactly this kind of work.
+If you're planning a rebuild, start with a clear [website design brief](https://www.natwic.com/journal/website-design-brief-free-template-and-filled-example) so every studio quotes the same project. And if you want a team that's done this for an AI product, our [SaaS website design](https://www.natwic.com/services/saas-website-design) service is built around exactly this kind of work.
 
 ## Free AI SaaS homepage checklist
 

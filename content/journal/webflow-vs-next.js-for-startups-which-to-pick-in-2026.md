@@ -133,7 +133,7 @@ The rule underneath all of this: pick the platform for the team that will mainta
 
 4. **Ignoring switching costs.** Moving later means a rebuild plus redirects for every URL. Decide with the next 18 to 24 months in mind.
 
-5. **Comparing quotes for different projects.** One studio quotes five pages, another quotes fifteen. A clear [website design brief](https://www.natwic.com/journal/website-design-brief) makes every quote cover the same scope.
+5. **Comparing quotes for different projects.** One studio quotes five pages, another quotes fifteen. A clear [website design brief](https://www.natwic.com/journal/website-design-brief-free-template-and-filled-example) makes every quote cover the same scope.
 
 ## Free Webflow vs Next.js decision scorecard
 

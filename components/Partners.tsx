@@ -144,9 +144,9 @@ export const Partners: React.FC = () => {
                 </div>
               </div>
               <div className="text-center px-4">
-                <h4 className="text-black font-bold text-[12px] md:text-[14px] mb-2 uppercase tracking-widest opacity-40 group-hover/item:opacity-100 transition-all duration-500">
+                <p className="text-black font-bold text-[12px] md:text-[14px] mb-2 uppercase tracking-widest opacity-40 group-hover/item:opacity-100 transition-all duration-500">
                   {partner.name}
-                </h4>
+                </p>
               </div>
             </div>
           ))}

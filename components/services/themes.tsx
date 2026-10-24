@@ -74,7 +74,7 @@ export const THEMES: Record<string, Theme> = {
     key: 'feed',
     name: 'Social feed',
     dark: false,
-    vars: { '--page': '#fbf7fb', '--ink': '#16101c', '--muted': '#6b6274', '--line': 'rgba(225,48,108,0.08)', '--card': '#ffffff', '--border': '#ecdfe9', '--accent': '#E1306C', '--accent-2': '#703FEC', '--on-accent': '#ffffff', '--stage': '#150c1d', '--stage-ink': '#ffffff' },
+    vars: { '--page': '#f6f5fa', '--ink': '#0f0c1a', '--muted': '#5f5b70', '--line': 'rgba(112,63,236,0.08)', '--card': '#ffffff', '--border': '#e4e1ee', '--accent': '#703FEC', '--accent-2': '#b9a1ff', '--on-accent': '#ffffff', '--stage': '#100c1c', '--stage-ink': '#ffffff' },
     display: 'font-bold tracking-[-0.055em]',
     label: (n, t) => `#${pad2(n)} · ${t}`,
   },
@@ -146,8 +146,8 @@ export const StageBackdrop: React.FC<{ theme: Theme }> = ({ theme }) => {
     case 'feed':
       return (
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -left-32 -top-32 w-[34rem] h-[34rem] rounded-full bg-[#E1306C]/20 blur-[120px]" />
-          <div className="absolute -right-32 bottom-0 w-[34rem] h-[34rem] rounded-full bg-[#703FEC]/25 blur-[120px]" />
+          <div className="absolute -left-32 -top-32 w-[34rem] h-[34rem] rounded-full bg-[#703FEC]/25 blur-[120px]" />
+          <div className="absolute -right-32 bottom-0 w-[30rem] h-[30rem] rounded-full bg-[#b9a1ff]/10 blur-[120px]" />
           <div className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:120px_120px]" />
         </div>
       );
@@ -218,8 +218,8 @@ export const CardTop: React.FC<{ theme: Theme; i: number; title: string }> = ({ 
 
 /** An avatar inside a story ring, for the social feed theme */
 export const StoryRing: React.FC<{ size: string; children?: React.ReactNode }> = ({ size, children }) => (
-  <span className={`grid shrink-0 place-items-center rounded-full bg-[conic-gradient(from_200deg,#F59E0B,#E1306C,#703FEC,#F59E0B)] p-[2px] ${size}`}>
-    <span className="grid h-full w-full place-items-center rounded-full border-2 border-white bg-[linear-gradient(135deg,#703FEC,#E1306C)] text-[10px] font-bold text-white">{children}</span>
+  <span className={`grid shrink-0 place-items-center rounded-full bg-[conic-gradient(from_200deg,#703FEC,#b9a1ff,#703FEC)] p-[2px] ${size}`}>
+    <span className="grid h-full w-full place-items-center rounded-full border-2 border-white bg-[#703FEC] text-[10px] font-bold text-white">{children}</span>
   </span>
 );
 
@@ -268,7 +268,7 @@ export const ProcessView: React.FC<{ theme: Theme; steps: Step[] }> = ({ theme, 
         {(fill) => (
           <div className="mt-12">
             <div aria-hidden className="relative h-1 rounded-full bg-[color:var(--border)] overflow-hidden">
-              <motion.span className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#F59E0B] via-[var(--accent)] to-[var(--accent-2)]" style={{ width: fill }} />
+              <motion.span className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[var(--accent-2)] to-[var(--accent)]" style={{ width: fill }} />
               {steps.slice(1).map((_, i) => <span key={i} className="absolute inset-y-0 w-1 bg-[var(--page)]" style={{ left: `${((i + 1) / steps.length) * 100}%` }} />)}
             </div>
             <ol className="mt-6 grid gap-4 md:grid-cols-4">
@@ -371,7 +371,7 @@ export const ProcessView: React.FC<{ theme: Theme; steps: Step[] }> = ({ theme, 
 /** Words that rise into place, styled per theme */
 export const ThemeTitle: React.FC<{ theme: Theme; text: string; className?: string }> = ({ theme, text, className = '' }) => {
   const words = text.split(' ');
-  const lastStyle = theme.key === 'product' || theme.key === 'feed'
+  const lastStyle = theme.key === 'feed' ? { color: 'var(--accent)' } : theme.key === 'product'
     ? { backgroundImage: 'linear-gradient(90deg, var(--accent), var(--accent-2))', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }
     : theme.key === 'editorial' ? { fontStyle: 'italic' as const, color: 'var(--accent)' } : undefined;
   const h1 = (
@@ -446,8 +446,8 @@ export const HeroBackdrop: React.FC<{ theme: Theme }> = ({ theme }) => {
     case 'feed':
       return (
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-          <div className="absolute -right-24 -top-24 w-[30rem] h-[30rem] rounded-full bg-[#E1306C]/12 blur-[110px]" />
-          <div className="absolute left-1/4 bottom-[-10rem] w-[30rem] h-[30rem] rounded-full bg-[#703FEC]/12 blur-[110px]" />
+          <div className="absolute -right-24 -top-24 w-[30rem] h-[30rem] rounded-full bg-[#703FEC]/10 blur-[110px]" />
+          <div className="absolute left-1/4 bottom-[-10rem] w-[30rem] h-[30rem] rounded-full bg-[#b9a1ff]/15 blur-[110px]" />
           <div className="absolute inset-0 [background-image:radial-gradient(var(--line)_1.5px,transparent_1.5px)] [background-size:28px_28px] [mask-image:linear-gradient(#000,transparent_90%)]" />
         </div>
       );

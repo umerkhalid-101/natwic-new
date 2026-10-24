@@ -75,5 +75,5 @@ export const SERVICE_FOR_CASE: Record<string, string> = {
 /** Meta for the /services hub */
 export const SERVICES_HUB = {
   title: 'Web Design and Branding Services | Natwic',
-  description: 'Web design and branding services for startups, SaaS teams and small businesses worldwide: websites, brand identity, SaaS sites, development and redesigns.',
+  description: 'Web design and branding services for startups, SaaS teams and small businesses worldwide: websites, brand identity, redesigns, development, social media.',
 };

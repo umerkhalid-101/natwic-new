@@ -439,16 +439,87 @@ export const RedesignDemo: React.FC = () => {
   );
 };
 
+/* ------------------------------------------------------------------ */
+/* Social media: a week's content calendar. Pick a day, preview, approve */
+/* ------------------------------------------------------------------ */
+
+const WEEK = [
+  { day: 'Mon', type: 'Carousel', time: '09:30', title: '3 signs your homepage is costing you sign-ups', caption: 'Swipe for the quick fixes we make on almost every launch.', from: '#703FEC', to: '#E1306C' },
+  { day: 'Tue', type: 'Reel', time: '12:00', title: 'Behind the build: a new page in 60 seconds', caption: 'From sketch to live in one minute. Sound on.', from: '#E1306C', to: '#F59E0B' },
+  { day: 'Wed', type: 'Post', time: '10:00', title: '“The new site finally explains what we do.”', caption: 'A note from a founder we worked with this month.', from: '#0f766e', to: '#22D3EE' },
+  { day: 'Thu', type: 'Carousel', time: '16:00', title: 'Before and after: one onboarding screen', caption: 'Same product, clearer first step. Which do you prefer?', from: '#1d4ed8', to: '#703FEC' },
+  { day: 'Fri', type: 'Story', time: '11:00', title: 'Ask us anything about launching', caption: 'Drop your questions; we answer the best ones Monday.', from: '#F59E0B', to: '#E1306C' },
+];
+
+export const SocialDemo: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { amount: 0.4 });
+  const [active, setActive] = useAutoStep(WEEK.length, 2600, inView);
+  const [approved, setApproved] = useState<number[]>([]);
+  const post = WEEK[active];
+  const isApproved = approved.includes(active);
+  return (
+    <DemoShell title="Content calendar" hint="Pick a day, then approve">
+      <div ref={ref} className="p-4 md:p-5">
+        <div className="grid grid-cols-5 gap-2">
+          {WEEK.map((p, i) => (
+            <button
+              key={p.day}
+              onClick={() => setActive(i)}
+              aria-pressed={active === i}
+              aria-label={`${p.day}: ${p.type}`}
+              className={`relative rounded-xl border p-1.5 text-left transition-all duration-300 ${active === i ? 'border-[#E1306C] bg-white/[0.08] shadow-[0_0_24px_rgba(225,48,108,0.35)]' : 'border-white/10 bg-white/[0.03] hover:border-white/25'}`}
+            >
+              <span className="block font-mono text-[9px] uppercase tracking-[0.2em] text-white/50">{p.day}</span>
+              <span className="mt-1.5 block aspect-square rounded-lg" style={{ background: `linear-gradient(135deg, ${p.from}, ${p.to})` }} />
+              <span className="mt-1.5 block truncate text-[9px] text-white/60">{p.type}</span>
+              {approved.includes(i) && <span className="absolute right-1 top-1 grid w-4 h-4 place-items-center rounded-full bg-emerald-400 text-[9px] font-bold text-black">✓</span>}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-3 rounded-2xl border border-white/10 bg-black/40 p-3">
+          <div className="flex items-center gap-2">
+            <span className="grid w-7 h-7 place-items-center rounded-full bg-[conic-gradient(from_200deg,#F59E0B,#E1306C,#703FEC,#F59E0B)] p-[2px]"><span className="h-full w-full rounded-full border border-black bg-[linear-gradient(135deg,#703FEC,#E1306C)]" /></span>
+            <span className="text-[11px] font-semibold text-white">yourbrand</span>
+            <span className="ml-auto rounded-full bg-white/[0.06] px-2 py-0.5 font-mono text-[9px] text-white/50">{post.type}</span>
+          </div>
+          <AnimatePresence mode="wait">
+            <motion.div key={active} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35, ease }}>
+              <div className="mt-2.5 grid aspect-[16/9] place-items-center rounded-xl p-4 text-center" style={{ background: `linear-gradient(135deg, ${post.from}, ${post.to})` }}>
+                <p className="max-w-[16rem] text-base md:text-lg font-bold leading-tight tracking-[-0.02em] text-white">{post.title}</p>
+              </div>
+              <p className="mt-2.5 text-[12px] leading-snug text-white/70"><span className="font-semibold text-white">yourbrand</span> {post.caption}</p>
+            </motion.div>
+          </AnimatePresence>
+          <div className="mt-3 flex items-center gap-3">
+            <span aria-hidden className="hidden sm:inline text-sm text-white/40">♥ 💬 ↗</span>
+            <span className="truncate font-mono text-[10px] text-white/40">Scheduled · {post.day} {post.time}</span>
+            <button
+              onClick={() => setApproved((a) => (a.includes(active) ? a.filter((x) => x !== active) : [...a, active]))}
+              className={`ml-auto shrink-0 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-semibold transition-colors ${isApproved ? 'bg-emerald-400 text-black' : 'bg-[#E1306C] text-white hover:bg-[#c9265e]'}`}
+            >
+              {isApproved ? 'Approved ✓' : 'Approve post'}
+            </button>
+          </div>
+        </div>
+        <p className="mt-3 text-center font-mono text-[10px] text-white/40">{approved.length} of {WEEK.length} posts approved this week</p>
+      </div>
+    </DemoShell>
+  );
+};
+
 export const DEMOS: Record<string, { Demo: React.FC; label: string }> = {
   'web-design': { Demo: WebDesignDemo, label: 'Page builder' },
   branding: { Demo: BrandingDemo, label: 'Identity lab' },
   'saas-website-design': { Demo: SaasDemo, label: 'Product tour' },
   'webflow-nextjs-development': { Demo: DevDemo, label: 'Code to canvas' },
   'website-redesign': { Demo: RedesignDemo, label: 'Before and after' },
+  'social-media': { Demo: SocialDemo, label: 'Content calendar' },
 };
 
 /* ------------------------------------------------------------------ */
-/* Hub: the five services orbiting the studio                          */
+/* Hub: the services orbiting the studio                          */
 /* ------------------------------------------------------------------ */
 
 const ORBIT_CSS = `

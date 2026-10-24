@@ -42,7 +42,7 @@ export const ServicesIndex: React.FC = () => {
         <div className="px-5 md:px-12 max-w-7xl mx-auto grid lg:grid-cols-[1.05fr_1fr] gap-12 lg:gap-8 items-center">
           <div>
             <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: 'Services', href: '/services' }]} />
-            <div className="mt-10 md:mt-14"><Eyebrow>Services · 05</Eyebrow></div>
+            <div className="mt-10 md:mt-14"><Eyebrow>Services · {pad2(SERVICE_PAGES.length)}</Eyebrow></div>
             <RiseTitle text={HUB_CONTENT.h1} className="mt-6 text-[13vw] md:text-[6.5vw] lg:text-[5.4vw] font-bold leading-[0.92] tracking-[-0.06em]" />
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, ease, delay: 0.4 }} className="mt-8 max-w-xl text-lg md:text-xl text-white/65 leading-relaxed">{HUB_CONTENT.intro}</motion.p>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="mt-10"><PrimaryButton>Start a project</PrimaryButton></motion.div>

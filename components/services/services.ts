@@ -51,6 +51,13 @@ export const SERVICE_PAGES: ServiceSummary[] = [
     description: 'Website redesign services for startups and small businesses. We rebuild outdated sites around your current product, with a clear plan to protect SEO.',
     teaser: 'A rebuilt site that matches where your company is today, without losing the search traffic you already have.',
   },
+  {
+    slug: 'social-media',
+    name: 'Social media management',
+    title: 'Social Media Management Services | Natwic',
+    description: 'Social media management services for startups and small businesses: strategy, on-brand content and steady posting, handled by one remote team.',
+    teaser: 'On-brand posts, a clear plan and steady publishing, so your social channels look as good as your product.',
+  },
 ];
 
 export const serviceBySlug = (slug: string) => SERVICE_PAGES.find((s) => s.slug === slug);

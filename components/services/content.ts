@@ -267,7 +267,7 @@ export const contentFor = (slug: string) => SERVICE_CONTENT.find((s) => s.slug =
 /** The /services hub */
 export const HUB_CONTENT = {
   h1: 'Web design and branding services',
-  intro: 'Natwic designs and builds websites and brands for startups, SaaS teams and small businesses. Pick the service that fits where you are now, or combine them into one project with one team.',
+  intro: 'Natwic designs and builds websites and brands, and keeps social channels active, for startups, SaaS teams and small businesses. Pick the service that fits where you are now, or combine them into one project with one team.',
   remote: [
     { title: 'Remote by default', text: 'We’re based in Dubai and work with clients in other countries. Everything runs through shared files, staging links and written updates, so you can follow progress at any time.' },
     { title: 'Calls that fit your day', text: 'We agree on a regular call time that overlaps with your working hours, wherever you are.' },

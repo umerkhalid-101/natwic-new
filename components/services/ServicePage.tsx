@@ -65,7 +65,7 @@ const Hero: React.FC<{ theme: Theme; slug: string }> = ({ theme, slug }) => {
   );
 
   const shell = (children: React.ReactNode) => (
-    <section ref={heroRef} className="relative mx-2 md:mx-6 overflow-clip rounded-[2rem] md:rounded-[3rem] border border-[color:var(--border)] pt-12 md:pt-16 pb-16 md:pb-24" style={{ background: theme.key === 'editorial' || theme.key === 'transform' || theme.key === 'blueprint' ? 'var(--page)' : 'var(--stage)' }}>
+    <section ref={heroRef} className="relative mx-2 md:mx-6 overflow-clip rounded-[2rem] md:rounded-[3rem] border border-[color:var(--border)] pt-12 md:pt-16 pb-16 md:pb-24" style={{ background: theme.key === 'editorial' || theme.key === 'transform' || theme.key === 'blueprint' || theme.key === 'feed' ? 'var(--page)' : 'var(--stage)' }}>
       <HeroBackdrop theme={theme} />
       {theme.key === 'blueprint' && <CursorCoords container={heroRef} />}
       {theme.key === 'editorial' && <BrandShapes />}

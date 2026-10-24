@@ -115,6 +115,10 @@ export const CardHoverFx: React.FC<{ theme: Theme }> = ({ theme }) => {
     // A scanline sweeps across the card
     return <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-full -translate-y-full bg-gradient-to-b from-transparent via-emerald-400/10 to-transparent transition-transform duration-700 ease-out group-hover:translate-y-full" />;
   }
+  if (theme.key === 'feed') {
+    // A story-ring outline fades in
+    return <span aria-hidden className="pointer-events-none absolute inset-0 rounded-[inherit] p-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100 [background:linear-gradient(135deg,#703FEC,#b9a1ff)] [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)]" />;
+  }
   return null;
 };
 

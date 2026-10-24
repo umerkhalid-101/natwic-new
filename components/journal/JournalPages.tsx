@@ -215,6 +215,7 @@ const SERVICE_HINTS: [RegExp, string][] = [
   [/saas|software|product/i, 'saas-website-design'],
   [/brand|logo|identity/i, 'branding'],
   [/redesign|rebuild|migrat/i, 'website-redesign'],
+  [/social|instagram|linkedin|tiktok/i, 'social-media'],
   [/webflow|next\.?js|develop|cms/i, 'webflow-nextjs-development'],
   [/web|site|design|startup|pricing/i, 'web-design'],
 ];

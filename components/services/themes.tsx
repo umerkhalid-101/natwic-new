@@ -1,7 +1,7 @@
 /**
  * A visual theme per service, so each page looks like the craft it sells:
  * a blueprint canvas for web design, a brand book for branding, product UI for SaaS,
- * a terminal for development and a before-to-after transformation for redesigns.
+ * a terminal for development, a before-to-after transformation for redesigns and a social feed for social media.
  * Colors come in as CSS variables (--page, --ink, --muted, --accent ...) set on the page.
  */
 
@@ -10,7 +10,7 @@ import { motion, MotionValue, useReducedMotion, useScroll, useTransform } from '
 import { pad2, ease } from '../work/rich/blocks';
 import { Typewriter } from './micro';
 
-export type ThemeKey = 'blueprint' | 'editorial' | 'product' | 'terminal' | 'transform';
+export type ThemeKey = 'blueprint' | 'editorial' | 'product' | 'terminal' | 'transform' | 'feed';
 
 export type Theme = {
   key: ThemeKey;
@@ -69,6 +69,14 @@ export const THEMES: Record<string, Theme> = {
     vars: { '--page': '#f1f0ec', '--ink': '#111114', '--muted': '#62615c', '--line': 'rgba(17,17,20,0.07)', '--card': '#ffffff', '--border': '#e0ded7', '--accent': '#703FEC', '--accent-2': '#F59E0B', '--on-accent': '#ffffff', '--stage': '#111114', '--stage-ink': '#ffffff' },
     display: 'font-bold tracking-[-0.055em]',
     label: (n, t) => `Step ${pad2(n)} · ${t}`,
+  },
+  'social-media': {
+    key: 'feed',
+    name: 'Social feed',
+    dark: false,
+    vars: { '--page': '#f6f5fa', '--ink': '#0f0c1a', '--muted': '#5f5b70', '--line': 'rgba(112,63,236,0.08)', '--card': '#ffffff', '--border': '#e4e1ee', '--accent': '#703FEC', '--accent-2': '#b9a1ff', '--on-accent': '#ffffff', '--stage': '#100c1c', '--stage-ink': '#ffffff' },
+    display: 'font-bold tracking-[-0.055em]',
+    label: (n, t) => `#${pad2(n)} · ${t}`,
   },
 };
 
@@ -135,6 +143,14 @@ export const StageBackdrop: React.FC<{ theme: Theme }> = ({ theme }) => {
           <div className="absolute inset-y-0 left-[38%] w-px bg-gradient-to-b from-transparent via-[#F59E0B]/50 to-transparent rotate-[14deg] origin-top" />
         </div>
       );
+    case 'feed':
+      return (
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -left-32 -top-32 w-[34rem] h-[34rem] rounded-full bg-[#703FEC]/25 blur-[120px]" />
+          <div className="absolute -right-32 bottom-0 w-[30rem] h-[30rem] rounded-full bg-[#b9a1ff]/10 blur-[120px]" />
+          <div className="absolute inset-0 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:120px_120px]" />
+        </div>
+      );
   }
 };
 
@@ -188,8 +204,24 @@ export const CardTop: React.FC<{ theme: Theme; i: number; title: string }> = ({ 
           <span className="ml-auto text-[color:var(--muted)]">{pad2(i + 1)}</span>
         </span>
       );
+    case 'feed':
+      return (
+        <span className="flex items-center gap-2.5">
+          <StoryRing size="w-8 h-8" />
+          <span className="text-xs font-semibold">@yourbrand</span>
+          <span className="text-[11px] text-[color:var(--muted)]">· Post {pad2(i + 1)}</span>
+          <span aria-hidden className="ml-auto text-lg leading-none text-[color:var(--border)] transition-[color,transform] duration-300 group-hover:scale-125 group-hover:text-[color:var(--accent)]">♥</span>
+        </span>
+      );
   }
 };
+
+/** An avatar inside a story ring, for the social feed theme */
+export const StoryRing: React.FC<{ size: string; children?: React.ReactNode }> = ({ size, children }) => (
+  <span className={`grid shrink-0 place-items-center rounded-full bg-[conic-gradient(from_200deg,#703FEC,#b9a1ff,#703FEC)] p-[2px] ${size}`}>
+    <span className="grid h-full w-full place-items-center rounded-full border-2 border-white bg-[#703FEC] text-[10px] font-bold text-white">{children}</span>
+  </span>
+);
 
 /* ------------------------------------------------------------------ */
 /* Process, told the theme's way                                       */
@@ -227,6 +259,33 @@ export const ProcessView: React.FC<{ theme: Theme; steps: Step[] }> = ({ theme, 
           ))}
         </ol>
       </div>
+    );
+  }
+  if (theme.key === 'feed') {
+    // Stories: segments fill as you scroll, one card per step
+    return (
+      <FillLine>
+        {(fill) => (
+          <div className="mt-12">
+            <div aria-hidden className="relative h-1 rounded-full bg-[color:var(--border)] overflow-hidden">
+              <motion.span className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[var(--accent-2)] to-[var(--accent)]" style={{ width: fill }} />
+              {steps.slice(1).map((_, i) => <span key={i} className="absolute inset-y-0 w-1 bg-[var(--page)]" style={{ left: `${((i + 1) / steps.length) * 100}%` }} />)}
+            </div>
+            <ol className="mt-6 grid gap-4 md:grid-cols-4">
+              {steps.map((s, i) => (
+                <motion.li key={s.title} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8, ease, delay: i * 0.08 }} className="group svc-glow-border rounded-[1.5rem] border border-[color:var(--border)] bg-[var(--card)] p-6">
+                  <span className="flex items-center gap-3">
+                    <StoryRing size="w-11 h-11">{i + 1}</StoryRing>
+                    <span className="text-xs text-[color:var(--muted)]">Story {i + 1} of {steps.length}</span>
+                  </span>
+                  <h3 className="mt-5 text-xl font-bold tracking-[-0.03em]">{s.title}</h3>
+                  <p className="mt-2 text-[15px] text-[color:var(--muted)] leading-relaxed">{s.text}</p>
+                </motion.li>
+              ))}
+            </ol>
+          </div>
+        )}
+      </FillLine>
     );
   }
   if (theme.key === 'editorial') {
@@ -312,7 +371,7 @@ export const ProcessView: React.FC<{ theme: Theme; steps: Step[] }> = ({ theme, 
 /** Words that rise into place, styled per theme */
 export const ThemeTitle: React.FC<{ theme: Theme; text: string; className?: string }> = ({ theme, text, className = '' }) => {
   const words = text.split(' ');
-  const lastStyle = theme.key === 'product'
+  const lastStyle = theme.key === 'feed' ? { color: 'var(--accent)' } : theme.key === 'product'
     ? { backgroundImage: 'linear-gradient(90deg, var(--accent), var(--accent-2))', WebkitBackgroundClip: 'text', backgroundClip: 'text', color: 'transparent' }
     : theme.key === 'editorial' ? { fontStyle: 'italic' as const, color: 'var(--accent)' } : undefined;
   const h1 = (
@@ -382,6 +441,14 @@ export const HeroBackdrop: React.FC<{ theme: Theme }> = ({ theme }) => {
         <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute inset-y-0 left-0 w-[45%] bg-[linear-gradient(90deg,#e6dfcf,transparent)] opacity-70" />
           <div className="absolute inset-0 [background-image:linear-gradient(var(--line)_1px,transparent_1px)] [background-size:100%_44px]" />
+        </div>
+      );
+    case 'feed':
+      return (
+        <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -right-24 -top-24 w-[30rem] h-[30rem] rounded-full bg-[#703FEC]/10 blur-[110px]" />
+          <div className="absolute left-1/4 bottom-[-10rem] w-[30rem] h-[30rem] rounded-full bg-[#b9a1ff]/15 blur-[110px]" />
+          <div className="absolute inset-0 [background-image:radial-gradient(var(--line)_1.5px,transparent_1.5px)] [background-size:28px_28px] [mask-image:linear-gradient(#000,transparent_90%)]" />
         </div>
       );
   }

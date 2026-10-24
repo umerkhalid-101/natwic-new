@@ -220,6 +220,46 @@ export const SERVICE_CONTENT: ServiceContent[] = [
       REMOTE_FAQ,
     ],
   },
+  {
+    slug: 'social-media',
+    h1: 'Social media management services',
+    serviceType: 'Social media management',
+    intro: [
+      'Social media for business is often the first place people check whether a company is active and worth trusting. A profile that hasn’t posted in months, or posts that look nothing like the website, makes a good product look neglected.',
+      'Natwic offers social media management services for startups and small businesses. We plan what to say, design posts that match your brand and keep your channels publishing on a steady schedule. Because we also design websites and brands, everything you post looks like it comes from the same company. We work remotely with clients around the world.',
+    ],
+    forWho: [
+      { title: 'Founders with no time to post', text: 'You know social matters, but running the product comes first. You want someone to own it without needing daily direction from you.' },
+      { title: 'Startups after a launch or rebrand', text: 'You have a new brand or website and want your social channels to look the same and keep the momentum going.' },
+      { title: 'Small businesses that post now and then', text: 'You post when you remember, it looks different every time, and you want a consistent presence that brings people back.' },
+      { title: 'Teams with a marketing lead but no designer', text: 'Someone plans the content, but there’s no one to turn ideas into polished, on-brand posts every week.' },
+    ],
+    included: [
+      { title: 'Social media strategy', text: 'Which channels to focus on, who you’re talking to, and the handful of topics you want to be known for.' },
+      { title: 'Content calendar', text: 'A monthly plan of posts, agreed with you in advance, so nothing goes out that you haven’t seen.' },
+      { title: 'On-brand post design', text: 'Graphics, carousels and short videos designed around your brand, with templates your team can reuse.' },
+      { title: 'Captions and copy', text: 'Clear captions in your voice, written for each platform rather than copied across all of them.' },
+      { title: 'Scheduling and publishing', text: 'We schedule and publish posts on your accounts, so your channels stay active every week.' },
+      { title: 'Monthly reporting', text: 'A short report on what was posted, what performed best and what we’ll change next month.' },
+    ],
+    process: [
+      { title: 'Discover', text: 'We review your current channels, audience and competitors, and agree on goals and the channels worth your time.' },
+      { title: 'Plan', text: 'We set up the content pillars, tone and visual templates, then build the first month’s calendar for your approval.' },
+      { title: 'Create', text: 'We design and write each month’s posts in batches, and you review and approve them before anything goes live.' },
+      { title: 'Publish and improve', text: 'We schedule and publish, track what works, and adjust the plan every month.' },
+    ],
+    pricing: 'Social media management runs on a monthly plan with an agreed number of posts and channels, so you know the cost each month before we start.',
+    cases: ['juno', 'breakthirty'],
+    faqs: [
+      { q: 'Which social media platforms do you manage?', a: 'We focus on the channels that matter for your business, usually LinkedIn and Instagram, with X, TikTok or Facebook when your audience is there. We recommend where to start during the strategy stage.' },
+      { q: 'Do we approve posts before they go live?', a: 'Yes. You see each month’s calendar and posts in advance and approve them before anything is published.' },
+      { q: 'Do you reply to comments and messages?', a: 'No. Your team handles comments and direct messages, because you know your customers and products best. We focus on planning, creating and publishing the content, and we can suggest simple reply guidelines so responses stay on brand.' },
+      { q: 'Do you run paid social ads?', a: 'No. We focus on organic social media for business: the strategy, the posts and steady publishing. If you run ads with another partner, our post designs and templates can be reused for them.' },
+      { q: 'Can you create content if we don’t have a brand yet?', a: 'Yes. We can set up a simple visual style before the first posts, or run a full branding project first so social, website and product all match.' },
+      { q: 'How soon will we see results?', a: 'Most accounts need a few months of consistent posting before engagement builds. We report monthly so you can see what’s working and where the plan is changing.' },
+      REMOTE_FAQ,
+    ],
+  },
 ];
 
 export const contentFor = (slug: string) => SERVICE_CONTENT.find((s) => s.slug === slug);

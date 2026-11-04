@@ -60,13 +60,9 @@ Our take: before comparing quotes, make sure they describe the same page. A temp
 Five line items explain most of the difference between a $500 quote and a $5,000 one.
 
 - Copywriting: Project Cost Estimator adds $500 to $1,500 for copy and headline testing, and eSEOspace says professional copy can add $500 to $3,000 or more.
-
 - Conversion work: Project Cost Estimator prices conversion optimization at an extra $500 to $1,500, and an A/B test setup with two variants at $200 to $600.
-
 - Platform and code: a custom-coded page costs far more to build than one on a visual builder, per the Wavespace ranges above.
-
 - Design only or design and build: DesignMonks puts design alone at $500 to $5,000 or more, with development priced separately.
-
 - Where the designer is based: in its regional breakdown, DesignMonks lists US freelancers at $500 to $3,000 per project and South Asian freelancers at $150 to $1,000.
 
 In our experience, the cheapest quotes usually save money by skipping the copy, not the design. That's the wrong place to save. Visitors decide in seconds whether the headline speaks to them, and a pretty page with vague words still loses them.
@@ -74,20 +70,6 @@ In our experience, the cheapest quotes usually save money by skipping the copy, 
 ## The tools you'll pay for after launch
 
 The build is a one-time cost. The tool that hosts the page is a bill every month or year. Here's what the most common options charged when we checked their pricing pages on November 4, 2026.
-
-| Tool | Cheapest plan with a custom domain | Where A/B testing starts |
-
-|---|---|---|
-
-| Carrd | Pro Standard, $19 a year | Not listed |
-
-| Framer | Basic, $10 a month | Pro ($30 a month) plus the Convert add-on, $50 per 500,000 events |
-
-| Webflow | Basic, $15 a month billed yearly | Optimize add-on, from $299 a month |
-
-| Leadpages | Pro, $29 a month | Grow, $99 a month |
-
-| Unbounce | Starter, $22 a month billed yearly | Experiment, $112 a month billed yearly |
 
 Prices change, so confirm on [Unbounce's pricing page](https://unbounce.com/pricing/), [Webflow's pricing page](https://webflow.com/pricing), and [Carrd Pro](https://carrd.co/pro) before you commit. If your main site already runs on Webflow or Framer, a new page there often costs nothing extra to host.
 
@@ -118,19 +100,12 @@ Two quotes are only comparable if they answer the same questions. Send these to 
 [INSERT IMAGE: landing-page-quote-checklist.webp | Alt text: Free checklist of 8 questions to ask before signing a landing page design quote, from copy to post-launch changes]
 
 1. Is copywriting included, or do we write it?
-
 2. Is this design only, or design and build?
-
 3. Which platform will it run on, and who owns the account?
-
 4. How many rounds of revisions are included?
-
 5. Is a separate mobile design included?
-
 6. Are forms, analytics, and ad tracking set up and tested?
-
 7. What's the timeline, and when do we see the first design?
-
 8. What does a change cost after launch?
 
 Already have a quote or a live page? Email it to hello@natwic.com with "landing page check" in the subject line. We'll reply with the three fixes we'd make first, or tell you whether the quote looks fair, for free.

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { SOCIALS } from './socials';
+import { SOCIALS, BOOKING_URL } from './socials';
 import { QuickBrief, Brief } from './QuickBrief';
 import { Link } from './nav';
+import { ArrowUpRight } from './icons';
 
 // Filled in elsewhere on the site (the home page chat, the footer brief) before opening Contact
 type Prefill = { name?: string; service?: string; message?: string };
@@ -176,8 +177,9 @@ export const Contact: React.FC<ContactProps> = ({ isStandalone = true }) => {
             {[
               { label: 'Email', value: EMAIL, href: `mailto:${EMAIL}` },
               { label: 'Call', value: PHONE, href: 'tel:+971585203139' },
+              { label: 'Book a call', value: '30-minute intro, free', href: BOOKING_URL, external: true },
             ].map((l) => (
-              <a key={l.label} href={l.href} className="group flex items-center justify-between rounded-2xl border border-black/10 bg-white/60 px-5 py-4 hover:border-[#703FEC] hover:bg-white transition-colors">
+              <a key={l.label} href={l.href} {...('external' in l ? { target: '_blank', rel: 'noopener' } : {})} className="group flex items-center justify-between rounded-2xl border border-black/10 bg-white/60 px-5 py-4 hover:border-[#703FEC] hover:bg-white transition-colors">
                 <span>
                   <span className="block text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">{l.label}</span>
                   <span className="block text-lg md:text-xl font-semibold tracking-tight">{l.value}</span>
@@ -190,7 +192,7 @@ export const Contact: React.FC<ContactProps> = ({ isStandalone = true }) => {
           <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-zinc-500">
             <span>Based in Dubai, working with clients worldwide</span>
             {SOCIALS.map((s) => (
-              <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="font-semibold text-black hover:text-[#703FEC] transition-colors">{s.name} ↗</a>
+              <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="font-semibold text-black hover:text-[#703FEC] transition-colors">{s.name} <ArrowUpRight /></a>
             ))}
           </div>
         </div>

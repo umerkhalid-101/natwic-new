@@ -4,9 +4,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Magnetic } from '../../Magnetic';
 import { Link } from '../../nav';
+import { BOOKING_URL } from '../../socials';
 import { scrollToY } from '../../smoothScroll';
 import { useTilt, Spotlight } from '../../interactions';
 import { QuickBrief, Brief } from '../../QuickBrief';
+import { ArrowUpRight } from '../../icons';
 
 export const ease = [0.16, 1, 0.3, 1] as const;
 export const pad2 = (n: number) => String(n).padStart(2, '0');
@@ -190,7 +192,7 @@ export const CaseHeader: React.FC<{
           <Magnetic strength={0.3}>
             <a href={liveUrl} target="_blank" rel="noopener" className="group inline-flex items-center gap-3 rounded-full bg-[#703FEC] text-white pl-6 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-black transition-colors">
               View live site
-              <span className="w-10 h-10 rounded-full bg-white text-black grid place-items-center transition-transform duration-500 group-hover:-rotate-45">↗</span>
+              <span className="w-10 h-10 rounded-full bg-white text-black grid place-items-center transition-transform duration-500 group-hover:-rotate-45"><ArrowUpRight /></span>
             </a>
           </Magnetic>
           <Magnetic strength={0.3}>
@@ -479,6 +481,7 @@ export const ClosingCta: React.FC<{ headline: string; line: string; send: (b: Br
               <span className="w-11 h-11 rounded-full bg-[#703FEC] text-white grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
             </Link>
           </Magnetic>
+          <a href={BOOKING_URL} target="_blank" rel="noopener" className="text-base md:text-lg font-semibold text-white hover:text-[#b9a1ff] transition-colors">Book a 30-min call <ArrowUpRight /></a>
           <a href="mailto:hello@natwic.com" className="text-base md:text-lg font-semibold text-[#b9a1ff] hover:text-white transition-colors">hello@natwic.com</a>
         </div>
       </div>

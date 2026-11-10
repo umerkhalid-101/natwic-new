@@ -8,6 +8,7 @@ import { Link } from './nav';
 import { PROJECTS } from './work/projects';
 import { SERVICE_PAGES, servicePath } from './services/services';
 import JOURNAL from 'virtual:journal-index';
+import { ArrowUpRight } from './icons';
 
 interface FooterProps {
   setView?: (view: 'home' | 'contact' | 'studio' | 'privacy' | 'terms') => void;
@@ -254,7 +255,7 @@ const Brief: React.FC<{ onSend: () => void }> = ({ onSend }) => {
 const FooterLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => (
   <a href={href} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between max-w-[200px] border-b border-white/[0.08] py-2 text-base font-semibold tracking-tight text-white/80 hover:text-white transition-colors">
     {children}
-    <span className="text-white/30 transition-all duration-300 group-hover:text-[#703FEC] group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
+    <span className="text-white/30 transition-all duration-300 group-hover:text-[#703FEC] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"><ArrowUpRight /></span>
   </a>
 );
 

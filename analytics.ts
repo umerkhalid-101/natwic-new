@@ -12,13 +12,13 @@ export const track = (event: string, params: Record<string, unknown> = {}) => {
 export const trackLead = (form: string, service?: string) =>
   track('generate_lead', { form_location: form, page_path: window.location.pathname, ...(service ? { service } : {}) });
 
-/** Email and phone links anywhere on the site, caught with one listener */
+/** Email, phone and booking links anywhere on the site, caught with one listener */
 export const trackContactLinks = () => {
   document.addEventListener('click', (e) => {
-    const a = (e.target as Element | null)?.closest?.('a[href^="mailto:"], a[href^="tel:"]') as HTMLAnchorElement | null;
+    const a = (e.target as Element | null)?.closest?.('a[href^="mailto:"], a[href^="tel:"], a[href*="calendly.com/"]') as HTMLAnchorElement | null;
     if (!a) return;
     const href = a.getAttribute('href') ?? '';
     const params = { link_url: href, page_path: window.location.pathname };
-    track(href.startsWith('mailto:') ? 'email_click' : 'phone_click', params);
+    track(href.startsWith('mailto:') ? 'email_click' : href.startsWith('tel:') ? 'phone_click' : 'booking_click', params);
   }, { capture: true });
 };

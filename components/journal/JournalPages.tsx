@@ -6,10 +6,11 @@ import { ease, Label, Reveal, spaClick, Meta, Cover, PostCard } from './parts';
 import { Seo } from '../Seo';
 import { Magnetic } from '../Magnetic';
 import { scrollToY } from '../smoothScroll';
-import { BASE_URL, postUrl } from '../../seo';
+import { BASE_URL, ROUTE_META, postUrl } from '../../seo';
 import { Link } from '../nav';
 import { SERVICE_PAGES, servicePath } from '../services/services';
 import IMAGE_SIZES from 'virtual:image-sizes';
+import { authorFor } from './authors';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const absolute = (src?: string) => (src && src.startsWith('/') ? `${BASE_URL}${src}` : src);
@@ -134,9 +135,22 @@ const TocList: React.FC<{ items: TocItem[]; active: string | null; onPick?: () =
 
 export const JournalIndex: React.FC<{ onOpen: (slug: string) => void }> = ({ onOpen }) => {
   const [lead, ...rest] = POSTS;
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'Natwic Journal',
+    headline: ROUTE_META.journal.title,
+    description: ROUTE_META.journal.description,
+    url: `${BASE_URL}/journal`,
+    inLanguage: 'en',
+    publisher: { '@id': `${BASE_URL}/#organization` },
+    isPartOf: { '@id': `${BASE_URL}/#website` },
+    blogPost: POSTS.map((p) => ({ '@type': 'BlogPosting', headline: p.title, url: postUrl(p.slug), datePublished: p.date })),
+  };
 
   return (
     <div className="bg-white min-h-screen pt-28 md:pt-36 pb-24 md:pb-32">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <section className="px-5 md:px-12 max-w-7xl mx-auto">
         <h1>
           <span className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500"><span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />Web design &amp; branding guides</span>
@@ -259,6 +273,7 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
   const services = servicesFor(post.tags);
   const url = postUrl(post.slug);
   const { title, description } = postMeta(post);
+  const author = authorFor(post.author);
 
   const schema = [
     {
@@ -271,8 +286,10 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
       url,
       mainEntityOfPage: url,
       ...(post.cover ? { image: absolute(post.cover) } : {}),
-      author: post.author ? { '@type': 'Person', name: post.author } : { '@type': 'Organization', name: 'Natwic' },
-      publisher: { '@id': `${BASE_URL}/#organization`, '@type': 'Organization', name: 'Natwic Studio', logo: { '@type': 'ImageObject', url: `${BASE_URL}/brand/icon-512.png` } },
+      author: author
+        ? { '@type': 'Person', name: author.name, jobTitle: author.role, url: `${BASE_URL}/studio`, image: `${BASE_URL}${author.image}`, worksFor: { '@id': `${BASE_URL}/#organization` } }
+        : post.author ? { '@type': 'Person', name: post.author } : { '@type': 'Organization', name: 'Natwic' },
+      publisher: { '@id': `${BASE_URL}/#organization`, '@type': 'Organization', name: 'Natwic', logo: { '@type': 'ImageObject', url: `${BASE_URL}/brand/icon-512.png` } },
       ...(post.tags.length ? { keywords: post.tags.join(', ') } : {}),
     },
     {
@@ -311,7 +328,7 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
         )}
         {(post.author || post.tags.length > 0) && (
           <div className="mt-8 flex flex-wrap items-center gap-2">
-            {post.author && <span className="mr-2 text-sm font-semibold text-black">By {post.author}</span>}
+            {post.author && <span className="mr-2 text-sm font-semibold text-black">By {author?.name ?? post.author}</span>}
             {post.tags.map((t) => <span key={t} className="rounded-full bg-zinc-100 px-4 py-2 text-xs font-semibold">{t}</span>)}
           </div>
         )}
@@ -353,6 +370,20 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
         </div>
       ) : (
         <div className="journal-prose px-5 md:px-12 max-w-3xl mx-auto mt-14 md:mt-20" dangerouslySetInnerHTML={{ __html: html }} />
+      )}
+
+      {author && (
+        <aside aria-label="About the author" className="px-5 md:px-12 max-w-3xl mx-auto mt-16 md:mt-20">
+          <div className="flex items-center gap-5 md:gap-6 rounded-[2rem] border border-zinc-200 p-6 md:p-8">
+            <img src={author.image} alt={`Portrait of ${author.name}`} width={80} height={80} loading="lazy" decoding="async" className="w-16 h-16 md:w-20 md:h-20 shrink-0 rounded-full object-cover" />
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-500">Written by</p>
+              <p className="mt-1 text-xl md:text-2xl font-bold tracking-[-0.03em]">{author.name}</p>
+              <p className="mt-1 text-sm md:text-base text-zinc-600">{author.role} at Natwic. Focus: {author.focus.toLowerCase()}.</p>
+              <Link href="/studio" className="mt-3 inline-block text-sm font-semibold text-[#703FEC] hover:text-black transition-colors">Meet the team →</Link>
+            </div>
+          </div>
+        </aside>
       )}
 
       <section className="mt-24 md:mt-36 px-5 md:px-12 max-w-7xl mx-auto border-t border-zinc-200 pt-14 md:pt-20">

@@ -4,6 +4,7 @@ import { PROJECTS, pad } from './projects';
 import { Magnetic } from '../Magnetic';
 import { Link } from '../nav';
 import { SERVICE_FOR_CASE, serviceBySlug, servicePath } from '../services/services';
+import { BASE_URL, ROUTE_META, caseUrl } from '../../seo';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -18,6 +19,19 @@ const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: 
 /* ------------------------------------------------------------------ */
 /* /work: the index                                                     */
 /* ------------------------------------------------------------------ */
+
+const WORK_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: ROUTE_META.work.title,
+  description: ROUTE_META.work.description,
+  url: `${BASE_URL}/work`,
+  isPartOf: { '@id': `${BASE_URL}/#website` },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: PROJECTS.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.title, url: caseUrl(p.slug) })),
+  },
+};
 
 export const WorkIndex: React.FC = () => {
   const [hovered, setHovered] = useState<number | null>(null);
@@ -41,6 +55,7 @@ export const WorkIndex: React.FC = () => {
 
   return (
     <div className="bg-white min-h-screen pt-28 md:pt-36 pb-24 md:pb-32">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(WORK_SCHEMA) }} />
       <section className="px-5 md:px-12 max-w-7xl mx-auto">
         <h1>
           <span className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500"><span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />Web design &amp; branding case studies</span>

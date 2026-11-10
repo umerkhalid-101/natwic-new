@@ -71,7 +71,7 @@ export const Hero: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 md:gap-16">
             <div className="max-w-4xl pointer-events-none">
               <MaskedText delay={0.4}>
-                <p className="text-[9px] md:text-xs font-bold uppercase tracking-[0.7em] mb-4 md:mb-8 text-white/50">ESTABLISHED TWENTY TWENTY FIVE</p>
+                <p className="text-[9px] md:text-xs font-bold uppercase tracking-[0.7em] mb-4 md:mb-8 text-white/50">ESTABLISHED TWENTY TWENTY THREE</p>
               </MaskedText>
               <MaskedText delay={0.55}>
                 <p className="text-3xl md:text-[4.5rem] font-bold text-white leading-[1.1] tracking-[-0.04em]">

@@ -14,9 +14,9 @@ export const Stats: React.FC = () => {
             transition={{ duration: 1 }}
             className="lg:sticky lg:top-32 self-start"
           >
-            <p className="text-xs uppercase tracking-[0.4em] text-zinc-500 mb-8">Testimonials</p>
+            <p aria-hidden className="text-xs uppercase tracking-[0.4em] text-zinc-500 mb-8">Client testimonials</p>
             <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-12">
-              What our<br />clients are<br />saying
+              <span className="sr-only">Client testimonials: </span>What our<br />clients are<br />saying
             </h2>
           </motion.div>
 
@@ -78,15 +78,15 @@ export const Stats: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center border-t border-zinc-100 pt-24">
           <div>
-            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC]">$2M</h3>
+            <p className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC]">$2M</p>
             <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Revenue influenced</p>
           </div>
           <div>
-            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC] opacity-80">89K</h3>
+            <p className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC] opacity-80">89K</p>
             <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Leads generated</p>
           </div>
           <div>
-            <h3 className="text-7xl md:text-9xl font-bold tracking-tighter">50+</h3>
+            <p className="text-7xl md:text-9xl font-bold tracking-tighter">50+</p>
             <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Brands partnered</p>
           </div>
         </div>

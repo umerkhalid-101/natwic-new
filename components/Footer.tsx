@@ -274,7 +274,11 @@ const SITE_LINKS = [
   ] },
   { title: 'Work', links: PROJECTS.map((p) => ({ label: p.title, href: `/work/${p.slug}` })) },
   { title: 'Services', links: SERVICE_PAGES.map((s) => ({ label: s.name, href: servicePath(s.slug) })) },
-  { title: 'Journal', links: JOURNAL.slice(0, 3).map((p) => ({ label: p.title, href: `/journal/${p.slug}` })) },
+  // The newest guides plus the hub, which lists every post; capped so the footer stays short as the journal grows
+  { title: 'Journal', links: [
+    ...JOURNAL.slice(0, 6).map((p) => ({ label: p.title, href: `/journal/${p.slug}` })),
+    ...(JOURNAL.length > 6 ? [{ label: `All ${JOURNAL.length} guides →`, href: '/journal' }] : []),
+  ] },
 ];
 
 const SiteLinks: React.FC = () => (
@@ -365,7 +369,7 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
     </div>
 
     <div className="relative max-w-7xl mx-auto px-5 md:px-10 py-6 md:py-8 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/35">
-      <p>© 2026 Natwic Studio</p>
+      <p>© 2026 Natwic</p>
       <div className="flex items-center gap-6 md:gap-8">
         <Link href="/privacy" className="uppercase tracking-[0.3em] hover:text-white transition-colors">Privacy</Link>
         <Link href="/terms" className="uppercase tracking-[0.3em] hover:text-white transition-colors">Terms</Link>

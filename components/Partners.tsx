@@ -95,7 +95,7 @@ export const Partners: React.FC = () => {
           className="flex gap-3 items-center justify-center mb-8"
         >
           <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_12px_rgba(112,63,236,0.8)]" />
-          <p className="text-xs font-bold uppercase tracking-[0.5em] text-zinc-600">Trusted Partnerships</p>
+          <p aria-hidden className="text-xs font-bold uppercase tracking-[0.5em] text-zinc-600">Startup &amp; SaaS clients</p>
         </motion.div>
         
         <motion.h2 
@@ -105,6 +105,7 @@ export const Partners: React.FC = () => {
           transition={{ duration: 1.2, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="text-4xl md:text-7xl font-bold tracking-tighter mb-8 text-black leading-[1.05]"
         >
+          <span className="sr-only">Startup &amp; SaaS clients: </span>
           Collaborating with<br />the world's boldest.
         </motion.h2>
 

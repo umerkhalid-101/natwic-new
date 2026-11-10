@@ -1,7 +1,5 @@
 /** Journal posts: Markdown files in /content/journal, written through the CMS at /admin. */
 
-import { parse } from 'yaml';
-
 export interface Post {
   slug: string;
   title: string;
@@ -17,16 +15,15 @@ export interface Post {
   readingMinutes: number;
 }
 
-const files = import.meta.glob('../../content/journal/*.md', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+// Frontmatter is parsed at build time by the journal-posts plugin in vite.config.ts
+type Source = { data: Record<string, any>; body: string };
+const files = import.meta.glob('../../content/journal/*.md', { query: '?post', import: 'default', eager: true }) as Record<string, Source>;
 
 const isoDate = (v: unknown) =>
   v instanceof Date ? v.toISOString().slice(0, 10) : String(v ?? '').slice(0, 10);
 
-const toPost = (file: string, raw: string): Post => {
+const toPost = (file: string, { data, body }: Source): Post => {
   const slug = file.split('/').pop()!.replace(/\.md$/, '');
-  const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-  const data = (m ? parse(m[1]) : {}) ?? {};
-  const body = (m ? m[2] : raw).trim();
   return {
     slug,
     title: data.title ?? slug,

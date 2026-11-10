@@ -141,10 +141,10 @@ export const Services: React.FC = () => {
           <div>
             <div className="flex gap-3 items-center mb-6">
               <div className="w-1.5 h-1.5 bg-[#F3350C] rounded-full" />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-black">Capabilities</p>
+              <p aria-hidden className="text-[11px] font-bold uppercase tracking-[0.2em] text-black">Web design &amp; branding</p>
             </div>
             <h2 className="text-6xl md:text-8xl font-bold tracking-tight leading-[0.85]">
-              Services<span className="text-[#703FEC]">.</span>
+              <span className="sr-only">Web design &amp; branding </span>Services<span className="text-[#703FEC]">.</span>
             </h2>
           </div>
           <div className="flex items-end gap-6 max-w-md">

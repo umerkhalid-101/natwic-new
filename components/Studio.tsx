@@ -26,7 +26,7 @@ const TEAM_SCHEMA = {
     '@type': 'Person',
     name: m.name,
     jobTitle: m.role,
-    description: `${m.role} at Natwic Studio. Focus: ${m.focus}.`,
+    description: `${m.role} at Natwic. Focus: ${m.focus}.`,
     image: `${BASE_URL}${m.image}`,
     knowsAbout: m.handles,
     worksFor: { '@id': `${BASE_URL}/#organization` },

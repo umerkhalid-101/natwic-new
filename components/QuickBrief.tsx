@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { trackLead } from '../analytics';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 const EMAIL = 'hello@natwic.com';
@@ -28,6 +29,8 @@ export type Brief = { name: string; email: string; services: string[]; message: 
 interface QuickBriefProps {
   /** Where the message goes: each form keeps its own Google Sheet and columns */
   send: (brief: Brief) => Promise<unknown>;
+  /** Which form this is, reported with the generate_lead event */
+  source?: string;
   tone?: 'light' | 'dark';
   /** Carried over from the footer sentence or the home page chat */
   initial?: { name?: string; service?: string; message?: string };
@@ -164,7 +167,7 @@ const buddyLine = (focus: string, email: string, subject: string, message: strin
   return 'Psst. Write to us.';
 };
 
-export const QuickBrief: React.FC<QuickBriefProps> = ({ send, tone = 'light', initial = {} }) => {
+export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact', tone = 'light', initial = {} }) => {
   const t = TONE[tone];
   const dark = tone === 'dark';
   const service = initial.service ?? '';
@@ -193,6 +196,7 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, tone = 'light', in
     try {
       await Promise.all([flight, send({ name: name.trim(), email: email.trim(), services: service ? [service] : [], message: body })]);
       setFormState('success');
+      trackLead(source, service || undefined);
     } catch (error) {
       console.error('Submission error:', error);
       setFormState('error');

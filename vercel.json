@@ -97,6 +97,11 @@
       "statusCode": 301
     },
     {
+      "source": "/journal/webflow-vs-next.js-for-startups-which-to-pick-in-2026",
+      "destination": "/journal/webflow-vs-nextjs-for-startups",
+      "statusCode": 301
+    },
+    {
       "source": "/journal/website-design-brief",
       "destination": "/journal/website-design-brief-free-template-and-filled-example",
       "statusCode": 301

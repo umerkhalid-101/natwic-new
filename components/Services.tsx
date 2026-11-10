@@ -6,6 +6,7 @@ import { useTilt, Spotlight } from './interactions';
 import { Magnetic } from './Magnetic';
 import { ServiceVisual } from './ServiceVisuals';
 import { Link } from './nav';
+import { ArrowUpRight } from './icons';
 
 const THEMES = [
   { card: 'bg-zinc-100 text-black', muted: 'text-zinc-600', chip: 'bg-white text-black', line: 'border-zinc-300', button: 'bg-black text-white' },
@@ -75,7 +76,7 @@ const ServiceCard: React.FC<{
                     return l.external ? (
                       <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className={cls}>
                         {l.label}
-                        <span className="transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5">↗</span>
+                        <span className="transition-transform duration-300 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"><ArrowUpRight /></span>
                       </a>
                     ) : (
                       <Link key={l.href} href={l.href} className={cls}>

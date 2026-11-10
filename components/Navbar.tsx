@@ -5,6 +5,7 @@ import { Logo } from './Logo';
 import { Magnetic } from './Magnetic';
 import { lockScroll, unlockScroll } from './smoothScroll';
 import { Link } from './nav';
+import { ArrowUpRight } from './icons';
 
 export const NAV_ITEMS = [
   { label: 'Home', view: 'home', href: '/' },
@@ -67,13 +68,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
               </Link>
             </Magnetic>
           ))}
-
-          <Magnetic>
-            <div className="flex flex-col gap-1 w-5 cursor-pointer ml-4 group p-2">
-              <div className="h-[1px] bg-black w-full group-hover:bg-[#703FEC] transition-colors" />
-              <div className="h-[1px] bg-black w-2/3 self-end group-hover:bg-[#703FEC] transition-colors" />
-            </div>
-          </Magnetic>
         </div>
         
         {/* Mobile Hamburger - Hidden on lg screens */}
@@ -136,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView }) => {
                 <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mb-6">Connect</p>
                 <div className="flex flex-col gap-4">
                     {SOCIALS.map((s) => (
-                      <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="text-xl font-medium tracking-tight">{s.name} ↗</a>
+                      <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="text-xl font-medium tracking-tight">{s.name} <ArrowUpRight /></a>
                     ))}
                 </div>
              </motion.div>

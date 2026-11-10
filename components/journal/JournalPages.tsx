@@ -8,9 +8,11 @@ import { Magnetic } from '../Magnetic';
 import { scrollToY } from '../smoothScroll';
 import { BASE_URL, ROUTE_META, postUrl } from '../../seo';
 import { Link } from '../nav';
+import { BOOKING_URL } from '../socials';
 import { SERVICE_PAGES, servicePath } from '../services/services';
 import IMAGE_SIZES from 'virtual:image-sizes';
 import { authorFor } from './authors';
+import { ArrowUpRight } from '../icons';
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const absolute = (src?: string) => (src && src.startsWith('/') ? `${BASE_URL}${src}` : src);
@@ -425,10 +427,13 @@ export const JournalPost: React.FC<{ slug: string; onOpen: (slug: string) => voi
 
       <section className="px-5 md:px-12 max-w-7xl mx-auto py-16 md:py-24 mt-16 md:mt-20 border-t border-zinc-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <p className="text-2xl md:text-3xl font-bold tracking-[-0.03em]">Want us to build something like this for you?</p>
-        <Link href="/contact" className="group inline-flex items-center gap-4 self-start rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
-          Start a project
-          <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
-        </Link>
+        <div className="flex flex-wrap items-center gap-5 self-start">
+          <Link href="/contact" className="group inline-flex items-center gap-4 rounded-full bg-black text-white pl-7 pr-2 py-2 text-[11px] font-bold uppercase tracking-[0.25em] hover:bg-[#703FEC] transition-colors">
+            Start a project
+            <span className="w-11 h-11 rounded-full bg-[#703FEC] grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
+          </Link>
+          <a href={BOOKING_URL} target="_blank" rel="noopener" className="text-[11px] font-bold uppercase tracking-[0.25em] text-black hover:text-[#703FEC] transition-colors">Book a 30-min call <ArrowUpRight /></a>
+        </div>
       </section>
     </article>
   );

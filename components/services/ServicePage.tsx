@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Magnetic } from '../Magnetic';
 import { Link } from '../nav';
+import { BOOKING_URL } from '../socials';
 import { sendBrief } from '../Pricing';
 import { PROJECTS, projectBySlug } from '../work/projects';
 import { BASE_URL, serviceUrl } from '../../seo';
@@ -14,6 +15,7 @@ import { DEMOS, RemoteFeed } from './demos';
 import { JsonLd, Breadcrumb, GRID_CSS, TOGETHER } from './ui';
 import { MICRO_CSS, ScrollProgress, RevealWords, ScrambleText, CardHoverFx, CursorCoords, BrandShapes } from './micro';
 import { Theme, themeFor, ThemeStyles, Stage, SectionLabel, CardTop, ProcessView, ThemeTitle, HeroBackdrop, ProductWidgets, StruckHeadline } from './themes';
+import { ArrowUpRight } from '../icons';
 
 /** Main call to action in the theme's colors */
 const ThemeButton: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -52,6 +54,7 @@ const Hero: React.FC<{ theme: Theme; slug: string }> = ({ theme, slug }) => {
   const cta = (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="mt-10 flex flex-wrap items-center gap-5">
       <ThemeButton>Start a project</ThemeButton>
+      <a href={BOOKING_URL} target="_blank" rel="noopener" className="text-[11px] font-bold uppercase tracking-[0.25em] opacity-60 hover:opacity-100 transition-opacity">Book a call <ArrowUpRight /></a>
       <a href="#pricing" className="text-[11px] font-bold uppercase tracking-[0.25em] opacity-60 hover:opacity-100 transition-opacity">Pricing ↓</a>
     </motion.div>
   );
@@ -292,6 +295,7 @@ export const ServicePage: React.FC<{ slug: string }> = ({ slug }) => {
                     <span className="w-11 h-11 rounded-full bg-black text-white grid place-items-center transition-transform duration-500 group-hover:-rotate-45">→</span>
                   </Link>
                 </Magnetic>
+                <a href={BOOKING_URL} target="_blank" rel="noopener" className="mt-4 block text-[11px] font-bold uppercase tracking-[0.25em] opacity-80 hover:opacity-100 transition-opacity">Or book a 30-min call <ArrowUpRight /></a>
               </div>
             </div>
           </div>

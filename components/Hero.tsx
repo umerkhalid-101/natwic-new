@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Magnetic } from './Magnetic';
-import { Link } from './nav';
+import { BOOKING_URL } from './socials';
 
 const MaskedText: React.FC<{ children: React.ReactNode; delay?: number }> = ({ children, delay = 0 }) => (
   <div className="overflow-hidden py-8 -my-8" style={{ transform: 'translateZ(0)' }}>
@@ -89,7 +89,7 @@ export const Hero: React.FC = () => {
             </div>
 
             <Magnetic strength={0.2}>
-              <Link href="/contact" className="block">
+              <a href={BOOKING_URL} target="_blank" rel="noopener" className="block">
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -97,15 +97,15 @@ export const Hero: React.FC = () => {
                 className="flex items-center gap-4 md:gap-5 bg-white/5 border border-white/10 p-2 md:p-3 pr-6 md:pr-8 rounded-[1.5rem] md:rounded-[2rem] hover:bg-white/10 transition-all cursor-pointer group"
               >
                 <div className="relative shrink-0">
-                  <span aria-hidden className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/10 text-white grid place-items-center text-sm md:text-lg font-bold transition-colors duration-700 group-hover:bg-[#703FEC]">M</span>
+                  <span aria-hidden className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-white/10 text-white grid place-items-center text-sm md:text-lg font-bold transition-colors duration-700 group-hover:bg-[#703FEC]">30</span>
                   <div className="absolute -top-1 -right-1 w-2.5 md:w-3.5 h-2.5 md:h-3.5 bg-[#703FEC] rounded-full border-2 border-zinc-950" />
                 </div>
                 <div className="text-white">
-                  <p className="text-xs md:text-sm font-bold leading-none mb-1 md:mb-1.5 group-hover:text-[#703FEC] transition-colors duration-500">Contact Mark</p>
-                  <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-[0.25em]">Customer support</p>
+                  <p className="text-xs md:text-sm font-bold leading-none mb-1 md:mb-1.5 group-hover:text-[#703FEC] transition-colors duration-500 whitespace-nowrap">Book a call</p>
+                  <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase tracking-[0.25em] whitespace-nowrap">Free 30-min intro</p>
                 </div>
               </motion.div>
-              </Link>
+              </a>
             </Magnetic>
           </div>
         </div>

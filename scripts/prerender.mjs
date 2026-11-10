@@ -112,9 +112,13 @@ console.log('prerendered 404 → dist/404.html (noindex)');
 const git = (...args) => {
   try { return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return ''; }
 };
-// In a shallow clone the oldest commit claims every file, so its date means nothing
+// In a shallow clone the oldest commit claims every file, so its date means nothing.
+// Hosts like Vercel build from a shallow clone, which left most pages without a lastmod:
+// fetch the full history when we can (set VERCEL_DEEP_CLONE=true to skip this step).
 const shallowFile = git('rev-parse', '--git-path', 'shallow');
+if (shallowFile && existsSync(shallowFile)) git('fetch', '--unshallow', '--quiet');
 const shallow = new Set(shallowFile && existsSync(shallowFile) ? readFileSync(shallowFile, 'utf8').split('\n').filter(Boolean) : []);
+if (shallow.size) console.warn('sitemap: shallow git clone, so pages without a recent commit get no lastmod');
 const lastChanged = (...paths) => {
   const [hash, date] = git('log', '-1', '--format=%H %cs', '--', ...paths).split(' ');
   return hash && !shallow.has(hash) ? date : null;

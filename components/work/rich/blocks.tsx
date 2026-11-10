@@ -482,7 +482,7 @@ export const ClosingCta: React.FC<{ headline: string; line: string; send: (b: Br
           <a href="mailto:hello@natwic.com" className="text-base md:text-lg font-semibold text-[#b9a1ff] hover:text-white transition-colors">hello@natwic.com</a>
         </div>
       </div>
-      <QuickBrief send={send} tone="dark" initial={{ message }} />
+      <QuickBrief send={send} source="case_study" tone="dark" initial={{ message }} />
     </div>
   </DarkBand>
 );

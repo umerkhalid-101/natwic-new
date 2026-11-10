@@ -209,7 +209,7 @@ The platform matters less than who will maintain the site after launch. Here's h
 
 - WordPress: a huge plugin ecosystem, but it needs regular updates and security care, so give it a clear owner.
 
-Many SaaS teams run two: a Webflow marketing site at yourdomain.com and a Next.js app at app.yourdomain.com, tied together by one design system. We break down the trade-offs and the 2026 platform fees in our [Webflow vs Next.js comparison for startups](https://www.natwic.com/journal/webflow-vs-next.js-for-startups-which-to-pick-in-2026).
+Many SaaS teams run two: a Webflow marketing site at yourdomain.com and a Next.js app at app.yourdomain.com, tied together by one design system. We break down the trade-offs and the 2026 platform fees in our [Webflow vs Next.js comparison for startups](https://www.natwic.com/journal/webflow-vs-nextjs-for-startups).
 
 If you sell in the Gulf, plan for Arabic from the start. Right-to-left layouts change navigation, icons, and typography, and retrofitting them is painful. Our guide to [bilingual website design in the UAE](https://www.natwic.com/journal/bilingual-website-design-uae) covers how to do it properly.
 

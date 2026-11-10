@@ -97,7 +97,7 @@ Run the numbers on a Webflow site with two hours of help a month at $100 an hour
 
 ### Pick a platform your team can edit
 
-The cheapest hour of maintenance is the one you don't have to buy. If your marketing team can update pages without a developer, most of the monthly work disappears. Our [Webflow vs Next.js comparison](https://www.natwic.com/journal/webflow-vs-next.js-for-startups-which-to-pick-in-2026) covers which platform fits which team.
+The cheapest hour of maintenance is the one you don't have to buy. If your marketing team can update pages without a developer, most of the monthly work disappears. Our [Webflow vs Next.js comparison](https://www.natwic.com/journal/webflow-vs-nextjs-for-startups) covers which platform fits which team.
 
 ### Keep the plugin list short
 

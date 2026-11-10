@@ -39,6 +39,25 @@ const journalIndex = (): Plugin => {
   };
 };
 
+/**
+ * `import x from './post.md?post'` gives `{ data, body }` with the frontmatter already
+ * parsed, so the YAML parser stays out of the browser bundle.
+ */
+const journalPosts = (): Plugin => ({
+  name: 'journal-posts',
+  load(id) {
+    if (!id.endsWith('.md?post')) return null;
+    const file = id.slice(0, -'?post'.length);
+    this.addWatchFile(file);
+    const raw = readFileSync(file, 'utf8');
+    const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+    const data = (m ? parse(m[1]) : {}) ?? {};
+    // YAML turns `date: 2026-10-22` into a Date; posts only ever need the day
+    for (const [k, v] of Object.entries(data)) if (v instanceof Date) data[k] = v.toISOString().slice(0, 10);
+    return `export default ${JSON.stringify({ data, body: (m ? m[2] : raw).trim() })};`;
+  },
+});
+
 /** Width and height from a WebP, PNG or JPEG header, or null for anything else */
 const imageSize = (b: Buffer): { width: number; height: number } | null => {
   if (b.toString('ascii', 0, 4) === 'RIFF' && b.toString('ascii', 8, 12) === 'WEBP') {
@@ -85,7 +104,7 @@ const imageSizes = (): Plugin => ({
 });
 
 export default defineConfig({
-  plugins: [react(), journalIndex(), imageSizes()],
+  plugins: [react(), journalIndex(), journalPosts(), imageSizes()],
   build: {
     outDir: 'dist',
     sourcemap: true

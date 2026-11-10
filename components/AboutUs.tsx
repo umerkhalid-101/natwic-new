@@ -60,11 +60,11 @@ export const AboutUs: React.FC = () => {
           >
               <div className="flex gap-3 items-center mb-8">
                 <div className="w-1.5 h-1.5 bg-[#F3350C] rounded-full" />
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-black">About us</p>
+                <p aria-hidden className="text-[11px] font-bold uppercase tracking-[0.2em] text-black">About us</p>
               </div>
               
               <h2 className="text-4xl md:text-[3.5rem] font-bold tracking-tight leading-[1.1] mb-12 text-black">
-                We’re a hands-on digital agency building thoughtful solutions for ambitious brands.
+                <span className="sr-only">About Natwic: </span>We’re a hands-on digital agency building thoughtful solutions for ambitious brands.
               </h2>
               
               <motion.button 

@@ -33,8 +33,7 @@ const useWindow = (p: MotionValue<number>, [a, b]: readonly [number, number], ed
 /* Site-consistent building blocks ----------------------------------- */
 
 const Label: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <p className={`flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-white/60 ${className}`}>
-    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC] shadow-[0_0_8px_rgba(112,63,236,0.6)]" />
+  <p className={`text-sm font-medium text-white/60 ${className}`}>
     {children}
   </p>
 );
@@ -195,7 +194,7 @@ const AudienceCard: React.FC<{ a: typeof AUDIENCES[number]; index: number; onEnt
     >
       <Rings tone={a.tone} />
       <div className="relative flex items-center justify-between gap-4">
-        <span className={`text-[10px] font-bold uppercase tracking-[0.4em] ${dark ? 'text-white/50' : 'text-black/45'}`}>{a.kicker}</span>
+        <span className={`text-sm font-medium ${dark ? 'text-white/50' : 'text-black/45'}`}>{a.kicker}</span>
         <span className={`font-mono text-xs rounded-full border px-3 py-1 ${dark ? 'border-white/15 text-white/60' : 'border-black/15 text-black/55'}`}>{pad(index + 1)}</span>
       </div>
 
@@ -439,8 +438,7 @@ const WorkChapter: React.FC<{ p: MotionValue<number> }> = ({ p }) => {
       ))}
 
       <div className="absolute left-5 right-5 md:left-12 md:right-12 bottom-6 md:bottom-10 flex items-center justify-between gap-4">
-        <p className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-white/55">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
+        <p className="flex items-center gap-3 text-sm font-medium text-white/55">
           <span className="hidden sm:inline">Selected archive</span>
           <span className="font-mono tracking-normal text-white">{pad(active + 1)}</span>
           <span className="font-mono tracking-normal">/ {pad(WORKS.length)}</span>

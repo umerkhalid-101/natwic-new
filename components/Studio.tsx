@@ -41,8 +41,7 @@ const STEPS = [
 ];
 
 const Label: React.FC<{ children: React.ReactNode; tone?: 'dark' | 'light' }> = ({ children, tone = 'dark' }) => (
-  <p className={`flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] ${tone === 'dark' ? 'text-zinc-500' : 'text-white/50'}`}>
-    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
+  <p className={`text-sm font-medium ${tone === 'dark' ? 'text-zinc-500' : 'text-white/50'}`}>
     {children}
   </p>
 );
@@ -307,8 +306,8 @@ const WhatWeDo: React.FC = () => {
               <p className="text-lg text-white/60 leading-relaxed">Founders in different countries, one team that plans, designs and builds with you from the first call to launch.</p>
               <ul className="mt-5 flex flex-wrap gap-2">
                 {WAYS.map((w) => (
-                  <li key={w} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/70">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC] shadow-[0_0_8px_#703FEC]" />{w}
+                  <li key={w} className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/70">
+                    {w}
                   </li>
                 ))}
               </ul>
@@ -390,7 +389,7 @@ export const Studio: React.FC = () => {
       <section className="px-5 md:px-12 mb-20 md:mb-32">
         <div className="max-w-7xl mx-auto">
           <h1 className="mb-12 md:mb-20">
-            <span className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500 mb-6"><span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />Remote web design &amp; branding team</span>
+            <span className="block mb-6 text-sm font-medium text-zinc-500">Remote web design &amp; branding team</span>
             <span className="sr-only">: </span>
             <span className="block overflow-hidden">
               <motion.span initial={{ y: '100%' }} whileInView={{ y: 0 }} viewport={{ once: true, margin: '-10%' }} transition={{ duration: 1.2, ease }} className="block text-[22vw] md:text-[14vw] font-bold leading-[0.8] tracking-[-0.06em] text-black">Studio</motion.span>

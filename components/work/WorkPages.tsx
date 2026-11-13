@@ -58,7 +58,7 @@ export const WorkIndex: React.FC = () => {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(WORK_SCHEMA) }} />
       <section className="px-5 md:px-12 max-w-7xl mx-auto">
         <h1>
-          <span className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500"><span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />Web design &amp; branding case studies</span>
+          <span className="block text-sm font-medium text-zinc-500">Web design &amp; branding case studies</span>
           <span className="sr-only">: </span>
           <span className="mt-6 flex items-start gap-3 md:gap-5 text-[22vw] md:text-[13vw] font-bold leading-[0.82] tracking-[-0.06em] text-black">
             <Reveal>Work</Reveal>
@@ -230,7 +230,7 @@ export const NextProject: React.FC<{ slug: string }> = ({ slug }) => {
         <motion.div aria-hidden className="absolute inset-0 bg-[#0A0A0A] origin-bottom" initial={false} animate={{ scaleY: nextHover ? 1 : 0 }} transition={{ duration: 0.6, ease }} />
         <div className="relative max-w-7xl mx-auto flex items-end justify-between gap-6">
           <div>
-            <p className={`text-[11px] font-bold uppercase tracking-[0.4em] transition-colors duration-500 ${nextHover ? 'text-white/50' : 'text-zinc-500'}`}>Next project</p>
+            <p className={`text-sm font-medium transition-colors duration-500 ${nextHover ? 'text-white/50' : 'text-zinc-500'}`}>Next project</p>
             <p className={`mt-4 text-[15vw] md:text-[9vw] font-bold leading-[0.85] tracking-[-0.06em] transition-colors duration-500 ${nextHover ? 'text-white' : 'text-black'}`}>{next.title}</p>
           </div>
           <motion.img

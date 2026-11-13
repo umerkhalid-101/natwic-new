@@ -51,10 +51,7 @@ const FAQ_SCHEMA = {
 };
 
 const SectionLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="flex items-center gap-3 mb-6">
-    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
-    <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500">{children}</p>
-  </div>
+  <p className="mb-6 text-sm font-medium text-zinc-500">{children}</p>
 );
 
 /** What happens after someone gets in touch, how long things take, and common questions */
@@ -131,8 +128,7 @@ export const Contact: React.FC<ContactProps> = ({ isStandalone = true }) => {
         {/* Left: the invitation and the direct lines */}
         <div>
           <h1>
-            <span className="flex items-center gap-3 mb-6 md:mb-8 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500">
-              <span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
+            <span className="block mb-6 md:mb-8 text-sm font-medium text-zinc-500">
               Start a web design or branding project
             </span>
             <span className="sr-only">: </span>

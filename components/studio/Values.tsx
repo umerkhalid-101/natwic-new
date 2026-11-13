@@ -318,8 +318,7 @@ export const Values: React.FC = () => (
   <section className="px-5 md:px-12 pb-28 md:pb-40">
     <div className="max-w-7xl mx-auto">
       <div className="mb-10 md:mb-14">
-        <p className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
+        <p className="text-sm font-medium text-zinc-500">
           Our values
         </p>
         <h2 className="mt-5 text-4xl md:text-7xl font-bold tracking-[-0.045em] leading-[1.02]">Don’t take our word for it.</h2>

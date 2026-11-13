@@ -14,7 +14,7 @@ export const Stats: React.FC = () => {
             transition={{ duration: 1 }}
             className="lg:sticky lg:top-32 self-start"
           >
-            <p aria-hidden className="text-xs uppercase tracking-[0.4em] text-zinc-500 mb-8">Client testimonials</p>
+            <p aria-hidden className="text-sm font-medium text-zinc-500 mb-8">Client testimonials</p>
             <h2 className="text-5xl md:text-7xl font-bold tracking-tighter mb-12">
               <span className="sr-only">Client testimonials: </span>What our<br />clients are<br />saying
             </h2>

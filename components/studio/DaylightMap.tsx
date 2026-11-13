@@ -128,8 +128,7 @@ const paint = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number) =
 /* ------------------------------------------------------------------ */
 
 const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <p className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-white/50">
-    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
+  <p className="text-sm font-medium text-white/50">
     {children}
   </p>
 );

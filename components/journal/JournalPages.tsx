@@ -155,7 +155,7 @@ export const JournalIndex: React.FC<{ onOpen: (slug: string) => void }> = ({ onO
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
       <section className="px-5 md:px-12 max-w-7xl mx-auto">
         <h1>
-          <span className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500"><span aria-hidden className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />Web design &amp; branding guides</span>
+          <span className="block text-sm font-medium text-zinc-500">Web design &amp; branding guides</span>
           <span className="sr-only">: </span>
           <span className="mt-6 block text-[20vw] md:text-[13vw] font-bold leading-[0.82] tracking-[-0.06em] text-black">
             <Reveal>Journal</Reveal>

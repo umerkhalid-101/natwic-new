@@ -43,8 +43,7 @@ export const useIsDesktop = () => {
 };
 
 export const Label: React.FC<{ children: React.ReactNode; tone?: 'dark' | 'light'; className?: string }> = ({ children, tone = 'dark', className = '' }) => (
-  <p className={`flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] ${tone === 'light' ? 'text-white/50' : 'text-zinc-500'} ${className}`}>
-    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC] shadow-[0_0_10px_rgba(112,63,236,0.8)]" />
+  <p className={`text-sm font-medium ${tone === 'light' ? 'text-white/50' : 'text-zinc-500'} ${className}`}>
     {children}
   </p>
 );
@@ -412,7 +411,7 @@ const PageCard: React.FC<{ pg: PageShot; client: string }> = ({ pg, client }) =>
     <TiltCard className="rounded-[1.5rem] bg-[#0A0A0A] p-2.5">
       <Still src={pg.image} alt={`The ${client} ${pg.name} page: ${pg.headline}`} sizes="(min-width: 1024px) 40vw, 82vw" className="rounded-[1rem]" />
     </TiltCard>
-    <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">{pg.name}</p>
+    <p className="mt-5 text-sm font-medium text-zinc-500">{pg.name}</p>
     <h3 className="mt-2 text-2xl md:text-3xl font-bold tracking-[-0.03em]">“{pg.headline}”</h3>
     <p className="mt-2 text-base text-zinc-600 leading-relaxed max-w-md">{pg.line}</p>
   </>

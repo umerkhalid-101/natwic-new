@@ -20,8 +20,7 @@ export const Pricing: React.FC<PricingProps> = () => (
 
     <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.15fr] gap-12 lg:gap-16 items-center">
       <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}>
-        <p className="flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-white/50">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC] shadow-[0_0_10px_rgba(112,63,236,0.8)]" />
+        <p className="text-sm font-medium text-white/50">
           Get a free quote
         </p>
         <h2 className="mt-6 text-5xl md:text-7xl font-bold tracking-[-0.05em] leading-[0.98]">

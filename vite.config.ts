@@ -1,4 +1,4 @@
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig, loadEnv, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -103,14 +103,52 @@ const imageSizes = (): Plugin => ({
   },
 });
 
-export default defineConfig({
-  plugins: [react(), journalIndex(), journalPosts(), imageSizes()],
-  build: {
-    outDir: 'dist',
-    sourcemap: true
+/**
+ * Runs the Vercel functions in api/ inside `npm run dev`, so forms work locally.
+ * Each file exports web-standard handlers (`export async function POST(req: Request)`).
+ */
+const apiRoutes = (): Plugin => ({
+  name: 'api-routes',
+  configureServer(server) {
+    server.middlewares.use(async (req, res, next) => {
+      const url = new URL(req.url ?? '/', 'http://localhost');
+      const name = url.pathname.match(/^\/api\/([\w-]+)$/)?.[1];
+      const file = name && path.resolve('api', `${name}.ts`);
+      if (!file || !existsSync(file)) return next();
+      try {
+        const mod = await server.ssrLoadModule(file);
+        const handler = mod[req.method ?? 'GET'];
+        if (typeof handler !== 'function') { res.statusCode = 405; return res.end(); }
+        const chunks: Buffer[] = [];
+        for await (const c of req) chunks.push(c as Buffer);
+        const headers = new Headers();
+        for (const [k, v] of Object.entries(req.headers)) if (typeof v === 'string') headers.set(k, v);
+        const body = chunks.length ? Buffer.concat(chunks) : undefined;
+        const out: Response = await handler(new Request(url, { method: req.method, headers, body }));
+        res.statusCode = out.status;
+        out.headers.forEach((v, k) => res.setHeader(k, v));
+        res.end(Buffer.from(await out.arrayBuffer()));
+      } catch (err) {
+        server.config.logger.error(String(err));
+        res.statusCode = 500;
+        res.end();
+      }
+    });
   },
-  server: {
-    port: 3000,
-    historyApiFallback: true
-  }
+});
+
+export default defineConfig(({ mode }) => {
+  // The api/ functions read process.env, as they do on Vercel; .env.local fills it in dev
+  for (const [k, v] of Object.entries(loadEnv(mode, process.cwd(), ''))) process.env[k] ??= v;
+  return {
+    plugins: [react(), journalIndex(), journalPosts(), imageSizes(), apiRoutes()],
+    build: {
+      outDir: 'dist',
+      sourcemap: true
+    },
+    server: {
+      port: 3000,
+      historyApiFallback: true
+    }
+  };
 });

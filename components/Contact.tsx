@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SOCIALS, BOOKING_URL } from './socials';
-import { QuickBrief, Brief } from './QuickBrief';
+import { QuickBrief } from './QuickBrief';
+import { sendLead } from '../leads';
 import { Link } from './nav';
 import { ArrowUpRight } from './icons';
 
@@ -14,26 +15,6 @@ const readPrefill = (): Prefill => {
   } catch { return {}; }
 };
 
-/**
- * GOOGLE SHEETS INTEGRATION INSTRUCTIONS:
- * 1. Open your Spreadsheet: https://docs.google.com/spreadsheets/d/1EskdmV6hZDE3Sc3cnfG93_ZOesMTbSFtE7FaFeIzOmE/edit
- * 2. Go to Extensions > App Script.
- * 3. Paste the following code:
- *
- * function doPost(e) {
- *   var sheet = SpreadsheetApp.openById("1EskdmV6hZDE3Sc3cnfG93_ZOesMTbSFtE7FaFeIzOmE").getActiveSheet();
- *   var data = JSON.parse(e.postData.contents);
- *   sheet.appendRow([new Date(), data.name, data.email, data.service, data.budget, data.message]);
- *   return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
- * }
- *
- * 4. Click 'Deploy' > 'New Deployment'. Select 'Web App'.
- * 5. Set 'Execute as' to 'Me' and 'Who has access' to 'Anyone'.
- * 6. Copy the Web App URL and replace 'YOUR_SCRIPT_URL' below.
- */
-
-const YOUR_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw2G50quGk5PYXv-QHT3AM5Lvs78oORiOJrKADEyd7H7xuUcdhGX-HPFySmU2bTB4jg4w/exec';
-
 const EMAIL = 'hello@natwic.com';
 const PHONE = '+971 58 520 3139';
 
@@ -42,14 +23,7 @@ interface ContactProps {
   setView?: (view: 'home' | 'contact') => void;
 }
 
-// The Contact sheet's columns: name, email, service, budget, message
-const sendToSheet = (b: Brief) =>
-  fetch(YOUR_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: b.name, email: b.email, service: b.services.join(', ') || 'Not specified', budget: 'Not asked', message: b.message }),
-  });
+const sendFromContact = sendLead('Contact page');
 
 const STEPS = [
   { t: 'We reply', d: 'Within 24 hours, with a few questions about your project or a suggested time for a call.' },
@@ -197,7 +171,7 @@ export const Contact: React.FC<ContactProps> = ({ isStandalone = true }) => {
           </div>
         </div>
 
-        <QuickBrief send={sendToSheet} initial={pre} />
+        <QuickBrief send={sendFromContact} initial={pre} />
       </div>
 
       <NextSteps />

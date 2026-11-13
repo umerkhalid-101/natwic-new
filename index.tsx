@@ -4,6 +4,7 @@ import App, { preloadRoute } from './App';
 import './index.css';
 import { viewFromPath, slugFromPath } from './seo';
 import { trackContactLinks } from './analytics';
+import { rememberVisit } from './leads';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -14,6 +15,7 @@ if (!rootElement) {
 // (hydration) instead of repainting it, so it shows at first paint and never flashes.
 // The dev server serves an empty root, so it renders from scratch.
 trackContactLinks();
+rememberVisit();
 
 const { pathname } = window.location;
 const app = (

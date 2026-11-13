@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from '../nav';
-import { sendBrief } from '../Pricing';
+import { sendLead } from '../../leads';
 import { PROJECTS } from '../work/projects';
 import { BASE_URL, serviceUrl } from '../../seo';
 import { FadeUp, TiltCard, ClosingCta, pad2, ease } from '../work/rich/blocks';
@@ -12,7 +12,7 @@ import { JsonLd, GridStage, Eyebrow, H2, Breadcrumb, PrimaryButton, RiseTitle, C
 
 export { ServicePage } from './ServicePage';
 
-const sendFromServices = sendBrief('Services');
+const sendFromServices = sendLead('Services');
 
 /* ------------------------------------------------------------------ */
 /* ------------------------------------------------------------------ */

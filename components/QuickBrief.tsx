@@ -24,10 +24,14 @@ export const SERVICES = [
 /* An email to the team, shared by the home page and the Contact page  */
 /* ------------------------------------------------------------------ */
 
-export type Brief = { name: string; email: string; services: string[]; message: string };
+export type Brief = {
+  name: string; email: string; services: string[]; message: string;
+  /** The hidden field only bots fill in, and how long the form was open: both for spam checks */
+  trap?: string; elapsedMs?: number;
+};
 
 interface QuickBriefProps {
-  /** Where the message goes: each form keeps its own Google Sheet and columns */
+  /** Where the message goes: usually sendLead() from leads.ts */
   send: (brief: Brief) => Promise<unknown>;
   /** Which form this is, reported with the generate_lead event */
   source?: string;
@@ -185,6 +189,9 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
   const [bounce, setBounce] = useState(0);
   const formRef = useRef<HTMLFormElement>(null);
   const bodyRef = useAutosize(message);
+  const trapRef = useRef<HTMLInputElement>(null);
+  const openedAt = useRef(0);
+  useEffect(() => { openedAt.current = Date.now(); }, []);
 
   const submit = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -194,7 +201,10 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
     const flight = new Promise((r) => window.setTimeout(r, 1300));
     const body = subject.trim() ? `${subject.trim()}\n\n${message.trim()}` : message.trim();
     try {
-      await Promise.all([flight, send({ name: name.trim(), email: email.trim(), services: service ? [service] : [], message: body })]);
+      await Promise.all([flight, send({
+        name: name.trim(), email: email.trim(), services: service ? [service] : [], message: body,
+        trap: trapRef.current?.value ?? '', elapsedMs: openedAt.current ? Date.now() - openedAt.current : undefined,
+      })]);
       setFormState('success');
       trackLead(source, service || undefined);
     } catch (error) {
@@ -205,7 +215,7 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
     }
   };
 
-  const reset = () => { setEmail(''); setSubject(''); setMessage(''); setName(''); setFocus(''); setFormState('idle'); };
+  const reset = () => { setEmail(''); setSubject(''); setMessage(''); setName(''); setFocus(''); setFormState('idle'); openedAt.current = Date.now(); };
   const field = `w-full min-w-0 bg-transparent outline-none ${t.field}`;
 
   return (
@@ -276,6 +286,9 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
                 Replies within 24h
               </span>
             </div>
+
+            {/* Spam trap: off-screen and skipped by keyboard and screen readers, so only bots fill it in */}
+            <input ref={trapRef} name="company_url" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" defaultValue="" className="absolute -left-[9999px] w-px h-px opacity-0" />
 
             {/* From */}
             <label className={`flex items-center gap-3 border-b px-5 md:px-7 py-3.5 ${t.row}`}>

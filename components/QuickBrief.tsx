@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
+import { motion, AnimatePresence, animate, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
 import { trackLead } from '../analytics';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -159,6 +160,62 @@ const Buddy: React.FC<{ say: string; bounce: number; dark: boolean }> = ({ say, 
   );
 };
 
+const PLANE_S = 1.15;
+const PLANE_PX = 56;
+
+/**
+ * The send button's little plane, taking off: it starts exactly where the icon is,
+ * then follows one smooth curve off the top-right of the screen, nose along the path.
+ * Rendered into <body> so no transformed parent can shift its fixed position.
+ */
+const PaperPlane: React.FC<{ from: DOMRect; onDone: () => void }> = ({ from, onDone }) => {
+  const t = useMotionValue(0);
+  const sx = from.left + from.width / 2;
+  const sy = from.top + from.height / 2;
+  // Past the top-right corner, from wherever the button is
+  const ex = window.innerWidth - sx + PLANE_PX * 2;
+  const ey = -(sy + PLANE_PX * 2);
+  // A cubic Bézier: a small forward swoop, then a long climb
+  const P = [[0, 0], [70, 18], [ex * 0.45, ey * 0.12], [ex, ey]];
+  const at = (u: number, i: 0 | 1) => {
+    const v = 1 - u;
+    return v * v * v * P[0][i] + 3 * v * v * u * P[1][i] + 3 * v * u * u * P[2][i] + u * u * u * P[3][i];
+  };
+  const slope = (u: number, i: 0 | 1) => {
+    const v = 1 - u;
+    return 3 * v * v * (P[1][i] - P[0][i]) + 6 * v * u * (P[2][i] - P[1][i]) + 3 * u * u * (P[3][i] - P[2][i]);
+  };
+  const x = useTransform(t, (u) => at(u, 0));
+  const y = useTransform(t, (u) => at(u, 1));
+  // The artwork points up-right (-45°). Ease from the icon's angle into following the path.
+  const rotate = useTransform(t, (u) => {
+    const along = (Math.atan2(slope(u, 1), slope(u, 0)) * 180) / Math.PI + 45;
+    const k = Math.min(1, u / 0.2);
+    return along * k * k * (3 - 2 * k);
+  });
+  const scale = useTransform(t, [0, 0.18, 0.75, 1], [16 / PLANE_PX, 1.15, 1, 0.75]);
+  const opacity = useTransform(t, [0, 0.82, 1], [1, 1, 0]);
+
+  useEffect(() => {
+    const run = animate(t, 1, { duration: PLANE_S, ease: [0.45, 0, 0.3, 1], onComplete: onDone });
+    return () => run.stop();
+  }, []);
+
+  return createPortal(
+    <motion.svg
+      viewBox="0 0 48 48"
+      aria-hidden
+      className="pointer-events-none fixed z-[60] text-[#703FEC] drop-shadow-[0_10px_20px_rgba(112,63,236,0.4)] will-change-transform"
+      style={{ left: sx - PLANE_PX / 2, top: sy - PLANE_PX / 2, width: PLANE_PX, height: PLANE_PX, x, y, rotate, scale, opacity }}
+    >
+      <path d="M4 22 44 4 30 44 22 28Z" fill="currentColor" />
+      <path d="M22 28 44 4 18 25Z" fill="#b9a1ff" />
+      <path d="M22 28v12l6-8" fill="#5a2fd0" />
+    </motion.svg>,
+    document.body,
+  );
+};
+
 /** What the buddy says, based on where you are and what you've written. */
 const buddyLine = (focus: string, email: string, subject: string, message: string, name: string) => {
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -192,13 +249,26 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
   const trapRef = useRef<HTMLInputElement>(null);
   const openedAt = useRef(0);
   useEffect(() => { openedAt.current = Date.now(); }, []);
+  const iconRef = useRef<SVGSVGElement>(null);
+  const [launch, setLaunch] = useState<{ id: number; from: DOMRect } | null>(null);
+  const reduceMotion = useReducedMotion();
+  const sending = useRef(false);
 
   const submit = async (e?: React.FormEvent) => {
     e?.preventDefault();
+    // ⌘ + Enter still reaches here while the button is disabled
+    if (sending.current) return;
     if (formRef.current && !formRef.current.reportValidity()) return;
+    sending.current = true;
     setFormState('submitting');
     setFlying(true);
-    const flight = new Promise((r) => window.setTimeout(r, 1300));
+    const icon = iconRef.current?.getBoundingClientRect();
+    // A new id each time, so a send right after a failed one gets a plane of its own
+    if (!reduceMotion && icon) setLaunch({ id: Date.now(), from: icon });
+    const wait = (s: number) => new Promise((r) => window.setTimeout(r, reduceMotion ? 0 : s * 1000));
+    // The thanks card arrives as the plane leaves the screen; an error waits until it's gone
+    const flight = wait(PLANE_S * 0.8);
+    const gone = wait(PLANE_S);
     const body = subject.trim() ? `${subject.trim()}\n\n${message.trim()}` : message.trim();
     try {
       await Promise.all([flight, send({
@@ -209,9 +279,11 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
       trackLead(source, service || undefined);
     } catch (error) {
       console.error('Submission error:', error);
+      await gone;
       setFormState('error');
     } finally {
       setFlying(false);
+      sending.current = false;
     }
   };
 
@@ -246,10 +318,9 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
             onSubmit={submit}
             onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); submit(); } }}
             initial={{ opacity: 0 }}
-            animate={flying ? { opacity: 0, scale: 0.6, y: -20, rotateX: 50 } : { opacity: 1, scale: 1, y: 0, rotateX: 0 }}
+            animate={flying ? { opacity: 0, y: -12 } : { opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.45, ease }}
-            style={{ transformPerspective: 900 }}
+            transition={{ duration: 0.5, ease, delay: flying && !reduceMotion ? 0.2 : 0 }}
           >
             {/* Window bar */}
             <div className={`flex items-center justify-between border-b px-5 md:px-7 py-3.5 ${t.bar}`}>
@@ -335,7 +406,8 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
               >
                 {formState === 'submitting' ? 'Sending…' : 'Send'}
                 <span className="w-10 h-10 rounded-full bg-[#703FEC] text-white grid place-items-center transition-transform duration-500 group-hover:-rotate-12 group-hover:translate-x-0.5">
-                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" aria-hidden><path d="M3 11.5 21 3l-7.5 18-2.5-7.5L3 11.5Z" /></svg>
+                  {/* Hidden while the big plane takes off from this exact spot */}
+                  <svg ref={iconRef} viewBox="0 0 24 24" className={`w-4 h-4 ${launch ? 'opacity-0' : ''}`} fill="currentColor" aria-hidden><path d="M3 11.5 21 3l-7.5 18-2.5-7.5L3 11.5Z" /></svg>
                 </span>
               </button>
             </div>
@@ -346,23 +418,7 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
     </div>
 
       {/* Off it goes */}
-      <AnimatePresence>
-        {flying && (
-          <motion.svg
-            key="plane"
-            viewBox="0 0 48 48"
-            aria-hidden
-            className="pointer-events-none fixed left-1/2 top-1/2 z-[60] w-16 h-16 md:w-20 md:h-20 text-[#703FEC] drop-shadow-[0_10px_20px_rgba(112,63,236,0.4)]"
-            initial={{ x: '-50%', y: '-50%', scale: 0.2, rotate: 0, opacity: 0 }}
-            animate={{ x: ['-50%', '-40%', '30vw', '70vw'], y: ['-50%', '-60%', '-25vh', '-70vh'], scale: [0.2, 1, 1, 0.7], rotate: [0, -10, -24, -30], opacity: [0, 1, 1, 0] }}
-            transition={{ duration: 1.3, times: [0, 0.25, 0.7, 1], ease: 'easeIn', delay: 0.25 }}
-          >
-            <path d="M4 22 44 4 30 44 22 28Z" fill="currentColor" />
-            <path d="M22 28 44 4 18 25Z" fill="#b9a1ff" />
-            <path d="M22 28v12l6-8" fill="#5a2fd0" />
-          </motion.svg>
-        )}
-      </AnimatePresence>
+      {launch && <PaperPlane key={launch.id} from={launch.from} onDone={() => setLaunch((l) => (l?.id === launch.id ? null : l))} />}
     </div>
   );
 };

@@ -250,18 +250,25 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
   const openedAt = useRef(0);
   useEffect(() => { openedAt.current = Date.now(); }, []);
   const iconRef = useRef<SVGSVGElement>(null);
-  const [launch, setLaunch] = useState<DOMRect | null>(null);
+  const [launch, setLaunch] = useState<{ id: number; from: DOMRect } | null>(null);
   const reduceMotion = useReducedMotion();
+  const sending = useRef(false);
 
   const submit = async (e?: React.FormEvent) => {
     e?.preventDefault();
+    // ⌘ + Enter still reaches here while the button is disabled
+    if (sending.current) return;
     if (formRef.current && !formRef.current.reportValidity()) return;
+    sending.current = true;
     setFormState('submitting');
     setFlying(true);
     const icon = iconRef.current?.getBoundingClientRect();
-    if (!reduceMotion && icon) setLaunch(icon);
-    // The thanks card arrives as the plane leaves the screen
-    const flight = new Promise((r) => window.setTimeout(r, reduceMotion ? 0 : PLANE_S * 800));
+    // A new id each time, so a send right after a failed one gets a plane of its own
+    if (!reduceMotion && icon) setLaunch({ id: Date.now(), from: icon });
+    const wait = (s: number) => new Promise((r) => window.setTimeout(r, reduceMotion ? 0 : s * 1000));
+    // The thanks card arrives as the plane leaves the screen; an error waits until it's gone
+    const flight = wait(PLANE_S * 0.8);
+    const gone = wait(PLANE_S);
     const body = subject.trim() ? `${subject.trim()}\n\n${message.trim()}` : message.trim();
     try {
       await Promise.all([flight, send({
@@ -272,9 +279,11 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
       trackLead(source, service || undefined);
     } catch (error) {
       console.error('Submission error:', error);
+      await gone;
       setFormState('error');
     } finally {
       setFlying(false);
+      sending.current = false;
     }
   };
 
@@ -409,7 +418,7 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
     </div>
 
       {/* Off it goes */}
-      {launch && <PaperPlane from={launch} onDone={() => setLaunch(null)} />}
+      {launch && <PaperPlane key={launch.id} from={launch.from} onDone={() => setLaunch((l) => (l?.id === launch.id ? null : l))} />}
     </div>
   );
 };

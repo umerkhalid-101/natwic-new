@@ -1,37 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { QuickBrief, Brief } from './QuickBrief';
+import { QuickBrief } from './QuickBrief';
+import { sendLead } from '../leads';
 
-/**
- * GOOGLE SHEETS INTEGRATION INSTRUCTIONS:
- * 
- * 1. Open your Spreadsheet: https://docs.google.com/spreadsheets/d/18SUwFshvxuUVYWDjBz2aUxir4-WB8IcXQL3_a81_EGQ/edit
- * 2. Go to Extensions > Apps Script.
- * 3. Paste the following code:
- * 
- * function doPost(e) {
- *   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
- *   var data = JSON.parse(e.postData.contents);
- *   sheet.appendRow([new Date(), data.name, data.email, data.service, data.message]);
- *   return ContentService.createTextOutput("Success").setMimeType(ContentService.MimeType.TEXT);
- * }
- * 
- * 4. Click 'Deploy' > 'New Deployment'. Select 'Web App'.
- * 5. Set 'Execute as' to 'Me' and 'Who has access' to 'Anyone'.
- * 6. Copy the Web App URL and replace the value of YOUR_SCRIPT_URL below.
- */
-
-const YOUR_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwqQ2130Za78V8VFQ2p-1Le5mvGsly5B6wwfJjPLM1n8KPboQBU02a3fHCeGYaCOQIs/exec';
-
-// The home page sheet's columns: name, email, service, message (plus where it came from)
-export const sendBrief = (source: string) => (b: Brief) =>
-  fetch(YOUR_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: b.name, email: b.email, service: b.services.join(', ') || 'Not specified', message: b.message, source }),
-  });
-const sendToSheet = sendBrief('Quote Section');
+const sendFromQuote = sendLead('Quote Section');
 
 interface PricingProps {
   setView?: (view: 'home' | 'contact' | 'studio') => void;
@@ -62,7 +34,7 @@ export const Pricing: React.FC<PricingProps> = () => (
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}>
-        <QuickBrief send={sendToSheet} source="pricing" tone="dark" />
+        <QuickBrief send={sendFromQuote} source="pricing" tone="dark" />
       </motion.div>
     </div>
   </section>

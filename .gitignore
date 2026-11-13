@@ -26,3 +26,4 @@ dist-ssr
 # iCloud sync conflict copies ("file 2.webp", "vite-env.d 2.ts")
 * 2.*
 * 2
+.env

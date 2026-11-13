@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { BASE_URL, caseUrl } from '../../../seo';
-import { sendBrief } from '../../Pricing';
+import { sendLead } from '../../../leads';
 import { projectBySlug, creativeWorkSchema } from '../projects';
 import { MoreWork, NextProject, ServiceLink } from '../WorkPages';
 import {
@@ -46,7 +46,7 @@ const FullPageScroll: React.FC<{ c: BuiltCase; domain: string }> = ({ c, domain 
 export const BuiltCaseStudy: React.FC<{ slug: string }> = ({ slug }) => {
   const c = builtCaseBySlug(slug)!;
   const project = projectBySlug(slug)!;
-  const send = sendBrief(`${project.title} case study`);
+  const send = sendLead(`${project.title} case study`);
   const breadcrumb = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',

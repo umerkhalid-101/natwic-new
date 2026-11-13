@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { BASE_URL, caseUrl } from '../../../seo';
-import { sendBrief } from '../../Pricing';
+import { sendLead } from '../../../leads';
 import { projectBySlug, creativeWorkSchema } from '../projects';
 import { MoreWork, NextProject, ServiceLink } from '../WorkPages';
 import {
@@ -13,7 +13,7 @@ import {
 } from './juno';
 
 const project = projectBySlug('juno')!;
-const sendFromJuno = sendBrief('Juno case study');
+const sendFromJuno = sendLead('Juno case study');
 
 /* ------------------------------------------------------------------ */
 /* The shift: drag between the old homepage and ours                    */

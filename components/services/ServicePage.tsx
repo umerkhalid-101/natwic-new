@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Magnetic } from '../Magnetic';
 import { Link } from '../nav';
 import { BOOKING_URL } from '../socials';
-import { sendBrief } from '../Pricing';
+import { sendLead } from '../../leads';
 import { PROJECTS, projectBySlug } from '../work/projects';
 import { BASE_URL, serviceUrl } from '../../seo';
 import { FadeUp, TiltCard, ClosingCta, pad2, ease } from '../work/rich/blocks';
@@ -202,7 +202,7 @@ export const ServicePage: React.FC<{ slug: string }> = ({ slug }) => {
   const theme = themeFor(meta.slug);
   const url = serviceUrl(meta.slug);
   const others = SERVICE_PAGES.filter((s) => s.slug !== meta.slug);
-  const send = sendBrief(`Service: ${meta.name}`);
+  const send = sendLead(`Service: ${meta.name}`);
 
   const schema = [
     {

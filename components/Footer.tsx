@@ -5,6 +5,7 @@ import { Magnetic } from './Magnetic';
 import { scrollToY } from './smoothScroll';
 import { FooterWordmark } from './FooterWordmark';
 import { Link } from './nav';
+import { openCookieSettings } from './CookieBanner';
 import { PROJECTS } from './work/projects';
 import { SERVICE_PAGES, servicePath } from './services/services';
 import JOURNAL from 'virtual:journal-index';
@@ -204,8 +205,7 @@ const Brief: React.FC<{ onSend: () => void }> = ({ onSend }) => {
   const line = 'block overflow-visible';
   return (
     <div className="pb-14 md:pb-20 border-b border-white/[0.08]">
-      <p className="flex items-center gap-3 mb-8 md:mb-10 text-[11px] font-bold uppercase tracking-[0.4em] text-white/50">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC] shadow-[0_0_10px_rgba(112,63,236,0.8)]" />
+      <p className="mb-8 md:mb-10 text-sm font-medium text-white/50">
         Start with a sentence
       </p>
       <motion.form
@@ -374,6 +374,7 @@ export const Footer: React.FC<FooterProps> = ({ setView, currentView }) => {
       <div className="flex items-center gap-6 md:gap-8">
         <Link href="/privacy" className="uppercase tracking-[0.3em] hover:text-white transition-colors">Privacy</Link>
         <Link href="/terms" className="uppercase tracking-[0.3em] hover:text-white transition-colors">Terms</Link>
+        <button onClick={openCookieSettings} className="uppercase tracking-[0.3em] hover:text-white transition-colors">Cookies</button>
         <button
           onClick={() => scrollToY(0)}
           aria-label="Back to top"

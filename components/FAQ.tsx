@@ -25,8 +25,7 @@ export const FAQ: React.FC = () => {
         {/* Left column: Questions */}
         <div className="lg:pr-10">
           <div className="flex gap-2 items-center mb-10">
-            <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_8px_rgba(112,63,236,0.6)]" />
-            <p aria-hidden className="text-xs font-bold text-zinc-700 uppercase tracking-[0.4em]">Web design FAQ</p>
+            <p aria-hidden className="text-sm font-medium text-zinc-500">Web design FAQ</p>
           </div>
           <h2 className="text-6xl md:text-[80px] font-semibold tracking-tighter mb-8 leading-[0.9] text-black">
             <span className="sr-only">Web design FAQ: </span>Answered<br />questions.

@@ -14,7 +14,6 @@ export const Privacy: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-400 mb-6">Legal</p>
                     <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8">Privacy Policy.</h1>
                     <p className="text-zinc-500 font-medium mb-16">Last updated: June 25, 2025</p>
                 </motion.div>
@@ -50,7 +49,12 @@ export const Privacy: React.FC = () => {
                         <li>Generate a personal profile about you to make future visits to the Site more personalized.</li>
                     </ul>
 
-                     <h2 className="text-2xl font-bold mb-4 mt-12">4. Contact Us</h2>
+                    <h2 id="cookies" className="text-2xl font-bold mb-4 mt-12 scroll-mt-32">4. Cookies</h2>
+                    <p className="text-zinc-600 mb-6 leading-relaxed">
+                        We use Google Analytics to understand which pages are useful, how people find us and where they leave. It only sets cookies if you accept them in the cookie banner. If you decline, or haven’t chosen yet, it sends anonymous, cookieless signals that can’t identify you. You can change your choice at any time with the “Cookies” link at the bottom of every page. We don’t use advertising cookies.
+                    </p>
+
+                    <h2 className="text-2xl font-bold mb-4 mt-12">5. Contact Us</h2>
                     <p className="text-zinc-600 mb-6 leading-relaxed">
                         If you have questions or comments about this Privacy Policy, please contact us at: <br/><br/>
                         <strong>Natwic Studio</strong><br/>

@@ -15,8 +15,7 @@ export const Terms: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-zinc-400 mb-6">Legal</p>
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8">Terms of Service.</h1>
+                                        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-8">Terms of Service.</h1>
                     <p className="text-zinc-500 font-medium mb-16">Last updated: June 25, 2025</p>
                 </motion.div>
 

@@ -71,7 +71,7 @@ export const Hero: React.FC = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12 md:gap-16">
             <div className="max-w-4xl pointer-events-none">
               <MaskedText delay={0.4}>
-                <p className="text-[9px] md:text-xs font-bold uppercase tracking-[0.7em] mb-4 md:mb-8 text-white/50">ESTABLISHED TWENTY TWENTY THREE</p>
+                <p className="text-sm font-medium mb-4 md:mb-8 text-white/50">Est. 2023</p>
               </MaskedText>
               <MaskedText delay={0.55}>
                 <p className="text-3xl md:text-[4.5rem] font-bold text-white leading-[1.1] tracking-[-0.04em]">
@@ -79,8 +79,7 @@ export const Hero: React.FC = () => {
                 </p>
               </MaskedText>
               <MaskedText delay={0.7}>
-                <h1 className="mt-6 md:mt-10 flex items-start gap-3 md:gap-4 max-w-2xl text-base md:text-[1.6rem] font-medium leading-[1.3] tracking-[-0.02em] text-white/50">
-                  <span aria-hidden className="mt-[0.55em] w-1.5 h-1.5 md:w-2 md:h-2 shrink-0 rounded-full bg-[#703FEC] shadow-[0_0_12px_rgba(112,63,236,0.8)]" />
+                <h1 className="mt-6 md:mt-10 max-w-2xl text-base md:text-[1.6rem] font-medium leading-[1.3] tracking-[-0.02em] text-white/50">
                   <span>
                     <span className="text-white">Web design &amp; branding</span> for startups, SaaS teams and small businesses, anywhere in the world.
                   </span>

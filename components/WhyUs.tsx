@@ -85,8 +85,7 @@ const TypingDots: React.FC = () => (
 
 const NextCard: React.FC<{ next: Next; onStart: (brief: string) => void }> = ({ next, onStart }) => (
   <div className="rounded-2xl bg-white border border-black/[0.06] p-4 md:p-5 w-[min(300px,82%)] shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-    <p className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.3em] text-[#703FEC]">
-      <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
+    <p className="text-xs font-semibold text-[#703FEC]">
       {next.fix ? 'How we fix it' : 'Your message'}
     </p>
     {next.fix ? (
@@ -218,7 +217,7 @@ const ProblemChat: React.FC<{ onStart: (brief: string) => void; onSpeaker: (id: 
 
   return (
     <div ref={ref} className="flex flex-col h-[560px] md:h-[600px]">
-      <p className="pt-10 md:pt-14 px-6 text-center text-[9px] font-bold uppercase tracking-[0.4em] text-black/25">Tell us what’s not working</p>
+      <p className="pt-10 md:pt-14 px-6 text-center text-sm font-medium text-zinc-500">Tell us what’s not working</p>
 
       {/* Thread */}
       <div
@@ -450,7 +449,7 @@ const ExpertOrbital: React.FC<{ speaker: number | null }> = ({ speaker }) => {
         </motion.button>
       ))}
 
-      <p className="absolute top-10 md:top-14 inset-x-0 px-6 text-center text-[9px] font-bold uppercase tracking-[0.4em] text-white/30 pointer-events-none">
+      <p className="absolute top-10 md:top-14 inset-x-0 px-6 text-center text-sm font-medium text-white/50 pointer-events-none">
         You talk to the people who build it
       </p>
     </div>
@@ -477,8 +476,7 @@ export const WhyUs: React.FC = () => {
             viewport={{ once: true }}
             className="flex gap-3 items-center pt-2 min-w-[200px]"
           >
-            <div className="w-1.5 h-1.5 bg-[#703FEC] rounded-full shadow-[0_0_8px_rgba(112,63,236,0.3)]" />
-            <p aria-hidden className="text-xs font-bold uppercase tracking-[0.4em] text-zinc-600 whitespace-nowrap">WHY WORK WITH US</p>
+            <p aria-hidden className="text-sm font-medium text-zinc-500 whitespace-nowrap">Why work with us</p>
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}

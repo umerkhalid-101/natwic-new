@@ -7,8 +7,7 @@ import { Post, formatDate } from './posts';
 export const ease = [0.16, 1, 0.3, 1] as const;
 
 export const Label: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <p className={`flex items-center gap-3 text-[11px] font-bold uppercase tracking-[0.4em] text-zinc-500 ${className}`}>
-    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC]" />
+  <p className={`text-sm font-medium text-zinc-500 ${className}`}>
     {children}
   </p>
 );

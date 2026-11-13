@@ -9,6 +9,7 @@ import { Stats } from './components/Stats';
 import { Pricing } from './components/Pricing';
 import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
+import { CookieBanner } from './components/CookieBanner';
 import { Seo } from './components/Seo';
 import { Loader } from './components/Loader';
 import { lazyPage } from './components/lazyPage';
@@ -204,6 +205,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
       </main>
 
       <Footer setView={changeView as any} currentView={view} />
+      <CookieBanner />
     </div>
     </NavContext.Provider>
   );

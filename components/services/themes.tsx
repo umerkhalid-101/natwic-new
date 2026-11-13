@@ -167,8 +167,7 @@ export const Stage: React.FC<{ theme: Theme; children: React.ReactNode; classNam
 /* ------------------------------------------------------------------ */
 
 export const SectionLabel: React.FC<{ theme: Theme; n: number; text: string; onStage?: boolean }> = ({ theme, n, text, onStage }) => (
-  <p className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 ${mono} text-[10px] uppercase tracking-[0.25em] ${onStage ? 'border-white/15 bg-white/[0.05] text-white/60' : 'border-[color:var(--border)] bg-[var(--card)] text-[color:var(--muted)]'}`}>
-    <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)]" />
+  <p className={`${mono} text-sm ${onStage ? 'text-white/60' : 'text-[color:var(--muted)]'}`}>
     {theme.key === 'terminal' ? <Typewriter text={theme.label(n, text)} /> : theme.label(n, text)}
   </p>
 );

@@ -55,8 +55,7 @@ export const GridStage: React.FC<{ children: React.ReactNode; className?: string
 };
 
 export const Eyebrow: React.FC<{ children: React.ReactNode; tone?: 'dark' | 'light' }> = ({ children, tone = 'light' }) => (
-  <p className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] ${tone === 'light' ? 'border-white/15 bg-white/[0.04] text-white/60' : 'border-zinc-200 bg-white text-zinc-500'}`}>
-    <span className="w-1.5 h-1.5 rounded-full bg-[#703FEC] shadow-[0_0_10px_rgba(112,63,236,0.9)]" />
+  <p className={`text-sm font-medium ${tone === 'light' ? 'text-white/60' : 'text-zinc-500'}`}>
     {children}
   </p>
 );

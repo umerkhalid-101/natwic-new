@@ -44,6 +44,7 @@ export const sendLead = (source: string) => async (b: Brief) => {
       page: window.location.pathname,
       trap: b.trap ?? '',
       elapsed_ms: b.elapsedMs,
+      captcha: b.captcha ?? '',
       ...readVisit(),
     }),
   });

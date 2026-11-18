@@ -11,6 +11,9 @@
  *   LEAD_NOTIFY_EMAIL  Where that email goes, e.g. hello@natwic.com (comma-separate for several)
  *   LEAD_FROM_EMAIL    Sender; needs a domain verified in Resend. Defaults to Resend's test sender.
  *   SLACK_WEBHOOK_URL  Slack incoming webhook, for a message per lead
+ *   TURNSTILE_SECRET_KEY  Cloudflare Turnstile secret, checking the form's "hold to verify" token.
+ *                      Set it together with VITE_TURNSTILE_SITE_KEY (components/HumanCheck.tsx):
+ *                      a secret without the site key marks every lead as spam.
  */
 
 const DEFAULT_SHEET_URL =
@@ -50,6 +53,29 @@ const escapeHtml = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
 const withTimeout = (ms: number) => AbortSignal.timeout(ms);
+
+/**
+ * Asks Cloudflare whether the form's Turnstile token is real. With no secret set the check
+ * is off. If Cloudflare can't be reached the lead passes: an outage must not cost a lead.
+ */
+const verifyHuman = async (token: string, ip: string) => {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (!secret) return true;
+  if (!token) return false;
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: new URLSearchParams({ secret, response: token, ...(ip ? { remoteip: ip } : {}) }),
+      signal: withTimeout(5_000),
+    });
+    const out = (await res.json()) as { success?: boolean; 'error-codes'?: string[] };
+    if (!out.success) console.warn('[lead] turnstile rejected:', out['error-codes']);
+    return Boolean(out.success);
+  } catch (e) {
+    console.error('[lead] turnstile unreachable, letting the lead through:', e);
+    return true;
+  }
+};
 
 /** Apps Script runs the script, then redirects to its output; fetch follows that redirect. */
 const saveToSheet = async (lead: Lead) => {
@@ -131,12 +157,14 @@ export async function POST(request: Request) {
   const message = text(body.message, 5000);
   if (!name || !EMAIL_RE.test(email)) return json({ ok: false, error: 'invalid_fields' }, 400);
 
-  // Bots fill the hidden field or submit instantly. Real people who trip this are still
-  // saved to the sheet (marked spam), just without an alert, so no lead is ever thrown away.
-  const elapsed = typeof body.elapsed_ms === 'number' ? body.elapsed_ms : Infinity;
-  const spam = Boolean(text(body.trap, 500)) || elapsed < MIN_FILL_MS;
-
+  // Bots fill the hidden field, submit instantly or fail the Turnstile check. Real people who
+  // trip this are still saved to the sheet (marked spam), just without an alert, so no lead is ever thrown away.
   const h = request.headers;
+  const elapsed = typeof body.elapsed_ms === 'number' ? body.elapsed_ms : Infinity;
+  const ip = (h.get('x-forwarded-for') ?? '').split(',')[0].trim();
+  const human = await verifyHuman(text(body.captcha, 2048), ip);
+  const spam = Boolean(text(body.trap, 500)) || elapsed < MIN_FILL_MS || !human;
+
   const lead: Lead = {
     submitted_at: new Date().toISOString(),
     name,

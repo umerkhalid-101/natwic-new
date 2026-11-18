@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, animate, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
 import { trackLead } from '../analytics';
+import { HumanCheckButton, useHumanCheck, type HumanState } from './HumanCheck';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 const EMAIL = 'hello@natwic.com';
@@ -29,6 +30,8 @@ export type Brief = {
   name: string; email: string; services: string[]; message: string;
   /** The hidden field only bots fill in, and how long the form was open: both for spam checks */
   trap?: string; elapsedMs?: number;
+  /** The Turnstile token from the human check, verified by api/lead.ts */
+  captcha?: string;
 };
 
 interface QuickBriefProps {
@@ -55,6 +58,8 @@ const TONE = {
     muted: 'text-zinc-600',
     strong: 'text-black',
     again: 'text-zinc-500 hover:text-black',
+    check: 'border-black/10 text-black/70 hover:border-black/30 hover:text-black',
+    checkFill: 'bg-[#703FEC]/10',
   },
   dark: {
     card: 'bg-[#141414] border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.6)] text-white',
@@ -69,6 +74,8 @@ const TONE = {
     muted: 'text-white/60',
     strong: 'text-white',
     again: 'text-white/50 hover:text-white',
+    check: 'border-white/15 text-white/70 hover:border-white/40 hover:text-white',
+    checkFill: 'bg-[#703FEC]/25',
   },
 };
 
@@ -217,9 +224,14 @@ const PaperPlane: React.FC<{ from: DOMRect; onDone: () => void }> = ({ from, onD
 };
 
 /** What the buddy says, based on where you are and what you've written. */
-const buddyLine = (focus: string, email: string, subject: string, message: string, name: string) => {
+const buddyLine = (focus: string, email: string, subject: string, message: string, name: string, human: HumanState, nudged: boolean) => {
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const first = name.trim().split(' ')[0];
+  if (human === 'holding') return 'Hold it… hold it…';
+  if (human === 'checking') return 'One sec…';
+  if (human === 'failed') return 'Hmm, try that again.';
+  if (focus === 'verify') return human === 'verified' ? 'Human confirmed.' : 'Hold the plane for me.';
+  if (nudged && human !== 'verified') return 'Hold the plane first.';
   if (focus === 'email') return email.length > 4 && !emailOk ? 'Hmm, check that email.' : emailOk ? 'Got it.' : 'Where do we reply?';
   if (focus === 'subject') return subject.trim() ? 'Ooh, intriguing.' : 'Optional, but fun.';
   if (focus === 'message') return message.trim().length > 140 ? 'This sounds good.' : message.trim() ? 'Go on…' : 'Tell us everything.';
@@ -253,13 +265,21 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
   const [launch, setLaunch] = useState<{ id: number; from: DOMRect } | null>(null);
   const reduceMotion = useReducedMotion();
   const sending = useRef(false);
+  const human = useHumanCheck(dark);
+  const checkRef = useRef<HTMLButtonElement>(null);
+  const [checkNudge, setCheckNudge] = useState(0);
 
   const submit = async (e?: React.FormEvent) => {
     e?.preventDefault();
     // ⌘ + Enter still reaches here while the button is disabled
     if (sending.current) return;
     if (formRef.current && !formRef.current.reportValidity()) return;
+    // Like an empty name in the footer sentence: a shake and focus, no error box
+    if (human.state !== 'verified') { setCheckNudge((n) => n + 1); checkRef.current?.focus(); return; }
     sending.current = true;
+    const captcha = await human.read();
+    // The token expired or failed: the pill asks for another press and shows why, nothing is sent
+    if (captcha === null) { sending.current = false; checkRef.current?.focus(); return; }
     setFormState('submitting');
     setFlying(true);
     const icon = iconRef.current?.getBoundingClientRect();
@@ -274,6 +294,7 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
       await Promise.all([flight, send({
         name: name.trim(), email: email.trim(), services: service ? [service] : [], message: body,
         trap: trapRef.current?.value ?? '', elapsedMs: openedAt.current ? Date.now() - openedAt.current : undefined,
+        captcha,
       })]);
       setFormState('success');
       trackLead(source, service || undefined);
@@ -281,18 +302,20 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
       console.error('Submission error:', error);
       await gone;
       setFormState('error');
+      // The token was spent on the failed send; fetch the next one for the retry
+      human.refresh();
     } finally {
       setFlying(false);
       sending.current = false;
     }
   };
 
-  const reset = () => { setEmail(''); setSubject(''); setMessage(''); setName(''); setFocus(''); setFormState('idle'); openedAt.current = Date.now(); };
+  const reset = () => { setEmail(''); setSubject(''); setMessage(''); setName(''); setFocus(''); setFormState('idle'); setCheckNudge(0); human.reset(); openedAt.current = Date.now(); };
   const field = `w-full min-w-0 bg-transparent outline-none ${t.field}`;
 
   return (
     <div className="relative pt-7">
-      {formState !== 'success' && !flying && <Buddy say={buddyLine(focus, email, subject, message, name)} bounce={bounce} dark={dark} />}
+      {formState !== 'success' && !flying && <Buddy say={buddyLine(focus, email, subject, message, name, human.state, checkNudge > 0)} bounce={bounce} dark={dark} />}
     <div className={`relative z-[1] rounded-[1.75rem] border overflow-hidden text-left ${t.card}`}>
       <AnimatePresence mode="wait">
         {formState === 'success' ? (
@@ -392,13 +415,20 @@ export const QuickBrief: React.FC<QuickBriefProps> = ({ send, source = 'contact'
               </label>
             </div>
 
+            {human.state === 'failed' && formState !== 'error' && (
+              <p className="px-5 md:px-7 text-sm font-medium text-[#F3350C]">We couldn’t confirm you’re human. Press the plane again, or email us at {EMAIL}.</p>
+            )}
             {formState === 'error' && (
               <p className="px-5 md:px-7 text-sm font-medium text-[#F3350C]">That didn’t send. Try again, or email us at {EMAIL}.</p>
             )}
 
-            {/* Send */}
-            <div className="flex items-center justify-between gap-4 px-5 md:px-7 pb-5 md:pb-6 pt-2">
-              <span className={`hidden md:inline text-xs ${t.hint}`}>⌘ + Enter to send</span>
+            {/* Turnstile runs here unseen; it only shows itself if it needs a click */}
+            <div ref={human.box} className="px-5 md:px-7" />
+
+            {/* Verify, then send */}
+            <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4 px-5 md:px-7 pb-5 md:pb-6 pt-2">
+              <HumanCheckButton ref={checkRef} check={human} pill={t.check} fill={t.checkFill} nudge={checkNudge} onFocus={() => setFocus('verify')} />
+              <span className={`hidden xl:inline text-xs ${t.hint}`}>⌘ + Enter to send</span>
               <button
                 type="submit"
                 disabled={formState === 'submitting'}

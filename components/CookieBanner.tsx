@@ -26,6 +26,7 @@ const readChoice = (): Choice | null => {
 const applyChoice = (c: Choice) => {
   try { localStorage.setItem(KEY, c); } catch { /* private mode: they'll be asked again next visit */ }
   window.gtag?.('consent', 'update', { analytics_storage: c === 'accepted' ? 'granted' : 'denied' });
+  if (c === 'accepted') window.natwicLoadApollo?.();
 };
 
 /** A cookie that loses a bite when you accept it */

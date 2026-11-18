@@ -1,7 +1,11 @@
 /** GA4 events. gtag is loaded in index.html; these are no-ops when it's blocked or missing. */
 
 declare global {
-  interface Window { gtag?: (...args: unknown[]) => void }
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+    /** Defined in index.html; loads the Apollo visitor tracker once consent is given */
+    natwicLoadApollo?: () => void;
+  }
 }
 
 export const track = (event: string, params: Record<string, unknown> = {}) => {

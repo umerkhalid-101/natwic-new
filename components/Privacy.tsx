@@ -54,7 +54,8 @@ export const Privacy: React.FC = () => {
                         We use Google Analytics to understand which pages are useful, how people find us and where they leave. It only sets cookies if you accept them in the cookie banner. If you decline, or haven’t chosen yet, it sends anonymous, cookieless signals that can’t identify you. You can change your choice at any time with the “Cookies” link at the bottom of every page. We don’t use advertising cookies.
                     </p>
                     <p className="text-zinc-600 mb-6 leading-relaxed">
-                        Our contact forms use Cloudflare Turnstile to check that a message comes from a person, not a bot. It only loads when you verify a form, and Cloudflare doesn’t use it for advertising.
+                        Our contact forms use Cloudflare Turnstile to check that a message comes from a person, not a bot. It only loads when you verify a form, and Cloudflare doesn’t use it for advertising. Cloudflare processes this data under its{' '}
+                        <a href="https://www.cloudflare.com/turnstile-privacy-policy/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-[#703FEC] transition-colors">Turnstile Privacy Addendum</a>.
                     </p>
 
                     <h2 className="text-2xl font-bold mb-4 mt-12">5. Contact Us</h2>

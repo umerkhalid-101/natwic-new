@@ -33,7 +33,8 @@ export const GRID_CSS = `
   background: conic-gradient(from var(--a, 0deg), transparent 0 70%, var(--accent, #703FEC) 80%, var(--accent-2, #b9a1ff) 88%, transparent 96%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
   opacity: 0; transition: opacity .4s ease; }
-.svc-glow-border:hover::before { opacity: 1; animation: svc-border 2.4s linear infinite; }
+/* Mouse only: on touch screens a tap sets :hover and the spinning border repaints every frame */
+@media (hover: hover) and (pointer: fine) { .svc-glow-border:hover::before { opacity: 1; animation: svc-border 2.4s linear infinite; } }
 @property --a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
 @keyframes svc-border { to { --a: 360deg; } }
 @media (prefers-reduced-motion: reduce) { .svc-scan, .svc-glow-border:hover::before { animation: none; } }

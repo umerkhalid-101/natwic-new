@@ -1,5 +1,5 @@
 ---
-title: 'Webflow vs Next.js for Startups: Which to Pick in 2026'
+title: 'Webflow vs Next.js for Startups (2026): Cost, Speed & Which to Pick'
 date: 2026-10-22
 excerpt: 'Webflow vs Next.js for your startup site: a side-by-side comparison, real 2026 platform costs, when to use both, and a free scorecard to decide.'
 cover: /journal/webflow-vs-nextjs-cover.webp

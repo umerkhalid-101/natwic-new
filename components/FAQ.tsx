@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const FAQS = [
+  { q: "Are you a web design company in Dubai?", a: "Yes. Natwic is a Dubai-based web design and branding agency working with startups, SaaS teams and small businesses in the UAE, the UK and worldwide." },
   { q: "What type of clients do you usually work with?", a: "We design websites and brands for startups, SaaS teams and small businesses. We're based in Dubai and work with clients around the world." },
   { q: "Do you work with clients in other countries?", a: "Yes. Most of our work is remote. We schedule calls around your time zone and share progress in writing between calls, so you're never waiting on a meeting to see where things stand." },
   { q: "How long does a typical project take?", a: "Most projects run in 2–4 week sprints. Larger brand and product work can take 3–6 months, depending on scope." },

@@ -213,7 +213,7 @@ export const ServicePage: React.FC<{ slug: string }> = ({ slug }) => {
       description: meta.description,
       url,
       provider: { '@id': `${BASE_URL}/#organization` },
-      areaServed: 'Worldwide',
+      areaServed: ['AE', 'GB', 'Worldwide'],
       availableChannel: { '@type': 'ServiceChannel', serviceUrl: `${BASE_URL}/contact` },
     },
     {
@@ -311,6 +311,22 @@ export const ServicePage: React.FC<{ slug: string }> = ({ slug }) => {
           </div>
           <Link href="/work" className="text-[11px] font-bold uppercase tracking-[0.25em] opacity-60 hover:opacity-100 transition-opacity shrink-0">All projects →</Link>
         </div>
+        {c.testimonial && (
+          <FadeUp>
+            <figure className="mt-10 md:mt-14 svc-glow-border rounded-[2rem] border border-[color:var(--border)] bg-[var(--card)] p-8 md:p-12">
+              <blockquote className={`max-w-4xl text-2xl md:text-4xl leading-[1.25] tracking-[-0.02em] ${theme.key === 'editorial' ? '[font-family:Georgia,serif]' : 'font-medium'}`}>
+                “{c.testimonial.quote}”
+              </blockquote>
+              <figcaption className="mt-8 flex items-center gap-3">
+                <span aria-hidden className="w-10 h-10 rounded-full grid place-items-center text-sm font-bold" style={{ background: 'var(--accent)', color: 'var(--on-accent)' }}>{c.testimonial.name.charAt(0)}</span>
+                <span>
+                  <span className="block font-bold">{c.testimonial.name}</span>
+                  <span className="block text-sm" style={{ color: 'var(--muted)' }}>{c.testimonial.company}</span>
+                </span>
+              </figcaption>
+            </figure>
+          </FadeUp>
+        )}
         <div className="mt-10 md:mt-14"><ThemedCases slugs={c.cases} /></div>
       </section>
 
@@ -331,6 +347,7 @@ export const ServicePage: React.FC<{ slug: string }> = ({ slug }) => {
                 <span aria-hidden className="mt-0.5 w-8 h-8 shrink-0 rounded-full border border-[color:var(--border)] grid place-items-center transition-transform duration-500 group-open:rotate-45">+</span>
               </summary>
               <p className="mt-4 pl-9 max-w-3xl text-base md:text-lg leading-relaxed" style={{ color: 'var(--muted)' }}>{f.a}</p>
+              {f.link && <Link href={f.link.href} className="mt-3 ml-9 inline-block text-base font-semibold underline underline-offset-4 decoration-[color:var(--accent)] hover:text-[color:var(--accent)] transition-colors">{f.link.label} →</Link>}
             </details>
           ))}
         </div>

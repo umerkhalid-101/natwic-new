@@ -16,8 +16,13 @@ export type ServiceContent = {
   pricing: string;
   /** Case study slugs to link, 2 to 3 */
   cases: string[];
-  faqs: { q: string; a: string }[];
+  faqs: Faq[];
+  /** A client quote shown above the related work */
+  testimonial?: { quote: string; name: string; company: string };
 };
+
+/** `link` renders after the answer, for pointing at a related guide */
+type Faq = { q: string; a: string; link?: { href: string; label: string } };
 
 const REMOTE_FAQ = {
   q: 'Can we work together if we’re in a different time zone?',
@@ -27,11 +32,11 @@ const REMOTE_FAQ = {
 export const SERVICE_CONTENT: ServiceContent[] = [
   {
     slug: 'web-design',
-    h1: 'Web design agency for startups',
+    h1: 'Website design company in Dubai for startups',
     serviceType: 'Startup website design',
     intro: [
-      'Your website is often the first proof that your startup is real. Investors check it before a meeting, early users check it before they sign up, and future hires check it before they apply. If it’s vague, slow or looks unfinished, people quietly leave.',
-      'Natwic is a web design agency for startups. We plan, design and build marketing sites that make a new product easy to understand and easy to try. We work remotely with founders around the world, so you get a focused team on your schedule, wherever you are.',
+      'Your website is often the first proof that your startup is real. Investors check it before a meeting, early users check it before they sign up, and future hires check it before they apply. If it’s vague, slow or looks unfinished, people quietly leave. Natwic offers web design services in Dubai and remotely for founders worldwide.',
+      'Natwic is a web design agency for startups. We plan, design and build marketing sites that make a new product easy to understand and easy to try. We also design bilingual Arabic/English sites. We work remotely with founders around the world, so you get a focused team on your schedule, wherever you are.',
     ],
     forWho: [
       { title: 'Pre-launch founders', text: 'You have a product taking shape and need a site that explains it clearly, collects a waitlist and looks credible enough to share with investors.' },
@@ -55,7 +60,11 @@ export const SERVICE_CONTENT: ServiceContent[] = [
     ],
     pricing: 'Every project starts with a fixed quote based on an agreed scope, so you know the cost before work begins.',
     cases: ['breakthirty', 'beyond-hut', 'cayano'],
+    testimonial: { quote: 'Quick turnarounds, smart ideas and no hand-holding needed. Natwic made our launch feel easy.', name: 'Ryan', company: 'Breakthirty' },
     faqs: [
+      { q: 'How much does a website cost in Dubai?', a: 'It depends on page count, copy and features. Every project gets a fixed quote after a free 30-minute call, so you know the cost before work starts.', link: { href: '/journal/startup-website-cost-dubai', label: 'See the full breakdown in our guide to startup website cost in Dubai' } },
+      { q: 'Do you only work with Dubai companies?', a: 'No. We’re based in Dubai and work with startups across the UAE, the UK and worldwide, with calls scheduled around your time zone.' },
+      { q: 'Are you an agency or a freelancer?', a: 'Natwic is a small remote studio based in Dubai, with a team of four handling strategy, design and build.' },
       { q: 'How long does a startup website take?', a: 'Most marketing sites run in focused sprints of two to four weeks. A larger site with many page types or custom features can take longer. We agree on a timeline during planning and build the schedule around your launch date.' },
       { q: 'Do you write the copy?', a: 'We give copy direction for every page and draft headlines and key sections with you. If you need full copywriting, we can include it in the scope.' },
       { q: 'Will we be able to update the site ourselves?', a: 'Yes. We set up a CMS so your team can edit text, swap images and publish new pages or posts without touching code.' },
@@ -70,7 +79,7 @@ export const SERVICE_CONTENT: ServiceContent[] = [
     serviceType: 'Brand identity design',
     intro: [
       'Early on, your brand has one job: make people trust a company they’ve never heard of. A clear identity helps you look established in a pitch, stand out in a crowded market and stay consistent as more people start creating things in your name.',
-      'Natwic is a startup branding agency. We design brand identities that are distinctive but practical: a logo, typography, color and a small set of rules your team can actually follow. We work remotely with founders in different countries, so the process fits around your calendar.',
+      'Natwic is a startup branding agency based in Dubai, working with founders in the UAE, UK and worldwide. We design brand identities that are distinctive but practical: a logo, typography, color and a small set of rules your team can actually follow. We work remotely, so the process fits around your calendar.',
     ],
     forWho: [
       { title: 'New companies', text: 'You have a name and an idea, maybe a placeholder logo, and you want an identity that feels intentional before you launch.' },
@@ -94,7 +103,9 @@ export const SERVICE_CONTENT: ServiceContent[] = [
     ],
     pricing: 'We quote a fixed price for an agreed scope before we start. If you need a website as well, we can plan both together.',
     cases: ['juno', 'unita', 'breakthirty'],
+    testimonial: { quote: 'Natwic understood our brand straight away and turned it into something we’re proud to show. Clear communication the whole way through.', name: 'Linda', company: 'Salams' },
     faqs: [
+      { q: 'How much does startup branding cost?', a: 'It depends on how much strategy work and how many applications the identity needs. You get a fixed quote for an agreed scope before we start.', link: { href: '/journal/startup-branding-cost-in-2026-a-real-price-breakdown', label: 'See our startup branding cost breakdown for typical 2026 ranges' } },
       { q: 'How long does a branding project take?', a: 'A focused identity project usually takes a few weeks from kickoff to final files. Larger projects with extensive strategy work or many applications take longer. We share a timeline before we begin.' },
       { q: 'Do you help with naming?', a: 'Our focus is visual identity. If you’re still choosing a name, we can share feedback on your shortlist and how each option might work visually.' },
       { q: 'What files will we receive?', a: 'Logo files in the formats you need for web and print, color and type specifications, brand guidelines and any templates included in the scope.' },
@@ -133,7 +144,9 @@ export const SERVICE_CONTENT: ServiceContent[] = [
     ],
     pricing: 'You get a fixed quote for an agreed scope before we start, and we can phase larger sites so the most important pages launch first.',
     cases: ['juno', 'unita'],
+    testimonial: { quote: 'Natwic moves fast, sweats the details and is easy to work with. It felt like having a design team in-house.', name: 'Adeel Raza', company: 'Mailmunch' },
     faqs: [
+      { q: 'How much does a SaaS website cost?', a: 'It depends on the number of page templates, the product visuals and the integrations you need. You get a fixed quote after a scoping call.' },
       { q: 'Do you design product UI as well as the marketing site?', a: 'Yes. We design product interfaces and dashboards too, and keeping both with one team makes the website and the product feel like one experience.' },
       { q: 'How do you show a product that is still changing?', a: 'We design product visuals that can be updated easily, and favor simplified screens and short loops over detailed screenshots that go stale quickly.' },
       { q: 'Can the site connect to our app and CRM?', a: 'Yes. We can connect sign-up and demo forms to your app, CRM or email tools so leads go straight where your team works.' },
@@ -144,11 +157,11 @@ export const SERVICE_CONTENT: ServiceContent[] = [
   },
   {
     slug: 'webflow-nextjs-development',
-    h1: 'Webflow development agency and Next.js websites',
+    h1: 'Web development agency in Dubai: Webflow and Next.js websites',
     serviceType: 'Website development',
     intro: [
       'A great design only works if it’s built well. Slow pages, broken layouts on phones and a CMS nobody can use undo all the work that went into the design.',
-      'Natwic builds marketing sites in Webflow and Next.js. Webflow suits teams who want to edit everything visually. Next.js suits teams who need more control, custom features or a site that lives close to their product code. We help you pick the right one, then build it properly. If you already have a site, we’ll also tell you honestly whether a full rebuild is worth it or whether targeted fixes will get you most of the way there. We work remotely with teams around the world and overlap with your working hours for reviews.',
+      'Natwic is a web development agency in Dubai that builds marketing websites in Webflow and Next.js: home, product, pricing, blog and landing pages. Webflow suits teams who want to edit everything visually. Next.js suits teams who need more control, custom features or a site that lives close to their product code. We help you pick the right one, then build it properly. If you already have a site, we’ll also tell you honestly whether a full rebuild is worth it or whether targeted fixes will get you most of the way there. We work remotely with teams around the world and overlap with your working hours for reviews.',
     ],
     forWho: [
       { title: 'Teams with designs ready', text: 'You already have designs from an in-house designer or another studio and need a reliable team to build them accurately.' },
@@ -173,6 +186,8 @@ export const SERVICE_CONTENT: ServiceContent[] = [
     pricing: 'We quote a fixed price after reviewing your designs or requirements, so the cost is clear before we start.',
     cases: ['breakthirty', 'cayano', 'beyond-hut'],
     faqs: [
+      { q: 'How much does web development cost in Dubai?', a: 'The price depends on the number of page templates, CMS needs and integrations. You get a fixed quote before work starts.' },
+      { q: 'Do you build ecommerce stores or web apps?', a: 'This service covers marketing websites on Webflow and Next.js. We also build ecommerce stores and web apps; tell us what you need and we’ll scope it as a separate project.' },
       { q: 'Should we choose Webflow or Next.js?', a: 'Webflow is usually best when a marketing team wants to edit and launch pages visually. Next.js is usually best when you need custom features, deep integrations or shared code with your product. We’ll recommend one after a short review.' },
       { q: 'Can you build from designs made by someone else?', a: 'Yes. We review the files first and raise any gaps, such as missing mobile layouts, before we start.' },
       { q: 'Can you migrate our existing site?', a: 'Yes. We can move content from your current platform, set up redirects from old URLs and keep your search rankings as intact as possible.' },
@@ -212,11 +227,51 @@ export const SERVICE_CONTENT: ServiceContent[] = [
     pricing: 'You get a fixed quote after the audit and planning stage, so the cost reflects your actual site rather than a guess.',
     cases: ['cayano', 'beyond-hut', 'breakthirty'],
     faqs: [
+      { q: 'How much does a website redesign cost?', a: 'We price from your current page count and what’s kept, and we plan redirects so you don’t lose SEO. You get a fixed quote after the audit and planning stage.' },
       { q: 'Will a redesign hurt our search rankings?', a: 'Not if it’s planned well. We map every important old URL to its new page, keep metadata that performs and check everything before launch. Some short-term movement can happen, and a careful migration keeps it small.' },
       { q: 'Can we keep parts of our current site?', a: 'Yes. If some pages, content or design elements work well, we keep them. A redesign doesn’t have to start from zero.' },
       { q: 'Do we need to rebrand at the same time?', a: 'Not necessarily. Many redesigns work within the existing brand. If the brand is part of the problem, we can refresh it as part of the project.' },
       { q: 'How long does a redesign take?', a: 'It depends on the size of the site. Smaller sites can move in a few weeks, while larger sites with lots of content take longer. We share a timeline after the audit.' },
       { q: 'Can you redesign the site while keeping it live?', a: 'Yes. We build the new site on a staging link while your current site stays up, then switch over on launch day.' },
+      REMOTE_FAQ,
+    ],
+  },
+  {
+    slug: 'landing-page-design',
+    h1: 'Landing page design for startups and SaaS',
+    serviceType: 'Landing page design',
+    intro: [
+      'You’re about to spend on ads, or a launch post is going out, and the link has to point somewhere. Your home page talks to everyone. A landing page talks to the people who clicked that one link, about the thing they clicked for.',
+      'We design and build landing pages for startups and SaaS teams. That means the copy, the design and the build, with the form connected to the tools you already use. Most pages go out on Webflow or Next.js, so your team can change the headline next week without calling us. We’re a small studio based in Dubai and work with founders wherever they are.',
+    ],
+    forWho: [
+      { title: 'You’re about to run ads', text: 'Sending paid clicks to your home page wastes them. Each campaign should land on a page that repeats the promise from the ad and asks for one thing.' },
+      { title: 'You’re launching before the site is ready', text: 'The product is nearly there and the full website isn’t. One page with a waitlist gets you through launch day, and it can grow into the site later.' },
+      { title: 'You’re testing an idea', text: 'A new plan, a new market or a new feature. Put up a page, send some traffic and see who signs up before you build more.' },
+      { title: 'Your current page isn’t converting', text: 'People arrive and leave. We look at what they see first, what’s missing and what gets in their way, then rebuild the page around that.' },
+    ],
+    included: [
+      { title: 'The copy', text: 'We write it: headline, sections, button text and form labels. You review it in a doc before anything is designed.' },
+      { title: 'Phone first', text: 'Ad clicks often come from phones, so we design the phone version first and make sure the button is never far from a thumb.' },
+      { title: 'Built in Webflow or Next.js', text: 'Fast to load, set up with page titles and social previews, and published on your domain or a subdomain.' },
+      { title: 'A form that reaches you', text: 'Connected to your CRM, email tool, Google Sheet or Slack, and tested with real submissions before launch.' },
+      { title: 'Tracking', text: 'Analytics events on the form and buttons, plus your ad pixels, so you can see what each campaign actually brings in.' },
+      { title: 'A base for the next one', text: 'Sections your team can duplicate for the next campaign, so page two doesn’t need us.' },
+    ],
+    process: [
+      { title: 'Call', text: '30 minutes on the offer, who it’s for and where the traffic will come from.' },
+      { title: 'Copy first', text: 'We write the page in a doc. It’s quicker to fix an argument in words than in a design.' },
+      { title: 'Design', text: 'Phone and desktop versions, shared as a link you can comment on, then revised.' },
+      { title: 'Build and launch', text: 'Built, checked on real phones, form and tracking tested, then published.' },
+    ],
+    pricing: 'Every landing page starts with a fixed quote based on an agreed scope, so you know the cost before work begins.',
+    cases: ['breakthirty', 'beyond-hut', 'cayano'],
+    faqs: [
+      { q: 'How much does landing page design cost?', a: 'It depends on how much copy, design and integration work the page needs. You get a fixed quote after a free 30-minute call.', link: { href: '/journal/landing-page-design-cost-in-2026-7-guides-compared', label: 'See what landing pages typically cost in 2026' } },
+      { q: 'Do you write the copy?', a: 'Yes. The words decide whether the page works, so we write them first and design around them. You review and edit before design starts.' },
+      { q: 'Do you run the ads too?', a: 'No. We build the page; your team or ad partner runs the campaigns. We set up the pixels and events they need to measure it.' },
+      { q: 'Can the page live on our existing website?', a: 'Yes. We can build it inside your current Webflow or Next.js site, or as a standalone page on its own domain or subdomain.' },
+      { q: 'Do we need a full website first?', a: 'No. Plenty of founders start with one page to collect sign-ups, then turn it into a full website later.' },
       REMOTE_FAQ,
     ],
   },

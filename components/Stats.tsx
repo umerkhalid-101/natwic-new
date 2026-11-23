@@ -6,7 +6,7 @@ export const Stats: React.FC = () => {
   return (
     <section className="py-24 px-6 bg-white text-black rounded-[4rem] mx-2 md:mx-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 mb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -76,21 +76,47 @@ export const Stats: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center border-t border-zinc-100 pt-24">
-          <div>
-            <p className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC]">$2M</p>
-            <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Revenue influenced</p>
-          </div>
-          <div>
-            <p className="text-7xl md:text-9xl font-bold tracking-tighter text-[#703FEC] opacity-80">89K</p>
-            <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Leads generated</p>
-          </div>
-          <div>
-            <p className="text-7xl md:text-9xl font-bold tracking-tighter">50+</p>
-            <p className="text-zinc-500 font-bold uppercase tracking-widest mt-4 text-[10px]">Brands partnered</p>
-          </div>
-        </div>
       </div>
     </section>
   );
 };
+
+/** Headline numbers, shown directly under the home hero */
+const KEY_STATS = [
+  { value: '$2', unit: 'M', label: 'Revenue influenced' },
+  { value: '89', unit: 'K', label: 'Leads generated' },
+  { value: '50', unit: '+', label: 'Brands partnered' },
+];
+
+export const KeyStats: React.FC = () => (
+  <section aria-label="Results" className="px-6 md:px-12 pt-14 md:pt-20 pb-16 md:pb-24 bg-white text-black">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_2.2fr] gap-10 lg:gap-16 items-end">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <p className="text-sm font-medium text-zinc-500">Track record</p>
+        <p className="mt-3 max-w-xs text-2xl md:text-3xl font-semibold tracking-[-0.03em] leading-[1.15]">The numbers behind the work.</p>
+      </motion.div>
+      <dl className="grid grid-cols-3 divide-x divide-zinc-200 border-t border-zinc-200 lg:border-t-0">
+        {KEY_STATS.map((s, i) => (
+          <motion.div
+            key={s.label}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col-reverse pt-6 lg:pt-0 px-3 sm:px-6 md:px-10 first:pl-0 last:pr-0"
+          >
+            <dt className="mt-2 md:mt-3 text-xs md:text-sm font-medium text-zinc-500">{s.label}</dt>
+            <dd className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-[-0.05em] leading-none">
+              {s.value}<span className="text-[#703FEC]">{s.unit}</span>
+            </dd>
+          </motion.div>
+        ))}
+      </dl>
+    </div>
+  </section>
+);

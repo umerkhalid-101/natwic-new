@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GGJQK98LL0"></script>
+    <script>
+      // Analytics only for real visitors on the live site. Skipped on localhost and preview
+      // deployments, for automated browsers (headless Chrome, webdriver, crawlers), and in any
+      // browser opted out with ?internal=1 (undo with ?internal=0), so our own visits stay out.
+      window.natwicTrack = (function () {
+        try {
+          var q = new URLSearchParams(location.search).get('internal');
+          if (q === '1') localStorage.setItem('natwic:internal', '1');
+          if (q === '0') localStorage.removeItem('natwic:internal');
+          if (localStorage.getItem('natwic:internal') === '1') return false;
+        } catch (e) {}
+        if (!/(^|\.)natwic\.com$/.test(location.hostname)) return false;
+        if (navigator.webdriver) return false;
+        if (/headless|bot|crawl|spider|slurp|lighthouse|pagespeed|phantom|puppeteer|playwright|selenium/i.test(navigator.userAgent)) return false;
+        return true;
+      })();
+    </script>
+    <!-- Google tag (gtag.js), loaded only when natwicTrack allows it -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      if (window.natwicTrack) {
+        var ga = document.createElement('script');
+        ga.async = true; ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-GGJQK98LL0';
+        document.head.appendChild(ga);
+      }
       // Consent mode: no analytics cookies until the visitor accepts in the cookie banner
       // (components/CookieBanner.tsx). Before that, Google only gets cookieless pings.
       gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', wait_for_update: 500 });
@@ -17,7 +38,7 @@
       // Apollo website visitor tracking. It sets cookies, so it only loads once the visitor
       // accepts in the cookie banner (components/CookieBanner.tsx calls this on accept).
       window.natwicLoadApollo = function () {
-        if (window.__apolloLoaded) return;
+        if (window.__apolloLoaded || !window.natwicTrack) return;
         window.__apolloLoaded = true;
         var n = Math.random().toString(36).substring(7), o = document.createElement('script');
         o.src = 'https://assets.apollo.io/micro/website-tracker/tracker.iife.js?nocache=' + n;
@@ -89,7 +110,7 @@
             "addressLocality": "Dubai",
             "addressCountry": "AE"
           },
-          "areaServed": "Worldwide",
+          "areaServed": ["AE", "GB", "Worldwide"],
           "foundingDate": "2023",
           "founder": {
             "@type": "Person",
@@ -274,7 +295,8 @@
         })();
     </script>
 <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
+    // Microsoft Clarity, under the same natwicTrack rule as Google Analytics
+    if (window.natwicTrack) (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);

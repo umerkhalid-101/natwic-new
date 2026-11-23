@@ -19,8 +19,8 @@ export const SERVICE_PAGES: ServiceSummary[] = [
   {
     slug: 'web-design',
     name: 'Web design for startups',
-    title: 'Web Design Agency for Startups | Natwic',
-    description: 'Startup website design that turns visitors into users. Natwic plans, designs and builds launch-ready sites for founders anywhere, working remotely.',
+    title: 'Website Design Company in Dubai for Startups | Natwic',
+    description: 'Startup website design from a Dubai-based studio. We plan, design and build launch-ready sites in 2-4 week sprints for founders in the UAE and worldwide.',
     teaser: 'Launch-ready marketing sites that explain what you do in seconds and give visitors a clear next step.',
   },
   {
@@ -34,14 +34,14 @@ export const SERVICE_PAGES: ServiceSummary[] = [
     slug: 'saas-website-design',
     name: 'SaaS website design',
     title: 'SaaS Website Design Agency | Natwic',
-    description: 'A SaaS website design agency for early-stage teams. We design marketing sites that explain your product, show it working and turn visitors into trials.',
+    description: 'A SaaS website design agency for early-stage teams: marketing sites that explain your product and drive trials, for SaaS teams in the UAE, UK and beyond.',
     teaser: 'Marketing sites for software products that explain the value fast, show the product working and drive sign-ups.',
   },
   {
     slug: 'webflow-nextjs-development',
     name: 'Webflow & Next.js development',
-    title: 'Webflow Development Agency & Next.js Websites | Natwic',
-    description: 'Webflow development and Next.js website development for startups. Fast, editable sites built from your designs or ours, by a remote team.',
+    title: 'Web Development Agency in Dubai: Webflow & Next.js | Natwic',
+    description: 'A Dubai web development agency building fast Webflow and Next.js websites for startups and SaaS teams. Fixed scope, fixed quote, a CMS your team can edit.',
     teaser: 'Fast, editable websites built in Webflow or Next.js, from your designs or ours.',
   },
   {
@@ -50,6 +50,13 @@ export const SERVICE_PAGES: ServiceSummary[] = [
     title: 'Website Redesign Services | Natwic',
     description: 'Website redesign services for startups and small businesses. We rebuild outdated sites around your current product, with a clear plan to protect SEO.',
     teaser: 'A rebuilt site that matches where your company is today, without losing the search traffic you already have.',
+  },
+  {
+    slug: 'landing-page-design',
+    name: 'Landing page design',
+    title: 'Landing Page Design for Startups & SaaS | Natwic',
+    description: 'Landing page design for startups and SaaS teams: one focused page for a launch, an ad campaign or a waitlist, built to turn visitors into sign-ups.',
+    teaser: 'A page for one campaign, launch or waitlist, with the copy written and the form wired up.',
   },
   {
     slug: 'social-media',

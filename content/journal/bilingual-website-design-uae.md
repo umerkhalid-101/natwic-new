@@ -117,7 +117,7 @@ Your platform decides how painful Arabic will be. Here's how the common options 
 
 Webflow's own [localization guide](https://webflow.com/webflow-way/localization/localize-design-and-assets) confirms the automatic RTL direction and recommends logical properties for layouts.
 
-This is how we approach builds at Natwic: we design and build startup sites in [Webflow or Next.js](https://www.natwic.com/services/webflow-nextjs-development) and set up the two-direction foundation from the first wireframe, even when Arabic is months away.
+This is how we approach builds at Natwic, a [website design company in Dubai](https://www.natwic.com/services/web-design): we design and build startup sites in [Webflow or Next.js](https://www.natwic.com/services/webflow-nextjs-development) and set up the two-direction foundation from the first wireframe, even when Arabic is months away.
 
 ## Free bilingual launch checklist
 

@@ -87,7 +87,7 @@ Our take: skip paid A/B testing until the page gets enough traffic to finish a t
 
 If we had $2,000 for a startup landing page, we'd spend it in this order: the message first, then one strong page design, then a clean build on a tool your team can edit. Testing comes later, once ads or launches bring real traffic.
 
-That's how we worked when we [rebuilt the Juno AI SaaS website in a week](https://www.natwic.com/journal/ai-saas-website-design-how-we-rebuilt-juno-in-a-week): pin down the buyer's problem, write the page around it, then design and build. Launch-ready landing pages are part of our [web design work for startups](https://www.natwic.com/services/web-design), and a page that converts is the goal, not the deliverable.
+That's how we worked when we [rebuilt the Juno AI SaaS website in a week](https://www.natwic.com/journal/ai-saas-website-design-how-we-rebuilt-juno-in-a-week): pin down the buyer's problem, write the page around it, then design and build. Launch-ready pages are part of our [landing page design for startups](https://www.natwic.com/services/landing-page-design), and a page that converts is the goal, not the deliverable.
 
 Keep the running costs in mind too. Our guide to [website maintenance cost](https://www.natwic.com/journal/website-maintenance-cost-in-2026-real-prices-by-platform) breaks down what each platform costs to keep up after launch.
 

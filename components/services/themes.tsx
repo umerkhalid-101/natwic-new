@@ -70,6 +70,14 @@ export const THEMES: Record<string, Theme> = {
     display: 'font-bold tracking-[-0.055em]',
     label: (n, t) => `Step ${pad2(n)} · ${t}`,
   },
+  'landing-page-design': {
+    key: 'blueprint',
+    name: 'Launch',
+    dark: false,
+    vars: { '--page': '#fbfaf7', '--ink': '#14110f', '--muted': '#66615a', '--line': 'rgba(255,107,44,0.10)', '--card': '#ffffff', '--border': '#ebe6dd', '--accent': '#703FEC', '--accent-2': '#FF6B2C', '--on-accent': '#ffffff', '--stage': '#16110d', '--stage-ink': '#fbfaf7' },
+    display: 'font-bold tracking-[-0.055em]',
+    label: (n, t) => `Section ${pad2(n)} · ${t}`,
+  },
   'social-media': {
     key: 'feed',
     name: 'Social feed',

@@ -1,5 +1,5 @@
 ---
-title: 'Website Design Brief: Free Template and Filled Example'
+title: 'Website Design Brief Template (Free Word & PDF) + Example'
 date: 2026-10-20
 excerpt: 'Write a website design brief that gets accurate quotes: the 10 sections to include, a filled-in SaaS example, and a free one-page template to copy.'
 cover: /journal/website-design-brief-template-cover.webp
@@ -17,6 +17,15 @@ featured: false
 You asked three studios for a website quote and got back $6K, $18K, and $40K. That gap usually isn't about who's cheap or who's greedy. It means each studio guessed at a different project, because nobody gave them a website design brief to work from.
 
 A good brief fixes that in one or two pages. Below, we'll show you exactly what to include, the parts most founders forget, a filled-in example you can copy, and a free one-page template.
+
+## Download the template
+
+Grab the free one-page website design brief template. No sign-up needed.
+
+- [Download the Word template (.docx)](/downloads/website-design-brief-template.docx)
+- [Download the PDF template](/downloads/website-design-brief-template.pdf)
+
+The Word file also opens in Google Docs: upload it to Google Drive and choose **Open with Google Docs**.
 
 ## The short answer: what a website design brief is
 
@@ -124,7 +133,7 @@ Will your marketing lead edit pages weekly, or will a developer handle changes? 
 
 ## Free website brief template
 
-Here's the one-page template we use with our own clients. Save the image, fill in each box in a doc, and send the same version to every studio you're talking to so the quotes are actually comparable.
+Here's the one-page template we use with our own clients. [Download it as a Word file](/downloads/website-design-brief-template.docx) or [as a PDF](/downloads/website-design-brief-template.pdf), fill in each box, and send the same version to every studio you're talking to so the quotes are actually comparable.
 
 ![Free one-page website design brief template with 10 fill-in sections for startups and small businesses](/journal/website-design-brief-template.webp "website-design-brief-template")
 

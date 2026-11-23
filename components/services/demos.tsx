@@ -537,12 +537,95 @@ export const SocialDemo: React.FC = () => {
   );
 };
 
+/* ------------------------------------------------------------------ */
+/* Landing page design: real pages we built, with notes pinned to the  */
+/* parts that do the converting. Clicking a note scrolls to it         */
+/* ------------------------------------------------------------------ */
+
+type Beat = { y: number; note: string };
+/** DocsAlot: a client landing page Natwic designed, captured from the live page */
+const LP_PAGE = {
+  name: 'DocsAlot',
+  url: 'https://docs-alot.vercel.app/',
+  domain: 'docs-alot.vercel.app',
+  src: '/work/docsalot/docsalot-full.webp',
+  size: [800, 10111] as const,
+  beats: [
+    { y: 0.024, note: 'The headline names the shift in one line: your docs have two readers now.' },
+    { y: 0.056, note: 'The product is the hero image. Drag the divider to see the human and agent versions of one page.' },
+    { y: 0.096, note: 'Launch proof straight under it: the Product Hunt badges.' },
+    { y: 0.194, note: 'One real example tells the story: a rate limit changes, and the page shows who finds out.' },
+    { y: 0.274, note: 'Three steps make setup look small.' },
+    { y: 0.733, note: 'Three plans, with the launch offer on the price itself.' },
+    { y: 0.825, note: 'FAQs written for technical buyers, each with a link sales can share.' },
+    { y: 0.899, note: 'It ends on a free audit, a low-risk first step.' },
+  ] as Beat[],
+};
+
+export const LandingDemo: React.FC = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const frame = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { amount: 0.4 });
+  const p = LP_PAGE;
+  const [beat, pickBeat] = useAutoStep(p.beats.length, 3400, inView);
+  // Keep the frame on the current note
+  useEffect(() => {
+    const el = frame.current;
+    const img = el?.querySelector('img');
+    if (!el || !img) return;
+    el.scrollTo({ top: Math.max(0, p.beats[beat].y * img.clientHeight - 40), behavior: 'smooth' });
+  }, [beat, p.beats]);
+  return (
+    <DemoShell title="Landing page teardown" hint="Click a number to jump to it">
+      <div ref={ref} className="p-4 md:p-5">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-sm font-semibold text-white">{p.name} <span className="ml-1.5 whitespace-nowrap rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-medium text-white/60">Client project</span></p>
+          <a href={p.url} target="_blank" rel="noopener" className="shrink-0 text-[11px] font-semibold text-white/50 hover:text-white transition-colors">View live page ↗</a>
+        </div>
+        <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-white">
+          <div className="flex items-center gap-1.5 bg-[#f1f1f4] px-3 py-2">
+            {['#FF5F57', '#FEBC2E', '#28C840'].map((c) => <span key={c} className="w-2 h-2 rounded-full" style={{ background: c }} />)}
+            <span className="ml-2 flex-1 truncate rounded-full bg-white px-3 py-0.5 text-[10px] text-zinc-500">{p.domain}</span>
+          </div>
+          <div ref={frame} data-lenis-prevent className="relative h-[300px] md:h-[380px] overflow-y-auto [scrollbar-width:thin]">
+            <div className="relative">
+              <img src={p.src} alt={`Full ${p.name} landing page designed by Natwic`} width={p.size[0]} height={p.size[1]} loading="lazy" decoding="async" className="block w-full h-auto" />
+              {p.beats.map((b, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => pickBeat(i)}
+                  aria-label={`Note ${i + 1}: ${b.note}`}
+                  className={`absolute left-2 -translate-y-1/2 grid place-items-center w-6 h-6 rounded-full text-[11px] font-bold transition-all duration-300 ${beat === i ? 'bg-[#FF6B2C] text-white scale-110 shadow-[0_0_0_6px_rgba(255,107,44,0.25)]' : 'bg-black/70 text-white'}`}
+                  style={{ top: `${b.y * 100}%` }}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="mt-3 min-h-[2.5rem]">
+          <AnimatePresence mode="wait">
+            <motion.p key={beat} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.25 }} className="text-[13px] leading-snug text-white/80">
+              <span className="mr-2 font-mono text-[11px] text-[#FF6B2C]">{pad(beat + 1)}</span>{p.beats[beat].note}
+            </motion.p>
+          </AnimatePresence>
+        </div>
+      </div>
+    </DemoShell>
+  );
+};
+
+const pad = (n: number) => String(n).padStart(2, '0');
+
 export const DEMOS: Record<string, { Demo: React.FC; label: string }> = {
   'web-design': { Demo: WebDesignDemo, label: 'Page builder' },
   branding: { Demo: BrandingDemo, label: 'Identity lab' },
   'saas-website-design': { Demo: SaasDemo, label: 'Product tour' },
   'webflow-nextjs-development': { Demo: DevDemo, label: 'Code to canvas' },
   'website-redesign': { Demo: RedesignDemo, label: 'Before and after' },
+  'landing-page-design': { Demo: LandingDemo, label: 'Landing page teardown' },
   'social-media': { Demo: SocialDemo, label: 'Content calendar' },
 };
 

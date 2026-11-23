@@ -81,7 +81,7 @@ export const Hero: React.FC = () => {
               <MaskedText delay={0.7}>
                 <h1 className="mt-6 md:mt-10 max-w-2xl text-base md:text-[1.6rem] font-medium leading-[1.3] tracking-[-0.02em] text-white/50">
                   <span>
-                    <span className="text-white">Web design &amp; branding</span> for startups, SaaS teams and small businesses, anywhere in the world.
+                    <span className="text-white">Dubai web design &amp; branding agency</span> for startups, SaaS teams and small businesses, working worldwide.
                   </span>
                 </h1>
               </MaskedText>

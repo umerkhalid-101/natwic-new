@@ -1,11 +1,11 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, lazy, Suspense, startTransition } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Partners } from './components/Partners';
 import { WhyUs } from './components/WhyUs';
 import { Services } from './components/Services';
-import { Stats } from './components/Stats';
+import { Stats, KeyStats } from './components/Stats';
 import { Pricing } from './components/Pricing';
 import { FAQ } from './components/FAQ';
 import { Footer } from './components/Footer';
@@ -16,6 +16,9 @@ import { lazyPage } from './components/lazyPage';
 import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './components/smoothScroll';
 import { NavContext } from './components/nav';
 import { ROUTE_META, View, viewFromPath, slugFromPath, caseMeta, serviceMeta } from './seo';
+
+// Layout effects warn during the build's server render, where they'd do nothing anyway
+const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 // The scroll universe (and three.js inside it) loads as its own chunk
 const Universe = lazy(() => import('./components/Universe').then(m => ({ default: m.Universe })));
@@ -58,9 +61,13 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
   // The intro plays once per visit, on the home page only. It opens after hydration,
   // so the pre-rendered page and the first client render stay identical.
   const [isLoading, setIsLoading] = useState(false);
+  // Post-hydration updates go in a transition: lazy sections (Universe) may still be waiting for
+  // their code, and an urgent update would make React throw #421 and re-render them from scratch
   useEffect(() => {
     if (initialView !== 'home') return;
-    try { if (!sessionStorage.getItem('natwic:intro')) setIsLoading(true); } catch { setIsLoading(true); }
+    let seen = false;
+    try { seen = !!sessionStorage.getItem('natwic:intro'); } catch { /* storage blocked */ }
+    if (!seen) startTransition(() => setIsLoading(true));
   }, []);
   const finishIntro = () => {
     setIsLoading(false);
@@ -79,22 +86,37 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
       setSlug(slugFromPath(window.location.pathname));
     };
 
-    // Check initial URL
-    handleUrlChange();
+    // Check initial URL. Usually it matches what the page hydrated with, so nothing re-renders.
+    if (viewFromPath(window.location.pathname) !== initialView || slugFromPath(window.location.pathname) !== initialSlug) {
+      startTransition(handleUrlChange);
+    }
 
     // Listen for browser back/forward navigation
     window.addEventListener('popstate', handleUrlChange);
     return () => window.removeEventListener('popstate', handleUrlChange);
   }, []);
 
-  // Every internal link lands here, so Google sees one real path per page
+  // Every internal link lands here, so Google sees one real path per page.
+  // The new page renders as a transition, so the tap paints at once (better INP) and the
+  // current page stays up until the next one is ready; we scroll to the top when it swaps in.
+  const scrollOnSwap = useRef(false);
   const go = (path: string) => {
     const pathname = path.split(/[?#]/)[0] || '/';
-    setView(viewFromPath(pathname));
-    setSlug(slugFromPath(pathname));
+    const nextView = viewFromPath(pathname);
+    const nextSlug = slugFromPath(pathname);
     if (pathname !== window.location.pathname) window.history.pushState({}, '', pathname);
-    scrollToTop();
+    if (nextView === view && nextSlug === slug) { scrollToTop(); return; }
+    scrollOnSwap.current = true;
+    startTransition(() => {
+      setView(nextView);
+      setSlug(nextSlug);
+    });
   };
+  useIsoLayoutEffect(() => {
+    if (!scrollOnSwap.current) return;
+    scrollOnSwap.current = false;
+    scrollToTop();
+  }, [view, slug]);
 
   const changeView = (newView: View) => go(newView === 'home' ? '/' : `/${newView}`);
   // Journal posts live at /journal/<slug>
@@ -117,6 +139,7 @@ const App: React.FC<{ initialView?: View; initialSlug?: string | null }> = ({ in
           <>
             <Seo {...ROUTE_META.home} view="home" />
             <Hero />
+            <KeyStats />
             <Partners />
             <WhyUs />
             <Suspense fallback={<UniverseFallback />}>
